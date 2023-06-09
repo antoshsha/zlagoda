@@ -134,8 +134,12 @@ def validate_store_product(UPC):
     return result[0] > 0
 
 
-store_product_data1 = ("UPC012", None, 5, -20, 100, False)
-insert_store_product(store_product_data1)
+"""TESTING """
+
+
+
+# store_product_data1 = ("UPC012", None, 5, -20, 100, False)
+# insert_store_product(store_product_data1)
 
 
 # store_product_data = ("UPC013", "UPC012", 5, -20, 45, True)

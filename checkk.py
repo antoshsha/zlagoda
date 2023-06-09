@@ -10,9 +10,10 @@ def insert_checkk(check_data):
     check_number, id_employee, card_number, print_date, upcs, quantities = check_data
 
     # Retrieve selling prices from Store_Product table
+    # Check if the quantities are more than zero
     for quantity in quantities:
-        if quantity < 0:
-            raise ValueError("Quantity can not be less than zero")
+        if quantity <= 0:
+            raise ValueError("Quantity must be more than zero")
     cursor = conn.cursor()
     selling_prices = []
     for upc in upcs:
@@ -44,6 +45,8 @@ def insert_checkk(check_data):
         selling_price * quantity if selling_price is not None else 0
         for selling_price, quantity in zip(selling_prices, quantities)
     )
+
+    # Calculate total sum with the discount card
     if card_number is not None:
         card_percent = get_card_percent(card_number)
         total_sum -= (total_sum*card_percent)/100
@@ -88,37 +91,32 @@ def get_card_percent(card_number: str) -> float:
     return float(percent)
 
 
+""" 
+TESTING CHECK INSERT, DELETE
+"""
 
-check_data = (
-    "CHK0016",  # check_number
-    "EMP001",  # id_employee
-    None,  # card_number
-    "2023-06-08",  # print_date
-    [
-        "UPC001",  # upc
-        "UPC002",
-        "UPC003"
-    ],
-    [
-        2,  # quantity
-        1,
-        3
-    ]
-)
 
-insert_checkk(check_data)
+# check_data = (
+#     "CHK0016",  # check_number
+#     "EMP001",  # id_employee
+#     None,  # card_number
+#     "2023-06-08",  # print_date
+#     [
+#         "UPC001",  # upc
+#         "UPC002",
+#         "UPC003"
+#     ],
+#     [
+#         2,  # quantity
+#         1,
+#         3
+#     ]
+# )
+#
+# insert_checkk(check_data)
 # delete_checkk("CHK0015")
 
 
-def delete_sale(upc, check_number):
-    """Delete a sale record from the Sale table"""
-    try:
-        cursor = conn.cursor()
-        cursor.execute("DELETE FROM Sale WHERE UPC = ? AND check_number = ?", (upc, check_number))
-        conn.commit()
-        cursor.close()
-        print("Sale record deleted successfully.")
-    except Exception as e:
-        print("Error: Failed to delete sale record -", str(e))
+
 
 
