@@ -9,7 +9,7 @@ def insert_customer_card(card_data: Iterable) -> None:
 
     try:
         card_number, cust_surname, cust_name, cust_patronymic, phone_number, city, street, zip_code, percent = card_data
-        if percent < 0:
+        if float(percent) < 0:
             raise ValueError("Percent can not be less than zero")
         cursor = conn.cursor()
         cursor.execute(

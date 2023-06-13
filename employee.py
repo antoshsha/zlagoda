@@ -28,7 +28,7 @@ def insert_employee(employee_data: Iterable) -> None:
         raise ValueError("Employee must be 18 years or older")
 
     # Checking if the salary is not negative
-    if salary < 0:
+    if float(salary) < 0:
         raise ValueError("Salary can not be less than zero")
     try:
         cursor = conn.cursor()
@@ -124,15 +124,14 @@ TESTING DELETION
 TESTING INSERTION 
 """
 
-#
-# new_employee = (
-#     'E002', 'Doe', 'John', 'Smith', 'Manager', 5000.00, '2000-01-01', '2023-01-01',
-#     '+123456789', 'City', 'Street', '12345'
-# )
-#
-# try:
-#     insert_employee(new_employee)
-#     print("Employee data inserted successfully.")
-# except ValueError as e:
-#     print("Error: Invalid employee data -", str(e))
+
+new_employee = (
+    'E002', 'Doe', 'John', 'Smith', 'Manager', 5000.00, '2000-01-01', '2023-01-01',
+   '+123456789', 'City', 'Street', '12345'
+)
+try:
+    insert_employee(new_employee)
+    print("Employee data inserted successfully.")
+except ValueError as e:
+    print("Error: Invalid employee data -", str(e))
 

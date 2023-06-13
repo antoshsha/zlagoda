@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Додати товар</title>
+</head>
+<body>
+    <h1>Додати товар</h1>
+    <form method="POST" action="{{ url_for('add_product') }}">
+        <div>
+            <label for="category_number">Номер категорії:</label>
+            <input type="text" id="category_number" name="category_number">
+        </div>
+        <div>
+            <label for="product_name">Назва товару:</label>
+            <input type="text" id="product_name" name="product_name">
+        </div>
+        <div>
+            <label for="characteristics">Характеристики:</label>
+            <textarea id="characteristics" name="characteristics"></textarea>
+        </div>
+        <div>
+            <input type="submit" value="Зберегти">
+        </div>
+    </form>
+    <a href="{{ url_for('manager_cabinet') }}">Назад</a>
+    <a href="{{ url_for('home') }}">Додому</a>
+</body>
+</html>

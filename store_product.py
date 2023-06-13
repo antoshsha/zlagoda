@@ -7,9 +7,9 @@ from employee import conn
 def insert_store_product(store_product_data):
     """Insert a new store product or update an existing one"""
     UPC, UPC_prom, id_product, selling_price, products_number, promotional_product = store_product_data
-    if selling_price < 0:
+    if float(selling_price) < 0:
         raise ValueError("Selling price can not be less than zero")
-    if products_number < 0:
+    if float(products_number) < 0:
         raise ValueError("The number of products can not be less than zero")
     if promotional_product:
         # Check if the promotional product already exists in the table
@@ -18,7 +18,7 @@ def insert_store_product(store_product_data):
         result = cursor.fetchone()[0]
         cursor.close()
 
-        if result > 0:
+        if float(result) > 0:
             print("Error: Promotional product already exists in the table.")
             return
 
@@ -82,7 +82,7 @@ def update_store_product(store_product_data):
     UPC, UPC_prom, id_product, selling_price, products_number, promotional_product = store_product_data
 
     # Validate data
-    if selling_price < 0 or products_number < 0:
+    if float(selling_price) < 0 or float(products_number) < 0:
         raise ValueError("Price and products number must be greater than or equal to zero")
 
     if promotional_product:
@@ -131,7 +131,7 @@ def validate_store_product(UPC):
     cursor.execute("SELECT COUNT(*) FROM Store_Product WHERE UPC = ?", (UPC,))
     result = cursor.fetchone()
     cursor.close()
-    return result[0] > 0
+    return float(result[0]) > 0
 
 
 """TESTING """

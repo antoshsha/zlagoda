@@ -2,6 +2,13 @@ from flask import Flask, render_template, redirect, url_for, request, session
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired
+import employee
+import category
+import checkk
+import customer_card
+import  manager
+import product
+import store_product
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret-key'  # Встановіть секретний ключ для захисту форми
@@ -68,22 +75,94 @@ def manager_cabinet():
 @app.route('/add_empl', methods=['GET', 'POST'])
 def add_empl():
     if request.method == 'POST':
-        data = {
-            'id_employee': request.form.get('id_employee'),
-            'empl_surname': request.form.get('empl_surname'),
-            'empl_name': request.form.get('empl_name'),
-            'empl_patronymic': request.form.get('empl_patronymic'),
-            'empl_role': request.form.get('empl_role'),
-            'salary': request.form.get('salary'),
-            'date_of_birth': request.form.get('date_of_birth'),
-            'date_of_start': request.form.get('date_of_start'),
-            'phone_number': request.form.get('phone_number'),
-            'city': request.form.get('city'),
-            'street': request.form.get('street'),
-            'zip_code': request.form.get('zip_code')
-        }
-        print("Отримані дані:", data)
-    return render_template("add_empl.html")
+        data = [
+            request.form.get('id_employee'),
+            request.form.get('empl_surname'),
+            request.form.get('empl_name'),
+            request.form.get('empl_patronymic'),
+            request.form.get('empl_role'),
+            request.form.get('salary'),
+            request.form.get('date_of_birth'),
+            request.form.get('date_of_start'),
+            request.form.get('phone_number'),
+            request.form.get('city'),
+            request.form.get('street'),
+            request.form.get('zip_code')
+        ]
+        print(data)
+        employee.insert_employee(data)
+        print(data)
+        employee.insert_employee(data)
+        # Опрацьовка даних та збереження в базу даних
+    return render_template("manager_options/add_empl.html")
+
+
+@app.route('/add_customer_card', methods=['GET', 'POST'])
+def add_customer_card():
+    if request.method == 'POST':
+        data = [
+            request.form.get('card_number'),
+            request.form.get('cust_surname'),
+            request.form.get('cust_name'),
+            request.form.get('cust_patronymic'),
+            request.form.get('phone_number'),
+            request.form.get('city'),
+            request.form.get('street'),
+            request.form.get('zip_code'),
+            request.form.get('percent'),
+        ]
+        print(data)  # Виведення даних на консоль (для перевірки)
+        # Опрацьовка даних та збереження в базу даних
+        customer_card.insert_customer_card(data)
+        return redirect(url_for('manager_cabinet'))  # Перенаправлення на сторінку кабінету менеджера
+
+    return render_template('manager_options/add_customer_card.html')
+
+
+@app.route('/add_category', methods=['GET', 'POST'])
+def add_category():
+    if request.method == 'POST':
+        category_name = request.form.get('category_name')
+        # Опрацьовка даних та збереження в базу даних
+        category.insert_category(category_name)
+        return redirect(url_for('manager_cabinet'))  # Перенаправлення на сторінку кабінету менеджера
+
+    return render_template('manager_options/add_category.html')
+
+
+@app.route('/add_product', methods=['GET', 'POST'])
+def add_product():
+    if request.method == 'POST':
+        data = [
+            request.form.get('category_number'),
+            request.form.get('product_name'),
+            request.form.get('characteristics')
+        ]
+        # Process and save the data to the database
+        product.insert_product(data)
+        return redirect(url_for('manager_cabinet'))
+
+    return render_template('manager_options/add_product.html')
+
+
+@app.route('/add_product_store', methods=['GET', 'POST'])
+def add_product_store():
+    if request.method == 'POST':
+        data = [
+            request.form.get('UPC'),
+            request.form.get('UPC_prom'),
+            request.form.get('id_product'),
+            request.form.get('selling_price'),
+            request.form.get('products_number'),
+            request.form.get('promotional_product'),
+        ]
+        print(data)  # Printing data for verification
+        # Process the data and save it to the database
+        store_product.insert_store_product(data)
+        return redirect(url_for('manager_cabinet'))  # Redirect to the manager's cabinet page
+
+    return render_template('manager_options/add_product_store.html')
+
 
 
 if __name__ == '__main__':

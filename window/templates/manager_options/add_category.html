@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Додати категорію</title>
+</head>
+<body>
+    <h1>Додати категорію</h1>
+    <form method="POST" action="{{ url_for('add_category') }}">
+        <div>
+            <label for="category_name">Назва категорії:</label>
+            <input type="text" id="category_name" name="category_name">
+        </div>
+        <div>
+            <input type="submit" value="Зберегти">
+        </div>
+    </form>
+    <a href="{{ url_for('manager_cabinet') }}">Назад</a>
+    <a href="{{ url_for('home') }}">Додому</a>
+</body>
+</html>
