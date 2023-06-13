@@ -50,7 +50,7 @@ def delete_category(category_number):
 TESTING DELETING UPDATING AND INSERTING A CATEGORY
 """
 
-# insert_category("Electronics")
+insert_category("test")
 # update_category(5, "Electronics and Gadgets")
 # delete_category(5)
 
