@@ -124,6 +124,22 @@ def delete_store_product(UPC):
     except IntegrityError as e:
         print("Error: Database constraint violation -", str(e))
 
+def get_all_products_by_name(product_name):
+    cursor = conn.cursor()
+    if product_name == "":
+        # Запит до бази даних для отримання всіх товарів
+        cursor.execute(
+            "SELECT * FROM Store_Product AS sp JOIN Product AS p ON sp.id_product = p.id_product")
+    else:
+        # Запит до бази даних для пошуку товару за назвою
+        cursor.execute(
+            "SELECT * FROM Store_Product AS sp JOIN Product AS p ON sp.id_product = p.id_product WHERE p.product_name LIKE ?",
+            ('%' + product_name + '%',))
+
+    products = cursor.fetchall()
+    cursor.close()
+    return products
+
 def get_all_products():
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM Store_Product")

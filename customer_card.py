@@ -97,6 +97,14 @@ def get_cards_by_discount(discount):
         print("Error: Failed to retrieve customer card data -", str(e))
         return []
 
+
+def get_all_clients_sorted_by_last_name():
+    query = "SELECT * FROM Customer_card ORDER BY cust_surname"
+    cursor = conn.cursor()
+    cursor.execute(query)
+    result =cursor.fetchall()
+    cursor.close()
+    return result
 """
 TESTING INSERTION, DELETING AND UPDATING IN CUSTOM_CARD
 """

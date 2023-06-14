@@ -1,6 +1,6 @@
 from sqlite3 import IntegrityError
 from typing import Iterable
-
+import numpy as np
 from employee import conn
 
 def get_all_checks():
@@ -9,6 +9,45 @@ def get_all_checks():
     checks = cursor.fetchall()
     cursor.close()
     return checks
+
+
+def get_checks_by_cashier(cashier_id, start_date, end_date):
+    cursor = conn.cursor()
+
+    if cashier_id:
+        query = """
+            SELECT c.check_number, c.id_employee, c.card_number, c.print_date, c.sum_total, c.vat, p.product_name, s.product_number, s.selling_price
+            FROM Checkk AS c
+            INNER JOIN Sale AS s ON c.check_number = s.check_number
+            INNER JOIN Product AS p ON s.product_number = p.id_product
+            WHERE c.id_employee = ? AND c.print_date BETWEEN ? AND ?
+        """
+        params = (cashier_id, start_date, end_date)
+    else:
+        query = """
+            SELECT c.check_number, c.id_employee, c.card_number, c.print_date, c.sum_total, c.vat, p.product_name, s.product_number, s.selling_price
+            FROM Checkk AS c
+            INNER JOIN Sale AS s ON c.check_number = s.check_number
+            INNER JOIN Product AS p ON s.product_number = p.id_product
+            WHERE c.id_employee IN (SELECT DISTINCT id_employee FROM Checkk) AND c.print_date BETWEEN ? AND ?
+        """
+        params = (start_date, end_date)
+
+    cursor.execute(query, params)
+    # Отримання результатів запиту
+    results = cursor.fetchall()
+    results=np.asarray(results)
+    prev=""
+    for check in results:
+        if check[0]==prev:
+            for i in range(6):
+                check[i]=""
+        else:
+            prev=check[0]
+    cursor.close()
+    return results
+
+
 def insert_checkk(check_data):
     """Insert a new check into the Checkk table and corresponding sales into the Sale table"""
 

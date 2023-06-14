@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Кабінет касира</title>
+</head>
+<body>
+    <h1>Кабінет касира</h1>
+    <ul>
+        <li><a href="{{ url_for('all_products') }}">Всі товари</a></li>
+        <li><a href="{{ url_for('all_products_store') }}">Всі товари в магазині</a></li>
+        <li><a href="{{ url_for('all_clients') }}">Всі постійні клієнти</a></li>
+        <li><a href="{{ url_for('search_product_by_name') }}">Пошук товару по назві</a></li>
+
+        <br>
+        <a href="{{ url_for('home') }}">Додому</a>
+    </ul>
+</body>
+</html>

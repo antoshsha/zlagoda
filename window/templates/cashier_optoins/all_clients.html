@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Clients</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>All Clients</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Card Number</th>
+                <th>Last Name</th>
+                <th>First Name</th>
+                <th>Patronymic</th>
+                <th>Phone Number</th>
+                <th>City</th>
+                <th>Street</th>
+                <th>ZIP Code</th>
+                <th>Discount Percent</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for client in clients %}
+                <tr>
+                    <td>{{ client[0] }}</td>
+                    <td>{{ client[1] }}</td>
+                    <td>{{ client[2] }}</td>
+                    <td>{{ client[3] }}</td>
+                    <td>{{ client[4] }}</td>
+                    <td>{{ client[5] }}</td>
+                    <td>{{ client[6] }}</td>
+                    <td>{{ client[7] }}</td>
+                    <td>{{ client[8] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('cashier_cabinet') }}">Назад</a>
+    <a href="{{ url_for('home') }}">Додому</a>
+</body>
+</html>

@@ -71,6 +71,24 @@ def validate_category(category_number):
     return result > 0
 
 
+def info_by_name(product_name):
+    cursor=conn.cursor()
+    cursor.execute("SELECT sp.UPC, sp.UPC_prom, sp.id_product, sp.selling_price, sp.products_number, sp.promotional_product, p.category_number, p.product_name, p.characteristics FROM Store_Product AS sp JOIN Product AS p ON sp.id_product = p.id_product WHERE p.product_name LIKE ?",('%' + product_name + '%',))
+    result=cursor.fetchall()
+    cursor.close()
+    return result
+
+def get_all_products_sorted_by_name():
+    cursor = conn.cursor()
+    query = """
+        SELECT id_product, category_number, product_name, characteristics
+        FROM Product
+        ORDER BY product_name
+    """
+    cursor.execute(query)
+    results = cursor.fetchall()
+    cursor.close()
+    return results
 """TESTING INSERTING, UPDATING AND DELETING PRODUCTS"""
 
 # product_data = (20, "Product A", "Characteristics A")

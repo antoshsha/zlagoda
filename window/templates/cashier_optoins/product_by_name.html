@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Product by Name</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>Product by Name</h1>
+    <form method="post" action="{{ url_for('search_product_by_name') }}">
+        <input type="text" name="product_name" placeholder="Enter product name">
+        <button type="submit">Search</button>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>UPC</th>
+                <th>UPC_prom</th>
+                <th>ID</th>
+                <th>Selling Price</th>
+                <th>Products Number</th>
+                <th>Promotional Product</th>
+                <th>Category Number</th>
+                <th>Product Name</th>
+                <th>Characteristics</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in product %}
+            <tr>
+                <td>{{ p[0] }}</td>
+                <td>{{ p[1] }}</td>
+                <td>{{ p[2] }}</td>
+                <td>{{ p[3] }}</td>
+                <td>{{ p[4] }}</td>
+                <td>{{ p[5] }}</td>
+                <td>{{ p[6] }}</td>
+                <td>{{ p[7] }}</td>
+                <td>{{ p[8] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('cashier_cabinet') }}">Back</a>
+    <a href="{{ url_for('home') }}">Home</a>
+</body>
+</html>

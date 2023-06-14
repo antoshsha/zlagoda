@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request, session
+from flask import Flask, render_template, redirect, url_for, request, session, flash
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired
@@ -22,10 +22,23 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Увійти')
 
 
+def manager_access():
+    if not session.get("manager"):
+        flash("Access denied")
+        return redirect(url_for('home'))
+
+
+def cashier_access():
+    if not session.get("cashier"):
+        flash("Access denied")
+        return redirect(url_for('home'))
+
 def login_user(username, password):
     # Перевірка введених облікових даних
     if username == 'admin' and password == '1':
         session['logged_in'] = True
+        session["manager"] = False
+        session["cashier"] = True
         return True
     return False
 
@@ -37,10 +50,15 @@ def start():
 
 @app.route('/home', methods=['GET', 'POST'])
 def home():
+    role= request.args.get("role")
     if not session.get('logged_in'):
         return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
-
-    return render_template('home.html')
+    role = ""
+    if session.get("manager"):
+        role = "менеджер!"
+    else:
+        role = "касир"
+    return render_template('home.html', role=role)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -62,18 +80,26 @@ def login():
 @app.route('/logout')
 def logout():
     session.pop('logged_in', None)  # Видалення змінної сеансу для виходу з системи
+    session["manager"] = False
+    session["cashier"] = False
     return redirect(url_for('login'))
 
 
+
+#------------------------------- ALL FOR MANAGER
 @app.route('/manager_cabinet', methods=['GET', 'POST'])
 def manager_cabinet():
     if not session.get('logged_in'):
         return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
+    if not session.get("manager"):
+        return redirect(url_for('home'))
     return render_template('manager_cabinet.html')
 
 #----------------------- ADD
 @app.route('/add_empl', methods=['GET', 'POST'])
 def add_empl():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
     if request.method == 'POST':
         data = [
             request.form.get('id_employee'),
@@ -99,6 +125,8 @@ def add_empl():
 
 @app.route('/add_customer_card', methods=['GET', 'POST'])
 def add_customer_card():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
     if request.method == 'POST':
         data = [
             request.form.get('card_number'),
@@ -121,6 +149,8 @@ def add_customer_card():
 
 @app.route('/add_category', methods=['GET', 'POST'])
 def add_category():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
     if request.method == 'POST':
         category_name = request.form.get('category_name')
         # Опрацьовка даних та збереження в базу даних
@@ -132,6 +162,8 @@ def add_category():
 
 @app.route('/add_product', methods=['GET', 'POST'])
 def add_product():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
     if request.method == 'POST':
         data = [
             request.form.get('category_number'),
@@ -149,6 +181,8 @@ def add_product():
 
 @app.route('/add_product_store', methods=['GET', 'POST'])
 def add_product_store():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
     if request.method == 'POST':
         data = [
             request.form.get('UPC'),
@@ -168,6 +202,8 @@ def add_product_store():
 #--------------------- UPDATE
 @app.route('/update_employee', methods=['GET', 'POST'])
 def update_employee():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
     if not session.get('logged_in'):
         return redirect(url_for('login'))
 
@@ -194,6 +230,8 @@ def update_employee():
 
 @app.route('/update_customer_card', methods=['POST', 'GET'])
 def update_customer_card():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
     if not session.get('logged_in'):
         return redirect(url_for('login'))
 
@@ -220,6 +258,8 @@ def update_customer_card():
 
 @app.route('/update_category', methods=['GET', 'POST'])
 def update_category():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
     if not session.get('logged_in'):
         return redirect(url_for('login'))
 
@@ -237,6 +277,8 @@ def update_category():
 
 @app.route('/update_product', methods=['GET', 'POST'])
 def update_product():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
     if request.method == 'POST':
         data = [
             request.form.get('product_name'),
@@ -252,6 +294,8 @@ def update_product():
 
 @app.route('/update_product_store', methods=['GET', 'POST'])
 def update_product_store():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
     if request.method == 'POST':
         data = [
             request.form.get('UPC'),
@@ -272,6 +316,8 @@ def update_product_store():
 
 @app.route('/delete_employee', methods=['POST', 'GET'])
 def delete_employee():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
     if not session.get('logged_in'):
         return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
     if request.method == 'POST':
@@ -284,6 +330,8 @@ def delete_employee():
 
 @app.route('/delete_customer_card', methods=['POST', 'GET'])
 def delete_customer_card():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
     if not session.get('logged_in'):
         return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
 
@@ -297,6 +345,8 @@ def delete_customer_card():
 
 @app.route('/delete_category', methods=['POST', 'GET'])
 def delete_category():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
     if not session.get('logged_in'):
         return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
 
@@ -310,6 +360,8 @@ def delete_category():
 
 @app.route('/delete_product', methods=['POST', 'GET'])
 def delete_product():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
     if not session.get('logged_in'):
         return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
 
@@ -323,6 +375,8 @@ def delete_product():
 
 @app.route('/delete_product_store', methods=['POST', 'GET'])
 def delete_product_store():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
     if not session.get('logged_in'):
         return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
 
@@ -336,6 +390,8 @@ def delete_product_store():
 
 @app.route('/delete_check_store', methods=['POST', 'GET'])
 def delete_check_store():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
     if not session.get('logged_in'):
         return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
 
@@ -349,6 +405,8 @@ def delete_check_store():
 #---------------- REPORTS
 @app.route('/report_employees', methods=['POST', 'GET'])
 def report_employees():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
     if not session.get('logged_in'):
         return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
 
@@ -366,6 +424,8 @@ def report_employees():
 
 @app.route('/report_customer_cards')
 def report_customer_cards():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
     if not session.get('logged_in'):
         return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
 
@@ -379,6 +439,8 @@ def report_customer_cards():
 
 @app.route('/report_categories')
 def report_categories():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
     if not session.get('logged_in'):
         return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
 
@@ -393,6 +455,8 @@ def report_categories():
 
 @app.route('/report_products')
 def report_products():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
     if not session.get('logged_in'):
         return redirect(url_for('login'))
 
@@ -405,6 +469,8 @@ def report_products():
 
 @app.route('/report_products_store')
 def report_products_store():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
     if not session.get('logged_in'):
         return redirect(url_for('login'))
 
@@ -417,6 +483,8 @@ def report_products_store():
 
 @app.route('/report_checks')
 def report_checks():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
     if not session.get('logged_in'):
         return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
 
@@ -427,6 +495,8 @@ def report_checks():
 
 @app.route('/search_by_surname', methods=['POST', "GET"])
 def search_by_surname():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
     surname = request.form.get('surname')
     phone, address=employee.get_by_surname(surname)
 
@@ -436,6 +506,8 @@ def search_by_surname():
 
 @app.route('/search_discount', methods=['POST'])
 def search_by_discount():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
     discount = request.form['discount']
 
     # Perform the search query using the discount value
@@ -446,5 +518,63 @@ def search_by_discount():
 
     return render_template('manager_options/report_customer_cards.html', cards=cards)
 
+
+
+@app.route('/check_by_id', methods=['GET', 'POST'])
+def check_by_id():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
+    if request.method == 'POST':
+        cashier_id = request.form['cashier_id']
+        start_date = request.form['start_date']
+        end_date = request.form['end_date']
+        product_name = request.form.get('product_name', '')
+
+        results = checkk.get_checks_by_cashier(cashier_id, start_date, end_date)
+        total_quantity = sum(int(check[7]) for check in results if check[6] == product_name)
+        total_sum = 0.0
+        for check in results:
+            if(check[4]!=""):
+                total_sum += float(check[4])  # Індекс 4 - колонка "Загальна сума"
+        print(results)
+        return render_template('manager_options/check_by_id.html', checks=results,total_sum=total_sum, total_quantity=total_quantity)
+
+    return render_template('manager_options/check_by_id.html', checks=[])
+
+
+#----------------------------------- ALL FOR CASHIER
+@app.route('/cashier_cabinet')
+def cashier_cabinet():
+    return render_template('cashier_cabinet.html')
+
+
+@app.route('/all_products')
+def all_products():
+    # Retrieve the list of products from your database
+    products = product.get_all_products_sorted_by_name()  # Replace with your own function to fetch products
+
+    return render_template('cashier_optoins/all_products.html', products=products)
+
+
+@app.route('/all_products_store')
+def all_products_store():
+    products=store_product.get_all_products_ordered_by_name()
+    return render_template('cashier_optoins/all_products_store.html', products=products)
+
+
+@app.route('/search_product_by_name', methods=['POST', 'GET'])
+def search_product_by_name():
+    if request.method == 'POST':
+        product_name = request.form['product_name']
+        product=store_product.get_all_products_by_name(product_name)
+        return render_template('cashier_optoins/product_by_name.html', product=product)
+    product_name=""
+    product = store_product.get_all_products_by_name(product_name)
+    return render_template('cashier_optoins/product_by_name.html', product=product)
+
+@app.route('/all_clients')
+def all_clients():
+    clients = customer_card.get_all_clients_sorted_by_last_name()
+    return render_template('cashier_optoins/all_clients.html', clients=clients)
 if __name__ == '__main__':
     app.run()

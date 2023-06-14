@@ -17,6 +17,22 @@
 </head>
 <body>
     <h1>Звіт про чеки</h1>
+    <form method="POST" action="/check_by_id">
+        <label for="cashier_id">ID касира:</label>
+        <input type="text" name="cashier_id" id="cashier_id" pattern=".*" >
+        <br>
+        <label for="product_name">Товар, продана кількість якого цікавить:</label>
+        <input type="text" name="product_name" id="product_name">
+        <br>
+        <label for="start_date">Початкова дата:</label>
+        <input type="date" name="start_date" id="start_date" required>
+        <br>
+        <label for="end_date">Кінцева дата:</label>
+        <input type="date" name="end_date" id="end_date" required>
+        <br>
+        <button type="submit">Отримати інформацію</button>
+    </form>
+    <br>
     <table>
         <thead>
             <tr>
@@ -42,7 +58,7 @@
         </tbody>
     </table>
     <br>
-    <a href="{{ url_for('manager_cabinet') }}">Назад</a>
     <a href="{{ url_for('home') }}">Додому</a>
+    <a href="{{ url_for('manager_cabinet') }}">Назад</a>
 </body>
 </html>

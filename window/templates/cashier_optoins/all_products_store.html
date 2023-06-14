@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Store Products</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>Store Products</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>UPC</th>
+                <th>UPC_prom</th>
+                <th>Product ID</th>
+                <th>Selling Price</th>
+                <th>Products Number</th>
+                <th>Promotional Product</th>
+                <th>Product Name</th>
+                <th>Characteristics</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+                <tr>
+                    <td>{{ product[0] }}</td>
+                    <td>{{ product[1] }}</td>
+                    <td>{{ product[2] }}</td>
+                    <td>{{ product[3] }}</td>
+                    <td>{{ product[4] }}</td>
+                    <td>{{ product[5] }}</td>
+                    <td>{{ product[6] }}</td>
+                    <td>{{ product[7] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('cashier_cabinet') }}">Назад</a>
+    <a href="{{ url_for('home') }}">Додому</a>
+</body>
+</html>
