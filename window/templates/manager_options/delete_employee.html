@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Видалити працівника</title>
+</head>
+<body>
+    <h1>Видалити працівника</h1>
+    <form method="POST" action="{{ url_for('delete_employee') }}">
+        <div>
+            <label for="id_employee">ID працівника:</label>
+            <input type="text" id="id_employee" name="id_employee">
+        </div>
+        <div>
+            <input type="submit" value="Видалити">
+        </div>
+    </form>
+    <a href="{{ url_for('manager_cabinet') }}">Назад</a>
+    <a href="{{ url_for('home') }}">Додому</a>
+</body>
+</html>

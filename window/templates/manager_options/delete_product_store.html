@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Видалити товар з магазину</title>
+</head>
+<body>
+    <h1>Видалити товар з магазину</h1>
+    <form method="POST" action="{{ url_for('delete_product_store') }}">
+        <div>
+            <label for="upc">UPC товару:</label>
+            <input type="text" id="upc" name="upc">
+        </div>
+        <div>
+            <input type="submit" value="Видалити">
+        </div>
+    </form>
+    <a href="{{ url_for('manager_cabinet') }}">Назад</a>
+    <a href="{{ url_for('home') }}">Додому</a>
+</body>
+</html>

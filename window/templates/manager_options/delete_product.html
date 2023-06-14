@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Видалити продукт</title>
+</head>
+<body>
+    <h1>Видалити продукт</h1>
+    <form method="POST" action="{{ url_for('delete_product') }}">
+        <div>
+            <label for="product_id">ID продукту:</label>
+            <input type="text" id="product_id" name="product_id">
+        </div>
+        <div>
+            <input type="submit" value="Видалити">
+        </div>
+    </form>
+    <a href="{{ url_for('manager_cabinet') }}">Назад</a>
+    <a href="{{ url_for('home') }}">Додому</a>
+</body>
+</html>

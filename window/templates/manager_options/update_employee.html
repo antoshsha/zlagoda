@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Оновлення даних про співробітника</title>
+</head>
+<body>
+  <h1>Оновлення даних про співробітника</h1>
+
+  {% if error %}
+    <p style="color: red;">{{ error }}</p>
+  {% endif %}
+
+  <form method="POST" action="{{ url_for('update_employee') }}">
+    <div>
+      <label for="employee_id">Ідентифікатор співробітника:</label>
+      <input type="text" id="employee_id" name="employee_id" required>
+    </div>
+
+    <div>
+      <label for="empl_surname">Прізвище:</label>
+      <input type="text" id="empl_surname" name="empl_surname" required>
+    </div>
+
+    <div>
+      <label for="empl_name">Ім'я:</label>
+      <input type="text" id="empl_name" name="empl_name" required>
+    </div>
+
+    <div>
+      <label for="empl_patronymic">По батькові:</label>
+      <input type="text" id="empl_patronymic" name="empl_patronymic" required>
+    </div>
+
+    <div>
+      <label for="empl_role">Посада:</label>
+      <input type="text" id="empl_role" name="empl_role" required>
+    </div>
+
+    <div>
+      <label for="salary">Зарплата:</label>
+      <input type="text" id="salary" name="salary" required>
+    </div>
+
+    <div>
+      <label for="date_of_birth">Дата народження:</label>
+      <input type="text" id="date_of_birth" name="date_of_birth" required>
+    </div>
+
+    <div>
+      <label for="date_of_start">Дата прийому на роботу:</label>
+      <input type="text" id="date_of_start" name="date_of_start" required>
+    </div>
+
+    <div>
+      <label for="phone_number">Номер телефону:</label>
+      <input type="text" id="phone_number" name="phone_number" required>
+    </div>
+
+    <div>
+      <label for="city">Місто:</label>
+      <input type="text" id="city" name="city" required>
+    </div>
+
+    <div>
+      <label for="street">Вулиця:</label>
+      <input type="text" id="street" name="street" required>
+    </div>
+
+    <div>
+      <label for="zip_code">Поштовий індекс:</label>
+      <input type="text" id="zip_code" name="zip_code" required>
+    </div>
+
+    <div>
+      <input type="submit" value="Оновити">
+    </div>
+  </form>
+</body>
+</html>

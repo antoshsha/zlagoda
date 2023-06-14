@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Оновити категорію</title>
+</head>
+<body>
+    <h1>Оновити категорію</h1>
+    <form method="POST" action="{{ url_for('update_category') }}">
+        <div>
+            <label for="category_number">Номер категорії:</label>
+            <input type="text" id="category_number" name="category_number">
+        </div>
+        <div>
+            <label for="category_name">Назва категорії:</label>
+            <input type="text" id="category_name" name="category_name">
+        </div>
+        <div>
+            <input type="submit" value="Зберегти">
+        </div>
+    </form>
+    <a href="{{ url_for('manager_cabinet') }}">Назад</a>
+    <a href="{{ url_for('home') }}">Додому</a>
+</body>
+</html>

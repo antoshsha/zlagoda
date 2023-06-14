@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Оновлення даних про картку клієнта</title>
+</head>
+<body>
+  <h1>Оновлення даних про клієнта постійного</h1>
+
+  {% if error %}
+    <p style="color: red;">{{ error }}</p>
+  {% endif %}
+
+  <form method="POST" action="{{ url_for('update_customer_card') }}">
+    <div>
+      <label for="card_number">Номер картки:</label>
+      <input type="text" id="card_number" name="card_number" required>
+    </div>
+
+    <div>
+      <label for="cust_surname">Прізвище:</label>
+      <input type="text" id="cust_surname" name="cust_surname" required>
+    </div>
+
+    <div>
+      <label for="cust_name">Ім'я:</label>
+      <input type="text" id="cust_name" name="cust_name" required>
+    </div>
+
+    <div>
+      <label for="cust_patronymic">По батькові:</label>
+      <input type="text" id="cust_patronymic" name="cust_patronymic" required>
+    </div>
+
+    <div>
+      <label for="phone_number">Номер телефону:</label>
+      <input type="text" id="phone_number" name="phone_number" required>
+    </div>
+
+    <div>
+      <label for="city">Місто:</label>
+      <input type="text" id="city" name="city" required>
+    </div>
+
+    <div>
+      <label for="street">Вулиця:</label>
+      <input type="text" id="street" name="street" required>
+    </div>
+
+    <div>
+      <label for="zip_code">Поштовий індекс:</label>
+      <input type="text" id="zip_code" name="zip_code" required>
+    </div>
+
+    <div>
+      <label for="percent">Відсоток знижки:</label>
+      <input type="text" id="percent" name="percent" required>
+    </div>
+
+    <div>
+      <input type="submit" value="Оновити">
+    </div>
+    <a href="{{ url_for('manager_cabinet') }}">Назад</a>
+    <a href="{{ url_for('home') }}">Додому</a>
+</body>
+  </form>
+</body>
+</html>
