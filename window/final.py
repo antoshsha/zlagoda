@@ -71,7 +71,7 @@ def manager_cabinet():
         return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
     return render_template('manager_cabinet.html')
 
-
+#----------------------- ADD
 @app.route('/add_empl', methods=['GET', 'POST'])
 def add_empl():
     if request.method == 'POST':
@@ -138,6 +138,8 @@ def add_product():
             request.form.get('product_name'),
             request.form.get('characteristics')
         ]
+        if data[1]=='':
+            data[1]=None
         # Process and save the data to the database
         product.insert_product(data)
         return redirect(url_for('manager_cabinet'))
@@ -163,6 +165,108 @@ def add_product_store():
 
     return render_template('manager_options/add_product_store.html')
 
+#--------------------- UPDATE
+@app.route('/update_employee', methods=['GET', 'POST'])
+def update_employee():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        employee_id = request.form.get('employee_id')
+        updated_data = [
+            request.form.get('empl_surname'),
+            request.form.get('empl_name'),
+            request.form.get('empl_patronymic'),
+            request.form.get('empl_role'),
+            request.form.get('salary'),
+            request.form.get('date_of_birth'),
+            request.form.get('date_of_start'),
+            request.form.get('phone_number'),
+            request.form.get('city'),
+            request.form.get('street'),
+            request.form.get('zip_code')
+        ]
+        employee.update_employee(employee_id,updated_data)  # Оновити дані про працівника в базі даних
+        return redirect(url_for('manager_cabinet'))
+
+    return render_template('manager_options/update_employee.html')
+
+
+@app.route('/update_customer_card', methods=['POST', 'GET'])
+def update_customer_card():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        data = [
+            request.form.get('card_number'),
+            request.form.get('cust_surname'),
+            request.form.get('cust_name'),
+            request.form.get('cust_patronymic'),
+            request.form.get('phone_number'),
+            request.form.get('city'),
+            request.form.get('street'),
+            request.form.get('zip_code'),
+            request.form.get('percent')
+        ]
+
+        # Опрацювання даних та оновлення в базі даних
+        customer_card.update_customer_card(data)
+
+        return redirect(url_for('manager_cabinet'))
+
+    return render_template('manager_options/update_customer_card.html')
+
+
+@app.route('/update_category', methods=['GET', 'POST'])
+def update_category():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        category_number = request.form.get('category_number')
+        category_name = request.form.get('category_name')
+
+        # Опрацювання даних та оновлення в базі даних
+        category.update_category(category_number, category_name)
+
+        return redirect(url_for('manager_cabinet'))
+
+    return render_template('manager_options/update_category.html')
+
+
+@app.route('/update_product', methods=['GET', 'POST'])
+def update_product():
+    if request.method == 'POST':
+        data = [
+            request.form.get('product_name'),
+            request.form.get('characteristics'),
+            request.form.get('category_number'),
+        ]
+        # Process and save the data to the database
+        product.update_product(data)
+        return redirect(url_for('manager_cabinet'))
+
+    return render_template('manager_options/update_product.html')
+
+
+@app.route('/update_product_store', methods=['GET', 'POST'])
+def update_product_store():
+    if request.method == 'POST':
+        data = [
+            request.form.get('UPC'),
+            request.form.get('UPC_prom'),
+            request.form.get('id_product'),
+            request.form.get('selling_price'),
+            request.form.get('products_number'),
+            request.form.get('promotional_product'),
+        ]
+        print(data)  # Printing data for verification
+        # Process the data and save it to the database
+        store_product.insert_store_product(data)
+        return redirect(url_for('manager_cabinet'))  # Redirect to the manager's cabinet page
+
+    return render_template('manager_options/update_product_store.html')
 
 
 if __name__ == '__main__':

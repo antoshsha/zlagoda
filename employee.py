@@ -68,7 +68,7 @@ def update_employee(id_employee, updated_data):
     if dob > age_limit:
         raise ValueError("Employee must be 18 years or older")
 
-    if salary < 0:
+    if float(salary) < 0:
         raise ValueError("Salary cannot be less than zero")
 
     try:

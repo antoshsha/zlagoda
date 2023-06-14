@@ -31,7 +31,7 @@ def update_customer_card(updated_data: Iterable) -> None:
         if not validate_customer_card(card_number):
             raise ValueError("Invalid customer card number")
 
-        if updated_data[-1] < 0:
+        if float(updated_data[-1]) < 0:
             raise ValueError("Percent can not be less than zero")
         cursor = conn.cursor()
         cursor.execute(
