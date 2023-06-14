@@ -71,6 +71,18 @@ def validate_customer_card(card_number: str) -> bool:
     return result[0] > 0
 
 
+def get_all_customer_cards():
+    """Get information of all customer cards"""
+    try:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM Customer_Card")
+        cards = cursor.fetchall()
+        cursor.close()
+        return cards
+    except Exception as e:
+        print("Error: Failed to retrieve customer card data -", str(e))
+        return []
+
 """
 TESTING INSERTION, DELETING AND UPDATING IN CUSTOM_CARD
 """

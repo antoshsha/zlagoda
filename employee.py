@@ -102,6 +102,17 @@ def delete_employee(id_employee):
         print("Error: Database constraint violation -", str(e))
         # Handle the constraint violation error here
 
+def get_all_employees():
+    """Get all employees from the database"""
+    try:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM Employee")
+        employees = cursor.fetchall()
+        cursor.close()
+        return employees
+    except Exception as e:
+        print("Error: Unable to fetch employees -", str(e))
+        return []
 
 """ 
 TESTING UPDATING 

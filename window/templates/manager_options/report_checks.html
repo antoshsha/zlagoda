@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Звіт про чеки</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>Звіт про чеки</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Номер чеку</th>
+                <th>ID працівника</th>
+                <th>Номер картки</th>
+                <th>Дата друку</th>
+                <th>Загальна сума</th>
+                <th>ПДВ</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for check in checks %}
+            <tr>
+                <td>{{ check[0] }}</td>
+                <td>{{ check[1] }}</td>
+                <td>{{ check[2] }}</td>
+                <td>{{ check[3] }}</td>
+                <td>{{ check[4] }}</td>
+                <td>{{ check[5] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <a href="{{ url_for('manager_cabinet') }}">Назад</a>
+    <a href="{{ url_for('home') }}">Додому</a>
+</body>
+</html>

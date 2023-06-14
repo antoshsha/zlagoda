@@ -124,7 +124,12 @@ def delete_store_product(UPC):
     except IntegrityError as e:
         print("Error: Database constraint violation -", str(e))
 
-
+def get_all_products():
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM Store_Product")
+    products = cursor.fetchall()
+    cursor.close()
+    return products
 def validate_store_product(UPC):
     """Check if a store product with the given UPC exists in the Store_Product table"""
     cursor = conn.cursor()

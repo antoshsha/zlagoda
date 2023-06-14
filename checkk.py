@@ -3,7 +3,12 @@ from typing import Iterable
 
 from employee import conn
 
-
+def get_all_checks():
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM Checkk")
+    checks = cursor.fetchall()
+    cursor.close()
+    return checks
 def insert_checkk(check_data):
     """Insert a new check into the Checkk table and corresponding sales into the Sale table"""
 

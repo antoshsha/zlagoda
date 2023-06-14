@@ -46,6 +46,17 @@ def delete_category(category_number):
         print("Error: Database constraint violation -", str(e))
 
 
+def get_all_categories():
+    """Get information of all categories"""
+    try:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM Category")
+        categories = cursor.fetchall()
+        cursor.close()
+        return categories
+    except Exception as e:
+        print("Error: Failed to retrieve category data -", str(e))
+        return []
 """
 TESTING DELETING UPDATING AND INSERTING A CATEGORY
 """

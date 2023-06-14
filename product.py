@@ -52,6 +52,15 @@ def delete_product(product_id):
         print("Error: Database constraint violation -", str(e))
 
 
+def get_all_products():
+    """Отримати всі товари з бази даних"""
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM Product")
+    products = cursor.fetchall()
+    cursor.close()
+    return products
+
+
 def validate_category(category_number):
 
     """Check if a category with the given category_number exists in the Category table"""

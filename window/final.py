@@ -346,6 +346,76 @@ def delete_check_store():
 
     return render_template('manager_options/delete_checkk.html')
 
+#---------------- REPORTS
+@app.route('/report_employees', methods=['POST', 'GET'])
+def report_employees():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
+
+    employees = employee.get_all_employees()  # Отримання списку всіх працівників з бази даних
+
+    return render_template('manager_options/report_employees.html', employees=employees)
+
+
+@app.route('/report_customer_cards')
+def report_customer_cards():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
+
+    try:
+        cards = customer_card.get_all_customer_cards()
+        return render_template('manager_options/report_customer_cards.html', cards=cards)
+    except Exception as e:
+        print("Error: Failed to generate customer card report -", str(e))
+        return redirect(url_for('manager_cabinet'))
+
+
+@app.route('/report_categories')
+def report_categories():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
+
+    try:
+        categories = category.get_all_categories()
+        print(categories)
+        return render_template('manager_options/report_categories.html', categories=categories)
+    except Exception as e:
+        print("Error: Failed to generate category report -", str(e))
+        return redirect(url_for('manager_cabinet'))
+
+
+@app.route('/report_products')
+def report_products():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+
+    # Отримати всі товари з бази даних
+    products=product.get_all_products()
+
+    # Передати дані товарів у шаблон і відобразити звіт
+    return render_template('manager_options/report_products.html', products=products)
+
+
+@app.route('/report_products_store')
+def report_products_store():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+
+    # Отримати всі товари в магазині з бази даних
+    products=store_product.get_all_products()
+
+    # Передати дані товарів у шаблон і відобразити звіт
+    return render_template('manager_options/report_products_store.html', products=products)
+
+
+@app.route('/report_checks')
+def report_checks():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
+
+    checks=checkk.get_all_checks()
+
+    return render_template('manager_options/report_checks.html', checks=checks)
 
 if __name__ == '__main__':
     app.run()

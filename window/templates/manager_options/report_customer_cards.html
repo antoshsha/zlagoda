@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Звіт: Картки клієнтів</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Звіт: Картки клієнтів</h1>
+    <table>
+        <tr>
+            <th>Номер картки</th>
+            <th>Прізвище</th>
+            <th>Ім'я</th>
+            <th>По-батькові</th>
+            <th>Дата народження</th>
+            <th>Номер телефону</th>
+            <th>Місто</th>
+            <th>Вулиця</th>
+            <th>Поштовий індекс</th>
+        </tr>
+        {% for card in cards %}
+        <tr>
+            <td>{{ card[0] }}</td>
+            <td>{{ card[1] }}</td>
+            <td>{{ card[2] }}</td>
+            <td>{{ card[3] }}</td>
+            <td>{{ card[4] }}</td>
+            <td>{{ card[5] }}</td>
+            <td>{{ card[6] }}</td>
+            <td>{{ card[7] }}</td>
+            <td>{{ card[8] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="{{ url_for('manager_cabinet') }}">Назад</a>
+    <a href="{{ url_for('home') }}">Додому</a>
+</body>
+</html>
