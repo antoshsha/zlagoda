@@ -352,7 +352,14 @@ def report_employees():
     if not session.get('logged_in'):
         return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
 
-    employees = employee.get_all_employees()  # Отримання списку всіх працівників з бази даних
+    if request.method == 'GET':
+        sort_by_surname = request.args.get('sort_by_surname')
+        if sort_by_surname:
+            employees = employee.get_all_employees_sorted_by_surname()
+        else:
+            employees = employee.get_all_employees()
+    else:
+        employees = employee.get_all_employees()
 
     return render_template('manager_options/report_employees.html', employees=employees)
 
@@ -416,6 +423,28 @@ def report_checks():
     checks=checkk.get_all_checks()
 
     return render_template('manager_options/report_checks.html', checks=checks)
+
+
+@app.route('/search_by_surname', methods=['POST', "GET"])
+def search_by_surname():
+    surname = request.form.get('surname')
+    phone, address=employee.get_by_surname(surname)
+
+
+    return render_template('manager_options/search_by_surname.html', phone=phone, address=address)
+
+
+@app.route('/search_discount', methods=['POST'])
+def search_by_discount():
+    discount = request.form['discount']
+
+    # Perform the search query using the discount value
+    cards = customer_card.get_cards_by_discount(discount)
+
+    # Sort the cards by surname
+    cards = sorted(cards, key=lambda x: x[1])
+
+    return render_template('manager_options/report_customer_cards.html', cards=cards)
 
 if __name__ == '__main__':
     app.run()

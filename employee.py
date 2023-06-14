@@ -114,6 +114,30 @@ def get_all_employees():
         print("Error: Unable to fetch employees -", str(e))
         return []
 
+
+def get_all_employees_sorted_by_surname():
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM Employee ORDER BY empl_surname")
+    employees = cursor.fetchall()
+    cursor.close()
+    return employees
+
+
+def get_by_surname(surname):
+    """Get phone number and address by surname"""
+    try:
+        cursor = conn.cursor()
+        cursor.execute("SELECT phone_number, city, street, zip_code FROM Employee WHERE empl_surname=?", (surname,))
+        result = cursor.fetchone()
+        cursor.close()
+        if result:
+            phone_number, city, street, zip_code = result
+            return phone_number, f"{city}, {street}, zip:{zip_code}"
+        else:
+            return None, None
+    except Exception as e:
+        print("Error: Unable to fetch employee by surname -", str(e))
+        return None, None
 """ 
 TESTING UPDATING 
 """

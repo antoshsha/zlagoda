@@ -15,15 +15,53 @@
 
         th {
             background-color: #f2f2f2;
+            cursor: pointer;
+        }
+
+        .sort-header {
+            color: blue;
+            text-decoration: underline;
         }
     </style>
+    <script>
+        function sortTable(columnIndex) {
+            var table, rows, switching, i, x, y, shouldSwitch;
+            table = document.getElementById("customers-table");
+            switching = true;
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("TD")[columnIndex];
+                    y = rows[i + 1].getElementsByTagName("TD")[columnIndex];
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                }
+            }
+        }
+         function resetFiltersAndSort() {
+            window.location.href = "{{ url_for('report_customer_cards') }}";
+        }
+    </script>
 </head>
 <body>
     <h1>Звіт: Картки клієнтів</h1>
-    <table>
+    <form action="/search_discount" method="POST">
+        <label for="discount">Відсоток знижки:</label>
+        <input type="number" id="discount" name="discount" step="0.01">
+        <button type="submit">Знайти</button>
+    </form>
+     <button onclick="resetFiltersAndSort()">Скинути</button>
+    <table id="customers-table">
         <tr>
-            <th>Номер картки</th>
-            <th>Прізвище</th>
+            <th onclick="sortTable(1)" class="sort-header">Прізвище</th>
             <th>Ім'я</th>
             <th>По-батькові</th>
             <th>Дата народження</th>
@@ -31,10 +69,10 @@
             <th>Місто</th>
             <th>Вулиця</th>
             <th>Поштовий індекс</th>
+            <th>Відсоток знижки</th>
         </tr>
         {% for card in cards %}
         <tr>
-            <td>{{ card[0] }}</td>
             <td>{{ card[1] }}</td>
             <td>{{ card[2] }}</td>
             <td>{{ card[3] }}</td>
@@ -43,9 +81,11 @@
             <td>{{ card[6] }}</td>
             <td>{{ card[7] }}</td>
             <td>{{ card[8] }}</td>
+            <td>{{ card[9] }}</td>
         </tr>
         {% endfor %}
     </table>
+    <br>
     <a href="{{ url_for('manager_cabinet') }}">Назад</a>
     <a href="{{ url_for('home') }}">Додому</a>
 </body>

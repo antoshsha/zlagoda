@@ -9,28 +9,68 @@
         }
 
         th, td {
-            border: 1px solid #ddd;
             padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
         }
 
-        th {
-            background-color: #f2f2f2;
+        .sort-btn {
+            cursor: pointer;
+            color: blue;
+            text-decoration: underline;
         }
     </style>
+    <script>
+        function sortTable(columnIndex) {
+            var table, rows, switching, i, x, y, shouldSwitch;
+            table = document.getElementById("categories-table");
+            switching = true;
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("TD")[columnIndex];
+                    y = rows[i + 1].getElementsByTagName("TD")[columnIndex];
+                    if (columnIndex === 0) {
+                        // Сортування за номером категорії як числове значення
+                        if (parseInt(x.innerHTML) > parseInt(y.innerHTML)) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else {
+                        // Сортування за назвою категорії як рядкове значення
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                }
+            }
+        }
+    </script>
 </head>
 <body>
     <h1>Звіт про категорії</h1>
-    <table>
-        <tr>
-            <th>Номер категорії</th>
-            <th>Назва категорії</th>
-        </tr>
-        {% for category in categories %}
-        <tr>
-            <td>{{ category[0] }}</td>
-            <td>{{ category[1] }}</td>
-        </tr>
-        {% endfor %}
+    <table id="categories-table">
+        <thead>
+            <tr>
+                <th onclick="sortTable(0)" class="sort-btn">Номер категорії</th>
+                <th onclick="sortTable(1)" class="sort-btn">Назва категорії</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in categories %}
+            <tr>
+                <td>{{ category[0] }}</td>
+                <td>{{ category[1] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
     <br>
     <a href="{{ url_for('manager_cabinet') }}">Назад</a>

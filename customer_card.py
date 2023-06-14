@@ -83,6 +83,20 @@ def get_all_customer_cards():
         print("Error: Failed to retrieve customer card data -", str(e))
         return []
 
+
+def get_cards_by_discount(discount):
+    """Get customer cards with the given discount percentage"""
+
+    try:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM Customer_Card WHERE percent = ?", (discount,))
+        cards = cursor.fetchall()
+        cursor.close()
+        return cards
+    except Exception as e:
+        print("Error: Failed to retrieve customer card data -", str(e))
+        return []
+
 """
 TESTING INSERTION, DELETING AND UPDATING IN CUSTOM_CARD
 """

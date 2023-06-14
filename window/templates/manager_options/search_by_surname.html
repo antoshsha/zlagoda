@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Пошук за прізвищем</title>
+</head>
+<body>
+    <h1>Пошук за прізвищем</h1>
+    <form action="/search_by_surname" method="POST">
+        <label for="surname">Прізвище:</label>
+        <input type="text" id="surname" name="surname">
+        <button type="submit">Пошук</button>
+    </form>
+    <h2>Результат:</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Телефон</th>
+                <th>Адреса</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ phone }}</td>
+                <td>{{ address }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <a href="{{ url_for('report_employees') }}">Назад</a>
+    <a href="{{ url_for('home') }}">Додому</a>
+</body>
+</html>
