@@ -268,6 +268,84 @@ def update_product_store():
 
     return render_template('manager_options/update_product_store.html')
 
+#--------------------- DELETE
+
+@app.route('/delete_employee', methods=['POST', 'GET'])
+def delete_employee():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
+    if request.method == 'POST':
+        employee_id = request.form.get('id_employee')
+        employee.delete_employee(employee_id)
+        return redirect(url_for('manager_cabinet'))
+
+    return render_template('manager_options/delete_employee.html')
+
+
+@app.route('/delete_customer_card', methods=['POST', 'GET'])
+def delete_customer_card():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
+
+    if request.method == 'POST':
+        card_number = request.form.get('card_number')
+        customer_card.delete_customer_card(card_number)
+        return redirect(url_for('manager_cabinet'))
+
+    return render_template('manager_options/delete_customer_card.html')
+
+
+@app.route('/delete_category', methods=['POST', 'GET'])
+def delete_category():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
+
+    if request.method == 'POST':
+        category_number = request.form.get('category_number')
+        category.delete_category(category_number)
+        return redirect(url_for('manager_cabinet'))
+
+    return render_template('manager_options/delete_category.html')
+
+
+@app.route('/delete_product', methods=['POST', 'GET'])
+def delete_product():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
+
+    if request.method == 'POST':
+        product_id = request.form.get('product_id')
+        product.delete_product(product_id)
+        return redirect(url_for('manager_cabinet'))
+
+    return render_template('manager_options/delete_product.html')
+
+
+@app.route('/delete_product_store', methods=['POST', 'GET'])
+def delete_product_store():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
+
+    if request.method == 'POST':
+        upc = request.form.get('upc')
+        store_product.delete_store_product(upc)
+        return redirect(url_for('manager_cabinet'))
+
+    return render_template('manager_options/delete_product_store.html')
+
+
+@app.route('/delete_check_store', methods=['POST', 'GET'])
+def delete_check_store():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
+
+    if request.method == 'POST':
+        check_number = request.form.get('check_number')
+        checkk.delete_checkk(check_number)
+        return redirect(url_for('manager_cabinet'))
+
+    return render_template('manager_options/delete_checkk.html')
+
 
 if __name__ == '__main__':
     app.run()

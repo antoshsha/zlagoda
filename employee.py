@@ -124,7 +124,7 @@ TESTING DELETION
 TESTING INSERTION 
 """
 
-
+'''
 new_employee = (
     'E002', 'Doe', 'John', 'Smith', 'Manager', 5000.00, '2000-01-01', '2023-01-01',
    '+123456789', 'City', 'Street', '12345'
@@ -133,5 +133,5 @@ try:
     insert_employee(new_employee)
     print("Employee data inserted successfully.")
 except ValueError as e:
-    print("Error: Invalid employee data -", str(e))
+    print("Error: Invalid employee data -", str(e))'''
 
