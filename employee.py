@@ -159,9 +159,9 @@ TESTING DELETION
 TESTING INSERTION 
 """
 
-'''
-new_employee = (
-    'E002', 'Doe', 'John', 'Smith', 'Manager', 5000.00, '2000-01-01', '2023-01-01',
+
+'''new_employee = (
+    'E008', 'Doe', 'John', 'Smith', 'Manager', 5000.00, '2000-01-01', '2023-01-01',
    '+123456789', 'City', 'Street', '12345'
 )
 try:
