@@ -14,10 +14,34 @@
             border-bottom: 1px solid #ddd;
         }
     </style>
+    <script>
+        function searchByLastName() {
+            var input, filter, table, tr, td, i;
+            input = document.getElementById("lastNameInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("clientTable");
+            tr = table.getElementsByTagName("tr");
+
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[1];
+                if (td) {
+                    if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
 </head>
 <body>
     <h1>All Clients</h1>
-    <table>
+    <label for="lastNameInput">Search by Last Name:</label>
+    <input type="text" id="lastNameInput" placeholder="Enter last name">
+    <button onclick="searchByLastName()">Search</button>
+
+    <table id="clientTable">
         <thead>
             <tr>
                 <th>Card Number</th>
@@ -47,7 +71,7 @@
             {% endfor %}
         </tbody>
     </table>
-    <a href="{{ url_for('cashier_cabinet') }}">Назад</a>
     <a href="{{ url_for('home') }}">Додому</a>
+    <a href="{{ url_for('cashier_cabinet') }}">Назад</a>
 </body>
 </html>

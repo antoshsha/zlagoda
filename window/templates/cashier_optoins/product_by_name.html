@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Product by Name</title>
+    <title>Товари за назвою</title>
     <style>
         table {
             border-collapse: collapse;
@@ -14,25 +14,75 @@
             border-bottom: 1px solid #ddd;
         }
     </style>
+    <script>
+        function sortTable() {
+            var table, rows, switching, i, x, y, shouldSwitch;
+            table = document.getElementById("productTable");
+            switching = true;
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("td")[7];
+                    y = rows[i + 1].getElementsByTagName("td")[7];
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                }
+            }
+        }
+
+        function filterByCategory() {
+            var input, filter, table, tr, td, i;
+            input = document.getElementById("categoryInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("productTable");
+            tr = table.getElementsByTagName("tr");
+
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[6];
+                if (td) {
+                    if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
 </head>
 <body>
-    <h1>Product by Name</h1>
+    <h1>Товари за назвою</h1>
     <form method="post" action="{{ url_for('search_product_by_name') }}">
-        <input type="text" name="product_name" placeholder="Enter product name">
-        <button type="submit">Search</button>
+        <label for="categoryInput">Пошук за назвою:</label>
+        <input type="text" name="product_name" placeholder="Введіть назву товару">
+        <button type="submit">Пошук</button>
     </form>
-    <table>
+    <label for="categoryInput">Пошук за категорією:</label>
+    <input type="text" id="categoryInput" placeholder="Введіть категорію">
+    <button onclick="filterByCategory()">Пошук</button>
+    <br>
+    <button onclick="sortTable()">Сортувати за назвою</button>
+
+    <table id="productTable">
         <thead>
             <tr>
                 <th>UPC</th>
                 <th>UPC_prom</th>
                 <th>ID</th>
-                <th>Selling Price</th>
-                <th>Products Number</th>
-                <th>Promotional Product</th>
-                <th>Category Number</th>
-                <th>Product Name</th>
-                <th>Characteristics</th>
+                <th>Ціна продажу</th>
+                <th>Кількість товарів</th>
+                <th>Акційний товар</th>
+                <th>Номер категорії</th>
+                <th>Назва товару</th>
+                <th>Характеристики</th>
             </tr>
         </thead>
         <tbody>
@@ -51,7 +101,7 @@
             {% endfor %}
         </tbody>
     </table>
-    <a href="{{ url_for('cashier_cabinet') }}">Back</a>
-    <a href="{{ url_for('home') }}">Home</a>
+    <a href="{{ url_for('home') }}">Додому</a>
+    <a href="{{ url_for('cashier_cabinet') }}">Назад</a>
 </body>
 </html>

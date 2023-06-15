@@ -37,7 +37,7 @@ def login_user(username, password):
     # Перевірка введених облікових даних
     if username == 'admin' and password == '1':
         session['logged_in'] = True
-        session["manager"] = False
+        session["manager"] = True
         session["cashier"] = True
         return True
     return False
@@ -125,8 +125,8 @@ def add_empl():
 
 @app.route('/add_customer_card', methods=['GET', 'POST'])
 def add_customer_card():
-    if not session.get("manager"):
-        return redirect(url_for('home'))
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
     if request.method == 'POST':
         data = [
             request.form.get('card_number'),
@@ -143,8 +143,10 @@ def add_customer_card():
         # Опрацьовка даних та збереження в базу даних
         customer_card.insert_customer_card(data)
         return redirect(url_for('manager_cabinet'))  # Перенаправлення на сторінку кабінету менеджера
-
-    return render_template('manager_options/add_customer_card.html')
+    role=0
+    if session.get("manager"):
+        role=1
+    return render_template('manager_options/add_customer_card.html', role=role)
 
 
 @app.route('/add_category', methods=['GET', 'POST'])
@@ -230,9 +232,7 @@ def update_employee():
 
 @app.route('/update_customer_card', methods=['POST', 'GET'])
 def update_customer_card():
-    if not session.get("manager"):
-        return redirect(url_for('home'))
-    if not session.get('logged_in'):
+    if not session.get('logged_in'):      #спільне для касира і менеджера
         return redirect(url_for('login'))
 
     if request.method == 'POST':
@@ -251,9 +251,11 @@ def update_customer_card():
         # Опрацювання даних та оновлення в базі даних
         customer_card.update_customer_card(data)
 
-        return redirect(url_for('manager_cabinet'))
-
-    return render_template('manager_options/update_customer_card.html')
+        return redirect(url_for('manager_cabinet'), role=session.get("manager"))
+    role = 0
+    if session.get("manager"):
+        role = 1
+    return render_template('manager_options/update_customer_card.html',role=role)
 
 
 @app.route('/update_category', methods=['GET', 'POST'])
@@ -571,6 +573,24 @@ def search_product_by_name():
     product_name=""
     product = store_product.get_all_products_by_name(product_name)
     return render_template('cashier_optoins/product_by_name.html', product=product)
+
+
+@app.route('/add_checkk', methods=['POST', 'GET'])
+def add_checkk():
+    if request.method == 'POST':
+        data = [
+            request.form.get('check_number'),
+            request.form.get('id_employee'),
+            request.form.get('card_number'),
+            request.form.get('print_date'),
+            request.form.get('upcs'),
+            request.form.get('quantities')
+        ]
+
+        # Виклик функції insert_checkk() для занесення даних в базу даних
+        checkk.insert_checkk(data)
+
+    return render_template('cashier_optoins/add_checkk.html')
 
 @app.route('/all_clients')
 def all_clients():

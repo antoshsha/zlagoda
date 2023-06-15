@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Створити новий чек</title>
+</head>
+<body>
+    <h1>Створити новий чек</h1>
+    <form method="post" action="{{ url_for('add_checkk') }}">
+        <div>
+            <label for="checkNumber">Номер чеку:</label>
+            <input type="text" id="checkNumber" name="check_number" required>
+        </div>
+
+        <div>
+            <label for="employeeID">ID працівника:</label>
+            <input type="text" id="employeeID" name="id_employee" required>
+        </div>
+
+        <div>
+            <label for="cardNumber">Номер картки:</label>
+            <input type="text" id="cardNumber" name="card_number" required>
+        </div>
+
+        <div>
+            <label for="printDate">Дата друку:</label>
+            <input type="text" id="printDate" name="print_date" required>
+        </div>
+
+        <div>
+            <label for="upcs">UPC-коди:</label>
+            <input type="text" id="upcs" name="upcs" required>
+        </div>
+
+        <div>
+            <label for="quantities">Кількості:</label>
+            <input type="text" id="quantities" name="quantities" required>
+        </div>
+
+        <button type="submit">Створити</button>
+    </form>
+    <a href="{{ url_for('home') }}">Додому</a>
+    <a href="{{ url_for('cashier_cabinet') }}">Назад</a>
+</body>
+</html>
