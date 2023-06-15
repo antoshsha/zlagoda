@@ -3,8 +3,8 @@ import datetime
 from sqlite3 import IntegrityError
 from typing import Iterable
 
-conn = sqlite3.connect(r'D:/ais/zlagoda/ais.db', check_same_thread=False)
-
+# conn = sqlite3.connect(r'D:/ais/zlagoda/ais.db', check_same_thread=False)
+conn = sqlite3.connect("ais.db")
 
 def insert_employee(employee_data: Iterable) -> None:
     """ INSERTING A NEW EMPLOYEE"""
