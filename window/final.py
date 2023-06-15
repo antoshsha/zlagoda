@@ -24,6 +24,26 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Увійти')
 
 
+def check_role(login, password):
+    try:
+        cursor = employee.conn.cursor()
+        cursor.execute(
+            "SELECT e.empl_role FROM Employee e JOIN User u ON e.id_employee = u.id_employee WHERE u.login = ? AND u.password = ?",
+            (login, password))
+        result = cursor.fetchone()
+        cursor.close()
+
+        if result:
+            role = result[0]
+            print(result[0])
+            return role
+        else:
+            return "not_find"
+    except Exception as e:
+        print("Error: Unable to fetch role -", str(e))
+        return "not_find"
+
+
 def manager_access():
     if not session.get("manager"):
         flash("Access denied")
@@ -37,12 +57,30 @@ def cashier_access():
 
 def login_user(username, password):
     # Перевірка введених облікових даних
-    if username == 'admin' and password == '1':
-        session['logged_in'] = True
-        session["manager"] = True
-        session["cashier"] = True
-        session["id"]="EMP001"
-        return True
+    try:
+        if username == 'admin' and password == '1':
+            session['logged_in'] = True
+            session["manager"] = True
+            session["cashier"] = True
+            session["id"] = "EMP001"
+            return True
+
+        cursor = employee.conn.cursor()
+        print("trying "+str(username)+" "+str(password))
+        cursor.execute("SELECT COUNT(*) FROM User WHERE login = ? AND password = ?", (str(username), str(password)))
+        result = cursor.fetchone()
+        cursor.close()
+
+        if result and result[0] > 0:
+            session['logged_in'] = True
+            return True
+        else:
+            return False
+    except Exception as e:
+        print("Error: Unable to authenticate user -", str(e))
+        return False
+
+
     return False
 
 
@@ -74,6 +112,13 @@ def login():
         username = form.username.data
         password = form.password.data
         if login_user(username, password):
+            print(login_user(username,password))
+            if check_role(username,password)=="Manager":
+                session['manager']=True
+                session['cashier']=False
+            if check_role(username,password)=="Cashier":
+                session['manager']=False
+                session['cashier']=True
             return redirect(url_for('home'))  # Перенаправлення на головну сторінку при успішному вході
         else:
             return render_template('login.html', form=form, error='Невірне ім\'я користувача або пароль')

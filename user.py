@@ -44,7 +44,7 @@ def delete_user(login):
 
 
 
-insert_user("johnsmith", "password123", "E008")
+#insert_user("johnsmith", "password123", "EMP022")
 # update_user("johnsmith", "newpassword456", "E008")
 # delete_user("johnsmith")
 
