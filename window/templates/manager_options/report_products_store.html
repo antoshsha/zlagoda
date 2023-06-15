@@ -168,7 +168,12 @@
         </tbody>
     </table>
     <br>
-    <a href="{{ url_for('manager_cabinet') }}">Назад</a>
+        {%if role==1%}
+        <a href="{{ url_for('manager_cabinet') }}">Назад</a>
+        {%endif%}
+        {%if role==0%}
+        <a href="{{ url_for('cashier_cabinet') }}">Назад</a>
+        {%endif%}
     <a href="{{ url_for('home') }}">Додому</a>
 </body>
 </html>

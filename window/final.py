@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask import Flask, render_template, redirect, url_for, request, session, flash
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
@@ -39,6 +41,7 @@ def login_user(username, password):
         session['logged_in'] = True
         session["manager"] = True
         session["cashier"] = True
+        session["id"]="EMP001"
         return True
     return False
 
@@ -470,9 +473,7 @@ def report_products():
 
 
 @app.route('/report_products_store')
-def report_products_store():
-    if not session.get("manager"):
-        return redirect(url_for('home'))
+def report_products_store():    #спільне для касира і менеджера
     if not session.get('logged_in'):
         return redirect(url_for('login'))
 
@@ -480,7 +481,10 @@ def report_products_store():
     products=store_product.get_all_products()
 
     # Передати дані товарів у шаблон і відобразити звіт
-    return render_template('manager_options/report_products_store.html', products=products)
+    role = 0
+    if session.get("manager"):
+        role = 1
+    return render_template('manager_options/report_products_store.html', products=products, role=role)
 
 
 @app.route('/report_checks')
@@ -591,6 +595,27 @@ def add_checkk():
         checkk.insert_checkk(data)
 
     return render_template('cashier_optoins/add_checkk.html')
+
+
+@app.route('/my_checks', methods=['POST', 'GET'])
+def my_checks():
+    if request.method == 'POST':
+        start_date = datetime.strptime(request.form.get('start_date'), '%Y-%m-%d').date()
+        end_date = datetime.strptime(request.form.get('end_date'), '%Y-%m-%d').date()
+
+        # Виклик функції, яка повертає список чеків за вказаний проміжок часу
+        checks = checkk.get_checks_by_cashier(session.get("id"),start_date, end_date)
+
+        return render_template('cashier_optoins/my_checks.html', checks=checks)
+
+    return render_template('cashier_optoins/my_checks.html')
+
+@app.route('/me')
+def me():
+    id = session.get("id")
+    data = employee.get_by_id(id)
+    return render_template('cashier_optoins/me.html', data=data)
+
 
 @app.route('/all_clients')
 def all_clients():

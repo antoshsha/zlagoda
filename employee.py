@@ -138,6 +138,21 @@ def get_by_surname(surname):
     except Exception as e:
         print("Error: Unable to fetch employee by surname -", str(e))
         return None, None
+
+def get_by_id(id):
+    """Get phone number and address by surname"""
+    try:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM Employee WHERE id_employee=?", (id,))
+        result = cursor.fetchone()
+        cursor.close()
+        if result:
+            return result
+        else:
+            return None, None
+    except Exception as e:
+        print("Error: Unable to fetch employee by surname -", str(e))
+        return None, None
 """ 
 TESTING UPDATING 
 """

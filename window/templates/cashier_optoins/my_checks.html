@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Мої чеки</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+    <script>
+        function searchByCheck() {
+            var checkName = document.getElementById("checkName").value.toUpperCase();
+            var table = document.getElementById("checkTable");
+            var rows = table.getElementsByTagName("tr");
+
+            for (var i = 1; i < rows.length; i++) {
+                var checkCell = rows[i].getElementsByTagName("td")[0];
+                if (checkCell) {
+                    var checkValue = checkCell.textContent || checkCell.innerText;
+                    if (checkValue.toUpperCase().indexOf(checkName) > -1) {
+                        rows[i].style.display = "";
+                    } else {
+                        rows[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Мої чеки</h1>
+    <form method="post" action="{{ url_for('my_checks') }}">
+        <label for="startDate">Початкова дата:</label>
+        <input type="date" id="startDate" name="start_date" value="{{ start_date }}" required>
+
+        <label for="endDate">Кінцева дата:</label>
+        <input type="date" id="endDate" name="end_date" value="{{ end_date }}" required>
+
+        <button type="submit">Показати</button>
+    </form>
+
+    <form>
+        <label for="checkName">Пошук за назвою чеку:</label>
+        <input type="text" id="checkName" onkeyup="searchByCheck()" placeholder="Введіть назву чеку">
+    </form>
+
+    <table id="checkTable">
+        <thead>
+            <tr>
+                <th>Номер чеку</th>
+                <th>ID працівника</th>
+                <th>Номер картки</th>
+                <th>Дата друку</th>
+                <th>Сума</th>
+                <th>ПДВ</th>
+                <th>Назва продукту</th>
+                <th>Кількість</th>
+                <th>Ціна продажу</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for check in checks %}
+            <tr>
+                <td>{{ check[0] }}</td>
+                <td>{{ check[1] }}</td>
+                <td>{{ check[2] }}</td>
+                <td>{{ check[3] }}</td>
+                <td>{{ check[4] }}</td>
+                <td>{{ check[5] }}</td>
+                <td>{{ check[6] }}</td>
+                <td>{{ check[7] }}</td>
+                <td>{{ check[8] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('home') }}">Додому</a>
+    <a href="{{ url_for('cashier_cabinet') }}">Назад</a>
+</body>
+</html>
