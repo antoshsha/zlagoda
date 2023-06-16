@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Table Data</title>
+</head>
+<body>
+    <h1>Знайти такі категоріх продуктів, в яких усі товари знаходяться на складі.</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Category Number</th>
+                <th>Category Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data %}
+            <tr>
+                <td>{{ row[0] }}</td>
+                <td>{{ row[1] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

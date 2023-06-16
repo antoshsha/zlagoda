@@ -61,7 +61,7 @@ def get_all_categories():
 TESTING DELETING UPDATING AND INSERTING A CATEGORY
 """
 
-insert_category("test")
+# insert_category("test")
 # update_category(5, "Electronics and Gadgets")
 # delete_category(5)
 

@@ -3,7 +3,10 @@ import datetime
 from sqlite3 import IntegrityError
 from typing import Iterable
 
-conn = sqlite3.connect(r'D:/ais/zlagoda/ais.db', check_same_thread=False)
+db_file_path = "/Users/antonmarynych/PycharmProjects/zlagoda56/ais.db"
+
+
+conn = sqlite3.connect(db_file_path, check_same_thread=False)
 
 
 def insert_employee(employee_data: Iterable) -> None:

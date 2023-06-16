@@ -1,15 +1,17 @@
 from sqlite3 import IntegrityError
 
+import encrypter
 from employee import conn
 
 
 def insert_user(login, password, id_employee):
     """Insert a new user record"""
     try:
+        password2 = encrypter.xor_encrypt_decrypt(password)
         cursor = conn.cursor()
         cursor.execute(
             "INSERT INTO User (login, password, id_employee) VALUES (?, ?, ?)",
-            (login, password, id_employee)
+            (login, password2, id_employee)
         )
         conn.commit()
         cursor.close()
@@ -20,6 +22,7 @@ def insert_user(login, password, id_employee):
 def update_user(login, password, id_employee):
     """Update an existing user record"""
     try:
+        password = encrypter.xor_encrypt_decrypt(password)
         cursor = conn.cursor()
         cursor.execute(
             "UPDATE User SET password = ?, id_employee = ? WHERE login = ?",
@@ -44,8 +47,9 @@ def delete_user(login):
 
 
 
-#insert_user("johnsmith", "password123", "EMP022")
+# insert_user("marks", "communist", "EMP002")
 # update_user("johnsmith", "newpassword456", "E008")
-# delete_user("johnsmith")
+# delete_user("cashier1")
+
 
 

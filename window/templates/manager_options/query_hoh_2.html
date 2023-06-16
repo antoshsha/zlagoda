@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HOH Custom 2</title>
+</head>
+<body>
+    <h1>Знайти всі міста за робітниками, такі, що ці робітники продали >= 2 одиниць товарів</h1>
+
+    {% if data %}
+        <h2>Результат:</h2>
+        <ul>
+            {% for city in data %}
+                <li>{{ city[0] }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No results found.</p>
+    {% endif %}
+</body>
+</html>
+

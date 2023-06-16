@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Query Result</title>
+</head>
+<body>
+    <h1>Знайти продукт, який було продано найбільше разів</h1>
+    {% if data %}
+        <p>Product ID: {{ data[0][0] }}</p>
+        <p>Product Name: {{ data[0][1] }}</p>
+    {% else %}
+        <p>No products found.</p>
+    {% endif %}
+</body>
+</html>

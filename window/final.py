@@ -11,6 +11,9 @@ import customer_card
 import  manager
 import product
 import store_product
+import encrypter
+from employee import conn
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret-key'  # Встановіть секретний ключ для захисту форми
@@ -64,10 +67,10 @@ def login_user(username, password):
             session["cashier"] = True
             session["id"] = "EMP001"
             return True
-
         cursor = employee.conn.cursor()
-        print("trying "+str(username)+" "+str(password))
-        cursor.execute("SELECT COUNT(*) FROM User WHERE login = ? AND password = ?", (str(username), str(password)))
+        print("trying "+str(username)+" "+encrypter.xor_encrypt_decrypt(str(password)))
+        cursor.execute("SELECT COUNT(*) FROM User WHERE login = ? AND password = ?",
+                       (str(username), encrypter.xor_encrypt_decrypt(str(password))))
         result = cursor.fetchone()
         cursor.close()
 
@@ -113,10 +116,10 @@ def login():
         password = form.password.data
         if login_user(username, password):
             print(login_user(username,password))
-            if check_role(username,password)=="Manager":
+            if check_role(username,encrypter.xor_encrypt_decrypt(str(password)))=="Manager":
                 session['manager']=True
                 session['cashier']=False
-            if check_role(username,password)=="Cashier":
+            if check_role(username,encrypter.xor_encrypt_decrypt(str(password)))=="Cashier":
                 session['manager']=False
                 session['cashier']=True
             return redirect(url_for('home'))  # Перенаправлення на головну сторінку при успішному вході
@@ -596,6 +599,10 @@ def check_by_id():
 #----------------------------------- ALL FOR CASHIER
 @app.route('/cashier_cabinet')
 def cashier_cabinet():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    if not session.get("cashier"):
+        return redirect(url_for('home'))
     return render_template('cashier_cabinet.html')
 
 
@@ -666,5 +673,186 @@ def me():
 def all_clients():
     clients = customer_card.get_all_clients_sorted_by_last_name()
     return render_template('cashier_optoins/all_clients.html', clients=clients)
+
+
+@app.route('/anton_mar_1', methods=['GET', 'POST'])
+def mar_custom_1():
+    if request.method == 'POST':
+        amount = float(request.form.get('amount'))
+        cursor = conn.cursor()
+        query = '''
+         SELECT CC.cust_surname, CC.cust_name, SUM(SP.selling_price) AS total_price
+         FROM Customer_Card CC
+         JOIN Checkk CK ON CC.card_number = CK.card_number
+         JOIN Sale S ON CK.check_number = S.check_number
+         JOIN Store_Product SP ON S.UPC = SP.UPC
+         WHERE SP.promotional_product = 1
+         GROUP BY CC.cust_surname, CC.cust_name
+         HAVING SUM(S.selling_price) > ?
+         '''
+        cursor.execute(query, (amount,))
+        results = cursor.fetchall()
+        cursor.close()
+        return render_template('manager_options/query_mar_1.html', data=results)
+    else:
+        return render_template('manager_options/query_mar_1.html')
+
+
+@app.route('/anton_mar_2', methods=['GET', 'POST'])
+def mar_custom_2():
+    cursor = conn.cursor()
+    query = '''
+            SELECT C.category_number, C.category_name
+            FROM Category C
+            WHERE EXISTS (
+             SELECT P.id_product
+             FROM Product P
+             WHERE P.category_number = C.category_number
+            )
+            AND NOT EXISTS (
+                SELECT P.id_product
+                FROM Product P
+                WHERE P.category_number = C.category_number
+             AND NOT EXISTS (
+                   SELECT S.UPC
+                   FROM Store_Product S
+                   WHERE S.id_product = P.id_product
+             )
+            )
+
+        '''
+    cursor.execute(query)
+    results = cursor.fetchall()
+    cursor.close()
+    return render_template('manager_options/query_mar_2.html', data=results)
+
+
+@app.route('/gryn_custom_1', methods=['GET', 'POST'])
+def gryn_custom_1():
+    cursor = conn.cursor()
+    query = '''
+        SELECT P.id_product, P.product_name
+        FROM Product AS P
+        WHERE P.id_product IN (
+            SELECT SP.Id_product
+            FROM Store_Product SP
+            WHERE SP.UPC IN (
+                SELECT S.UPC
+                FROM Sale S
+                GROUP BY S.UPC
+                HAVING SUM(S.product_number) = (
+                    SELECT MAX(subquery.total_bought)
+                    FROM (
+                        SELECT SUM(S2.product_number) AS total_bought
+                        FROM Sale S2
+                        GROUP BY S2.UPC
+                    ) AS subquery
+                )
+            )
+        );
+    '''
+    cursor.execute(query)
+    results = cursor.fetchall()
+    cursor.close()
+
+    return render_template('manager_options/query_gryn_1.html', data=results)
+
+@app.route('/gryn_2', methods=['GET', 'POST'])
+def gryn_custom_2():
+    if request.method == 'POST':
+        cursor = conn.cursor()
+        query = '''
+            SELECT category_number, category_name
+            FROM Category
+            WHERE EXISTS (
+                SELECT *
+                FROM Product
+                WHERE category_number = Category.category_number
+            )
+            AND NOT EXISTS (
+                SELECT *
+                FROM Product
+                WHERE category_number = Category.category_number
+                AND id_product NOT IN (
+                    SELECT id_product
+                    FROM Store_Product
+                    WHERE selling_price > ?
+                )
+            );
+        '''
+        parameter_value = float(request.form.get('parameter'))
+        cursor.execute(query, (parameter_value,))
+        results = cursor.fetchall()
+        cursor.close()
+
+        return render_template('manager_options/query_gryn_2.html', data=results, submitted=True)
+    else:
+        return render_template('manager_options/query_gryn_2.html', submitted=False)
+
+
+@app.route('/hoh_1', methods=['GET', 'POST'])
+def hoh_custom_1():
+    if request.method == 'POST':
+        cursor = conn.cursor()
+        query = '''
+            SELECT E.id_employee, E.empl_name, E.empl_surname
+            FROM Employee E
+            WHERE E.empl_role = 'Cashier' AND E.id_employee NOT IN (
+                SELECT C.id_employee
+                FROM Checkk C
+                WHERE C.check_number IN (
+                    SELECT S.check_number
+                    FROM Sale S
+                    WHERE S.UPC IN (
+                        SELECT SP.UPC
+                        FROM Store_Product SP
+                        WHERE SP.id_product = (
+                            SELECT P.id_product
+                            FROM Product P
+                            WHERE P.product_name = ?
+                        )
+                    )
+                )
+            )
+            AND E.id_employee NOT IN (
+                SELECT C.id_employee
+                FROM Checkk C
+                WHERE C.print_date = ?
+            );
+        '''
+        product_name = str(request.form.get('product'))
+        date_string = request.form.get('date')
+        date = datetime.strptime(date_string, '%Y-%m-%d').date().strftime('%Y-%m-%d')
+        cursor.execute(query, (product_name, date))
+        results = cursor.fetchall()
+        cursor.close()
+
+        return render_template('manager_options/query_hoh_1.html', data=results, submitted=True)
+    else:
+        return render_template('manager_options/query_hoh_1.html', submitted=False)
+
+
+@app.route('/hoh_2', methods=['GET', 'POST'])
+def hoh_custom_2():
+    cursor = conn.cursor()
+    query = '''
+            SELECT E.city
+            FROM Employee E
+            INNER JOIN Checkk C ON E.id_employee = C.id_employee
+            INNER JOIN Sale S ON C.check_number = S.check_number
+            GROUP BY E.city
+            HAVING COUNT(DISTINCT S.product_number) >= 2;
+    '''
+    cursor.execute(query)
+    results = cursor.fetchall()
+    cursor.close()
+    return render_template('manager_options/query_hoh_2.html', data=results, submitted=True)
+
+
 if __name__ == '__main__':
     app.run()
+
+
+
+
+

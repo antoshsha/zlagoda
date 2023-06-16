@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HOH Custom 1</title>
+</head>
+<body>
+    <h1>Знайти таких касирів, що не продавали товар за заданой назвою і не продавали нічого у задану дату</h1>
+    <form action="/hoh_1" method="POST">
+        <label for="product">Product Name:</label>
+        <input type="text" id="product" name="product" required>
+        <br>
+        <label for="date">Date (YYYY-MM-DD):</label>
+        <input type="text" id="date" name="date" pattern="\d{4}-\d{2}-\d{2}" required>
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+
+    {% if submitted %}
+        {% if data %}
+            <h2>Results:</h2>
+            <table>
+                <tr>
+                    <th>ID Employee</th>
+                    <th>Employee Name</th>
+                    <th>Employee Surname</th>
+                </tr>
+                {% for row in data %}
+                <tr>
+                    <td>{{ row[0] }}</td>
+                    <td>{{ row[1] }}</td>
+                    <td>{{ row[2] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>No results found.</p>
+        {% endif %}
+    {% endif %}
+</body>
+</html>
