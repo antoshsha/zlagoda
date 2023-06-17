@@ -68,14 +68,16 @@ def login_user(username, password):
             session["id"] = "EMP001"
             return True
         cursor = employee.conn.cursor()
-        print("trying "+str(username)+" "+encrypter.xor_encrypt_decrypt(str(password)))
-        cursor.execute("SELECT COUNT(*) FROM User WHERE login = ? AND password = ?",
-                       (str(username), encrypter.xor_encrypt_decrypt(str(password))))
+        print("trying "+str(username)+" "+(str(password)))
+        cursor.execute("SELECT * FROM User WHERE login = ? AND password = ?",
+                       (str(username), (str(password))))
         result = cursor.fetchone()
         cursor.close()
-
-        if result and result[0] > 0:
+        print(result)
+        if result:
             session['logged_in'] = True
+            session["id"]=result[2]
+            print("session id: "+str(result[2]))
             return True
         else:
             return False
@@ -114,7 +116,7 @@ def login():
     if form.validate_on_submit():
         username = form.username.data
         password = form.password.data
-        if login_user(username, password):
+        if login_user(username, encrypter.xor_encrypt_decrypt(str(password))):
             print(login_user(username,password))
             if check_role(username,encrypter.xor_encrypt_decrypt(str(password)))=="Manager":
                 session['manager']=True

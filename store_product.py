@@ -3,6 +3,15 @@ from typing import Iterable
 
 from employee import conn
 
+def get_all_products_ordered_by_name():
+    cursor = conn.cursor()
+    cursor.execute("""SELECT sp.UPC, sp.UPC_prom, p.id_product, p.category_number, p.product_name, p.characteristics, sp.selling_price, sp.products_number, sp.promotional_product
+FROM Store_Product sp
+INNER JOIN Product p ON sp.id_product = p.id_product
+ORDER BY p.product_name;""")
+    products = cursor.fetchall()
+    cursor.close()
+    return products
 
 def insert_store_product(store_product_data):
     """Insert a new store product or update an existing one"""
@@ -141,11 +150,7 @@ def get_all_products_by_name(product_name):
     return products
 
 def get_all_products():
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM Store_Product")
-    products = cursor.fetchall()
-    cursor.close()
-    return products
+    c
 def validate_store_product(UPC):
     """Check if a store product with the given UPC exists in the Store_Product table"""
     cursor = conn.cursor()
