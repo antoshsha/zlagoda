@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Категорії</title>
+</head>
+<body>
+    <h1>Категорії</h1>
+    <ul>
+        <li><a href="{{ url_for('add_category') }}">Додати категорію товару</a></li>
+
+        <li><a href="{{ url_for('update_category') }}">Оновити категорію товару</a></li>
+
+        <li><a href="{{ url_for('delete_category') }}">Видалити категорію товару</a></li>
+      
+        <li><a href="{{ url_for('report_categories') }}">Звіт по категоріям</a></li>
+       
+        <li><a href="{{ url_for('mar_custom_2') }}">Знайти такі категоріх продуктів, в яких усі товари знаходяться на складі.</a></li>
+        <li><a href="{{ url_for('gryn_custom_2') }}">Знайти категорії продуктів, у яких всі продукти коштують більше заданої суми</a></li>
+         <br>
+         <a href="{{ url_for('manager_cabinet') }}">Назад</a>
+        <a href="{{ url_for('home') }}">Додому</a>
+    </ul>
+</body>
+</html>
