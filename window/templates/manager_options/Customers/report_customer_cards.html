@@ -23,6 +23,8 @@
             text-decoration: underline;
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
     <script>
         function sortTable(columnIndex) {
             var table, rows, switching, i, x, y, shouldSwitch;
@@ -46,8 +48,51 @@
                 }
             }
         }
-         function resetFiltersAndSort() {
+
+        function resetFiltersAndSort() {
             window.location.href = "{{ url_for('report_customer_cards') }}";
+        }
+
+        function saveReport() {
+            var docDefinition = {
+                content: [
+                    { text: 'Звіт: Картки клієнтів', style: 'header' },
+                    { text: '\n' },
+                    {
+                        table: {
+                            headerRows: 1,
+                            widths: ['auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
+                            body: collectTableData()
+                        }
+                    }
+                ],
+                styles: {
+                    header: {
+                        fontSize: 18,
+                        bold: true
+                    }
+                }
+            };
+
+            pdfMake.createPdf(docDefinition).download('customer_cards_report.pdf');
+        }
+
+        function collectTableData() {
+            var table = document.querySelector('table');
+            var data = [];
+
+            for (var i = 0; i < table.rows.length; i++) {
+                var tableRow = table.rows[i];
+                var rowData = [];
+
+                for (var j = 0; j < tableRow.cells.length; j++) {
+                    rowData[j] = tableRow.cells[j].innerHTML;
+                }
+
+                data.push(rowData);
+            }
+
+            return data;
         }
     </script>
 </head>
@@ -58,13 +103,12 @@
         <input type="number" id="discount" name="discount" step="0.01">
         <button type="submit">Знайти</button>
     </form>
-     <button onclick="resetFiltersAndSort()">Скинути</button>
+    <button onclick="resetFiltersAndSort()">Скинути</button>
     <table id="customers-table">
         <tr>
             <th onclick="sortTable(1)" class="sort-header">Прізвище</th>
             <th>Ім'я</th>
             <th>По-батькові</th>
-            <th>Дата народження</th>
             <th>Номер телефону</th>
             <th>Місто</th>
             <th>Вулиця</th>
@@ -81,12 +125,12 @@
             <td>{{ card[6] }}</td>
             <td>{{ card[7] }}</td>
             <td>{{ card[8] }}</td>
-            <td>{{ card[9] }}</td>
         </tr>
         {% endfor %}
     </table>
     <br>
-    <a href="{{ url_for('manager_cabinet') }}">Назад</a>
+    <button onclick="saveReport()">Save Report</button>
+    <a href="{{ url_for('go_customers') }}">Назад</a>
     <a href="{{ url_for('home') }}">Додому</a>
 </body>
 </html>

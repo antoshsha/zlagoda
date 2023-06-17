@@ -14,6 +14,51 @@
             border-bottom: 1px solid #ddd;
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
+    <script>
+        function saveReport() {
+            var docDefinition = {
+                content: [
+                    { text: 'Звіт про чеки', style: 'header' },
+                    { text: '\n' },
+                    {
+                        table: {
+                            headerRows: 1,
+                            widths: ['auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
+                            body: collectTableData()
+                        }
+                    }
+                ],
+                styles: {
+                    header: {
+                        fontSize: 18,
+                        bold: true
+                    }
+                }
+            };
+
+            pdfMake.createPdf(docDefinition).download('report.pdf');
+        }
+
+        function collectTableData() {
+            var table = document.querySelector('table');
+            var data = [];
+
+            for (var i = 0; i < table.rows.length; i++) {
+                var tableRow = table.rows[i];
+                var rowData = [];
+
+                for (var j = 0; j < tableRow.cells.length; j++) {
+                    rowData[j] = tableRow.cells[j].innerHTML;
+                }
+
+                data.push(rowData);
+            }
+
+            return data;
+        }
+    </script>
 </head>
 <body>
     <h1>Звіт про чеки</h1>
@@ -58,7 +103,8 @@
         </tbody>
     </table>
     <br>
+    <button onclick="saveReport()">Save Report</button>
     <a href="{{ url_for('home') }}">Додому</a>
-    <a href="{{ url_for('manager_cabinet') }}">Назад</a>
+    <a href="{{ url_for('go_check') }}">Назад</a>
 </body>
 </html>

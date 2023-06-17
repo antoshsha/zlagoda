@@ -6,12 +6,12 @@
 <body>
     <h1>Кабінет менеджера</h1>
     <ul>
-        <li><a href= "{{url_for('category')}}">Категорії</a></li>
-        <li><a href="{{ url_for('check') }}">Чеки</a></li>
-        <li><a href="{{ url_for('customers') }}">Клієнти</a></li>
-        <li><a href="{{ url_for('employee') }}">Працівники</a></li>
-        <li><a href="{{ url_for('product') }}">Продукти</a></li>
-        <li><a href="{{ url_for('product_store') }}">Наявність</a></li>
+        <li><a href= "{{url_for('go_category')}}">Категорії</a></li>
+        <li><a href="{{ url_for('go_check') }}">Чеки</a></li>
+        <li><a href="{{ url_for('go_customers') }}">Клієнти</a></li>
+        <li><a href="{{ url_for('go_employee') }}">Працівники</a></li>
+        <li><a href="{{ url_for('go_product') }}">Продукти</a></li>
+        <li><a href="{{ url_for('go_product_store') }}">Наявність</a></li>
     </ul>
     
      <a href="{{ url_for('home') }}">Додому</a>

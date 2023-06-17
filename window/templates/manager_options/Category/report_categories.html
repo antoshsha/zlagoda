@@ -20,6 +20,8 @@
             text-decoration: underline;
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
     <script>
         function sortTable(columnIndex) {
             var table, rows, switching, i, x, y, shouldSwitch;
@@ -52,6 +54,55 @@
                 }
             }
         }
+
+        function saveReport() {
+            var docDefinition = {
+                content: [
+                    { text: 'Звіт про категорії', style: 'header' },
+                    { text: '\n' },
+                    {
+                        table: {
+                            headerRows: 1,
+                            widths: ['auto', 'auto'],
+                            body: collectTableData()
+                        }
+                    }
+                ],
+                styles: {
+                    header: {
+                        fontSize: 18,
+                        bold: true
+                    }
+                }
+            };
+
+            pdfMake.createPdf(docDefinition).download('report.pdf');
+        }
+
+        function collectTableData() {
+            var table = document.getElementById("categories-table");
+            var data = [];
+            var headers = [];
+
+            for (var i = 0; i < table.rows[0].cells.length; i++) {
+                headers[i] = table.rows[0].cells[i].innerHTML;
+            }
+
+            data.push(headers);
+
+            for (var j = 1; j < table.rows.length; j++) {
+                var tableRow = table.rows[j];
+                var rowData = [];
+
+                for (var k = 0; k < tableRow.cells.length; k++) {
+                    rowData[k] = tableRow.cells[k].innerHTML;
+                }
+
+                data.push(rowData);
+            }
+
+            return data;
+        }
     </script>
 </head>
 <body>
@@ -73,7 +124,8 @@
         </tbody>
     </table>
     <br>
-    <a href="{{ url_for('manager_cabinet') }}">Назад</a>
+    <button onclick="saveReport()">Save Report</button>
+    <a href="{{ url_for('go_category') }}">Назад</a>
     <a href="{{ url_for('home') }}">Додому</a>
 </body>
 </html>

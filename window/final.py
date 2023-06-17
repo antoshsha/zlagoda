@@ -151,29 +151,33 @@ def manager_cabinet():
         return redirect(url_for('home'))
     return render_template('/manager_cabinet.html')
 
+
+#------------------------------- BASIC MENU(CHANGES POSSIBLE)
 @app.route('/category')
-def category():
+def go_category():
     return render_template('/manager_options/Category/category.html')
 
 @app.route('/check')
-def check():
+def go_check():
     return render_template('/manager_options/Check/check.html')
 
 @app.route('/customers')
-def customers():
+def go_customers():
     return render_template('/manager_options/Customers/customers.html')
 
 @app.route('/employee')
-def employee():
+def go_employee():
     return render_template('/manager_options/Employee/employee.html')
 
 @app.route('/product')
-def product():
+def go_product():
     return render_template('/manager_options/Product/product.html')
 
 @app.route('/product_store')
-def product_store():
+def go_product_store():
     return render_template('/manager_options/Product_store/product_store.html')
+
+#------------------------------- CATEGORY
 
 @app.route('/Category/add_category', methods=['GET', 'POST'])
 def add_category():
@@ -183,7 +187,7 @@ def add_category():
         category_name = request.form.get('category_name')
         # Опрацьовка даних та збереження в базу даних
         category.insert_category(category_name)
-        return redirect(url_for('manager_cabinet'))  # Перенаправлення на сторінку кабінету менеджера
+        return redirect(url_for('go_category'))  # Перенаправлення на сторінку кабінету менеджера
 
     return render_template('manager_options/Category/add_category.html')
 
@@ -201,7 +205,7 @@ def update_category():
         # Опрацювання даних та оновлення в базі даних
         category.update_category(category_number, category_name)
 
-        return redirect(url_for('manager_cabinet'))
+        return redirect(url_for('go_category'))
 
     return render_template('manager_options/Category/update_category.html')
 
@@ -215,7 +219,7 @@ def delete_category():
     if request.method == 'POST':
         category_number = request.form.get('category_number')
         category.delete_category(category_number)
-        return redirect(url_for('manager_cabinet'))
+        return redirect(url_for('go_category'))
 
     return render_template('manager_options/Category/delete_category.html')
 
@@ -232,7 +236,7 @@ def report_categories():
         return render_template('manager_options/Category/report_categories.html', categories=categories)
     except Exception as e:
         print("Error: Failed to generate category report -", str(e))
-        return redirect(url_for('manager_cabinet'))
+        return redirect(url_for('category'))
     
 @app.route('/Category/anton_mar_2', methods=['GET', 'POST'])
 def mar_custom_2():
@@ -294,404 +298,497 @@ def gryn_custom_2():
     else:
         return render_template('manager_options/Category/query_gryn_2.html', submitted=False)
 
+#------------------------------- CHECK
+@app.route('/Check/delete_check_store', methods=['POST', 'GET'])
+def delete_check_store():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
+
+    if request.method == 'POST':
+        check_number = request.form.get('check_number')
+        checkk.delete_checkk(check_number)
+        return redirect(url_for('go_check'))
+
+    return render_template('manager_options/Check/delete_checkk.html')
+
+@app.route('/Check/report_checks')
+def report_checks():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
+
+    checks=checkk.get_all_checks()
+
+    return render_template('manager_options/Check/report_checks.html', checks=checks)
+
+@app.route('/Check/check_by_id', methods=['GET', 'POST'])
+def check_by_id():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
+    if request.method == 'POST':
+        cashier_id = request.form['cashier_id']
+        start_date = request.form['start_date']
+        end_date = request.form['end_date']
+        product_name = request.form.get('product_name', '')
+
+        results = checkk.get_checks_by_cashier(cashier_id, start_date, end_date)
+        total_quantity = sum(int(check[7]) for check in results if check[6] == product_name)
+        total_sum = 0.0
+        for check in results:
+            if(check[4]!=""):
+                total_sum += float(check[4])  # Індекс 4 - колонка "Загальна сума"
+        print(results)
+        return render_template('manager_options/Check/check_by_id.html', checks=results,total_sum=total_sum, total_quantity=total_quantity)
+
+    return render_template('manager_options/Check/check_by_id.html', checks=[])
+
+# #----------------------- CUSTOMERS
+
+@app.route('/Customers/add_customer_card', methods=['GET', 'POST'])
+def add_customer_card():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    if request.method == 'POST':
+        data = [
+            request.form.get('card_number'),
+            request.form.get('cust_surname'),
+            request.form.get('cust_name'),
+            request.form.get('cust_patronymic'),
+            request.form.get('phone_number'),
+            request.form.get('city'),
+            request.form.get('street'),
+            request.form.get('zip_code'),
+            request.form.get('percent'),
+        ]
+        print(data)  # Виведення даних на консоль (для перевірки)
+        # Опрацьовка даних та збереження в базу даних
+        customer_card.insert_customer_card(data)
+        return redirect(url_for('go_customer'))  # Перенаправлення на сторінку кабінету менеджера
+    role=0
+    if session.get("manager"):
+        role=1
+    return render_template('manager_options/Customers/add_customer_card.html', role=role)
+
+@app.route('/Customers/update_customer_card', methods=['POST', 'GET'])
+def update_customer_card():
+    if not session.get('logged_in'):      #спільне для касира і менеджера
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        data = [
+            request.form.get('card_number'),
+            request.form.get('cust_surname'),
+            request.form.get('cust_name'),
+            request.form.get('cust_patronymic'),
+            request.form.get('phone_number'),
+            request.form.get('city'),
+            request.form.get('street'),
+            request.form.get('zip_code'),
+            request.form.get('percent')
+        ]
+
+        # Опрацювання даних та оновлення в базі даних
+        customer_card.update_customer_card(data)
+
+        return redirect(url_for('go_category'), role=session.get("manager"))
+    role = 0
+    if session.get("manager"):
+        role = 1
+    return render_template('manager_options/Customers/update_customer_card.html',role=role)
+
+@app.route('/Customers/delete_customer_card', methods=['POST', 'GET'])
+def delete_customer_card():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
+
+    if request.method == 'POST':
+        card_number = request.form.get('card_number')
+        customer_card.delete_customer_card(card_number)
+        return redirect(url_for('go_customers'))
+
+    return render_template('manager_options/Customers/delete_customer_card.html')
+
+@app.route('/Customers/search_discount', methods=['POST'])
+def search_by_discount():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
+    discount = request.form['discount']
+
+    # Perform the search query using the discount value
+    cards = customer_card.get_cards_by_discount(discount)
+
+    # Sort the cards by surname
+    cards = sorted(cards, key=lambda x: x[1])
+
+    return render_template('manager_options/Customers/report_customer_cards.html', cards=cards)
+
+@app.route('/Customers/report_customer_cards')
+def report_customer_cards():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
+
+    try:
+        cards = customer_card.get_all_customer_cards()
+        return render_template('manager_options/Customers/report_customer_cards.html', cards=cards)
+    except Exception as e:
+        print("Error: Failed to generate customer card report -", str(e))
+        return redirect(url_for('go_customers'))
+
+@app.route('/Customers/anton_mar_1', methods=['GET', 'POST'])
+def mar_custom_1():
+    if request.method == 'POST':
+        amount = float(request.form.get('amount'))
+        cursor = conn.cursor()
+        query = '''
+         SELECT CC.cust_surname, CC.cust_name, SUM(SP.selling_price) AS total_price
+         FROM Customer_Card CC
+         JOIN Checkk CK ON CC.card_number = CK.card_number
+         JOIN Sale S ON CK.check_number = S.check_number
+         JOIN Store_Product SP ON S.UPC = SP.UPC
+         WHERE SP.promotional_product = 1
+         GROUP BY CC.cust_surname, CC.cust_name
+         HAVING SUM(S.selling_price) > ?
+         '''
+        cursor.execute(query, (amount,))
+        results = cursor.fetchall()
+        cursor.close()
+        return render_template('manager_options/Customers/query_mar_1.html', data=results)
+    else:
+        return render_template('manager_options/Customers/query_mar_1.html')
+    
+
+# #----------------------- EMPLOYEE
+
+@app.route('/Employee/add_empl', methods=['GET', 'POST'])
+def add_empl():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
+    if request.method == 'POST':
+        data = [
+            request.form.get('id_employee'),
+            request.form.get('empl_surname'),
+            request.form.get('empl_name'),
+            request.form.get('empl_patronymic'),
+            request.form.get('empl_role'),
+            request.form.get('salary'),
+            request.form.get('date_of_birth'),
+            request.form.get('date_of_start'),
+            request.form.get('phone_number'),
+            request.form.get('city'),
+            request.form.get('street'),
+            request.form.get('zip_code')
+        ]
+        print(data)
+        employee.insert_employee(data)
+        print(data)
+        employee.insert_employee(data)
+        # Опрацьовка даних та збереження в базу даних
+    return render_template("manager_options/Employee/add_empl.html")
+
+@app.route('/Employee/update_employee', methods=['GET', 'POST'])
+def update_employee():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        employee_id = request.form.get('employee_id')
+        updated_data = [
+            request.form.get('empl_surname'),
+            request.form.get('empl_name'),
+            request.form.get('empl_patronymic'),
+            request.form.get('empl_role'),
+            request.form.get('salary'),
+            request.form.get('date_of_birth'),
+            request.form.get('date_of_start'),
+            request.form.get('phone_number'),
+            request.form.get('city'),
+            request.form.get('street'),
+            request.form.get('zip_code')
+        ]
+        employee.update_employee(employee_id,updated_data)  # Оновити дані про працівника в базі даних
+        return redirect(url_for('manager_cabinet'))
+
+    return render_template('manager_options/Employee/update_employee.html')
+
+@app.route('/Employee/delete_employee', methods=['POST', 'GET'])
+def delete_employee():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
+    if request.method == 'POST':
+        employee_id = request.form.get('id_employee')
+        employee.delete_employee(employee_id)
+        return redirect(url_for('manager_cabinet'))
+
+    return render_template('manager_options/Employee/delete_employee.html')
+
+@app.route('/Employee/report_employees', methods=['POST', 'GET'])
+def report_employees():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
+
+    if request.method == 'GET':
+        sort_by_surname = request.args.get('sort_by_surname')
+        if sort_by_surname:
+            employees = employee.get_all_employees_sorted_by_surname()
+        else:
+            employees = employee.get_all_employees()
+    else:
+        employees = employee.get_all_employees()
+
+    return render_template('manager_options/Employee/report_employees.html', employees=employees)
+
+@app.route('/Employee/search_by_surname', methods=['POST', "GET"])
+def search_by_surname():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
+    surname = request.form.get('surname')
+    phone, address=employee.get_by_surname(surname)
+
+
+    return render_template('manager_options/Employee/search_by_surname.html', phone=phone, address=address)
+
+@app.route('/Employee/hoh_1', methods=['GET', 'POST'])
+def hoh_custom_1():
+    if request.method == 'POST':
+        cursor = conn.cursor()
+        query = '''
+            SELECT E.id_employee, E.empl_name, E.empl_surname
+            FROM Employee E
+            WHERE E.empl_role = 'Cashier' AND E.id_employee NOT IN (
+                SELECT C.id_employee
+                FROM Checkk C
+                WHERE C.check_number IN (
+                    SELECT S.check_number
+                    FROM Sale S
+                    WHERE S.UPC IN (
+                        SELECT SP.UPC
+                        FROM Store_Product SP
+                        WHERE SP.id_product = (
+                            SELECT P.id_product
+                            FROM Product P
+                            WHERE P.product_name = ?
+                        )
+                    )
+                )
+            )
+            AND E.id_employee NOT IN (
+                SELECT C.id_employee
+                FROM Checkk C
+                WHERE C.print_date = ?
+            );
+        '''
+        product_name = str(request.form.get('product'))
+        date_string = request.form.get('date')
+        date = datetime.strptime(date_string, '%Y-%m-%d').date().strftime('%Y-%m-%d')
+        cursor.execute(query, (product_name, date))
+        results = cursor.fetchall()
+        cursor.close()
+
+        return render_template('manager_options/Employee/query_hoh_1.html', data=results, submitted=True)
+    else:
+        return render_template('manager_options/Employee/query_hoh_1.html', submitted=False)
+
+
+@app.route('/Employee/hoh_2', methods=['GET', 'POST'])
+def hoh_custom_2():
+    cursor = conn.cursor()
+    query = '''
+            SELECT E.city
+            FROM Employee E
+            INNER JOIN Checkk C ON E.id_employee = C.id_employee
+            INNER JOIN Sale S ON C.check_number = S.check_number
+            GROUP BY E.city
+            HAVING COUNT(DISTINCT S.product_number) >= 2;
+    '''
+    cursor.execute(query)
+    results = cursor.fetchall()
+    cursor.close()
+    return render_template('manager_options/Employee/query_hoh_2.html', data=results, submitted=True)
+
+# #--------------------- PRODUCT
+
+@app.route('/Product/add_product', methods=['GET', 'POST'])
+def add_product():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
+    if request.method == 'POST':
+        data = [
+            request.form.get('category_number'),
+            request.form.get('product_name'),
+            request.form.get('characteristics')
+        ]
+        if data[1]=='':
+            data[1]=None
+        # Process and save the data to the database
+        product.insert_product(data)
+        return redirect(url_for('go_product'))
+
+    return render_template('manager_options/Product/add_product.html')
+
+
+@app.route('/Product/update_product', methods=['GET', 'POST'])
+def update_product():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
+    if request.method == 'POST':
+        data = [
+            request.form.get('product_name'),
+            request.form.get('characteristics'),
+            request.form.get('category_number'),
+        ]
+        # Process and save the data to the database
+        product.update_product(data)
+        return redirect(url_for('go_product'))
+
+    return render_template('manager_options/Product/update_product.html')
+
+
+@app.route('/Product/delete_product', methods=['POST', 'GET'])
+def delete_product():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
+
+    if request.method == 'POST':
+        product_id = request.form.get('product_id')
+        product.delete_product(product_id)
+        return redirect(url_for('go_product'))
+
+    return render_template('manager_options/Product/delete_product.html')
+
+@app.route('/Product/report_products')
+def report_products():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+
+    # Отримати всі товари з бази даних
+    products=product.get_all_products()
+
+    # Передати дані товарів у шаблон і відобразити звіт
+    return render_template('manager_options/Product/report_products.html', products=products)
+
+@app.route('/Product/gryn_custom_1', methods=['GET', 'POST'])
+def gryn_custom_1():
+    cursor = conn.cursor()
+    query = '''
+        SELECT P.id_product, P.product_name
+        FROM Product AS P
+        WHERE P.id_product IN (
+            SELECT SP.Id_product
+            FROM Store_Product SP
+            WHERE SP.UPC IN (
+                SELECT S.UPC
+                FROM Sale S
+                GROUP BY S.UPC
+                HAVING SUM(S.product_number) = (
+                    SELECT MAX(subquery.total_bought)
+                    FROM (
+                        SELECT SUM(S2.product_number) AS total_bought
+                        FROM Sale S2
+                        GROUP BY S2.UPC
+                    ) AS subquery
+                )
+            )
+        );
+    '''
+    cursor.execute(query)
+    results = cursor.fetchall()
+    cursor.close()
+
+    return render_template('manager_options/Product/query_gryn_1.html', data=results)
+
+# #--------------------- PRODUCT_STORE
+
+@app.route('/Product_Store/add_product_store', methods=['GET', 'POST'])
+def add_product_store():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
+    if request.method == 'POST':
+        data = [
+            request.form.get('UPC'),
+            request.form.get('UPC_prom'),
+            request.form.get('id_product'),
+            request.form.get('selling_price'),
+            request.form.get('products_number'),
+            request.form.get('promotional_product'),
+        ]
+        print(data)  # Printing data for verification
+        # Process the data and save it to the database
+        store_product.insert_store_product(data)
+        return redirect(url_for('go_product_store'))  # Redirect to the manager's cabinet page
+
+    return render_template('manager_options/Product_Store/add_product_store.html')
+
+
+@app.route('/Product_Store/update_product_store', methods=['GET', 'POST'])
+def update_product_store():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
+    if request.method == 'POST':
+        data = [
+            request.form.get('UPC'),
+            request.form.get('UPC_prom'),
+            request.form.get('id_product'),
+            request.form.get('selling_price'),
+            request.form.get('products_number'),
+            request.form.get('promotional_product'),
+        ]
+        print(data)  # Printing data for verification
+        # Process the data and save it to the database
+        store_product.insert_store_product(data)
+        return redirect(url_for('go_product_store'))  # Redirect to the manager's cabinet page
+
+    return render_template('manager_options/Product_Store/update_product_store.html')
+
+
+@app.route('/Product_Store/delete_product_store', methods=['POST', 'GET'])
+def delete_product_store():
+    if not session.get("manager"):
+        return redirect(url_for('home'))
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
+
+    if request.method == 'POST':
+        upc = request.form.get('upc')
+        store_product.delete_store_product(upc)
+        return redirect(url_for('go_product_store'))
+
+    return render_template('manager_options/Product_Store/delete_product_store.html')
+
+
+@app.route('/Product_store/report_products_store')
+def report_products_store():    #спільне для касира і менеджера
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+
+    # Отримати всі товари в магазині з бази даних
+    products=store_product.get_all_products()
+
+    # Передати дані товарів у шаблон і відобразити звіт
+    role = 0
+    if session.get("manager"):
+        role = 1
+    return render_template('manager_options/Product_store/report_products_store.html', products=products, role=role)
 
-# #----------------------- ADD
-# @app.route('/Employee/add_empl', methods=['GET', 'POST'])
-# def add_empl():
-#     if not session.get("manager"):
-#         return redirect(url_for('home'))
-#     if request.method == 'POST':
-#         data = [
-#             request.form.get('id_employee'),
-#             request.form.get('empl_surname'),
-#             request.form.get('empl_name'),
-#             request.form.get('empl_patronymic'),
-#             request.form.get('empl_role'),
-#             request.form.get('salary'),
-#             request.form.get('date_of_birth'),
-#             request.form.get('date_of_start'),
-#             request.form.get('phone_number'),
-#             request.form.get('city'),
-#             request.form.get('street'),
-#             request.form.get('zip_code')
-#         ]
-#         print(data)
-#         employee.insert_employee(data)
-#         print(data)
-#         employee.insert_employee(data)
-#         # Опрацьовка даних та збереження в базу даних
-#     return render_template("manager_options/Employee/add_empl.html")
-
-
-# @app.route('/Customers/add_customer_card', methods=['GET', 'POST'])
-# def add_customer_card():
-#     if not session.get('logged_in'):
-#         return redirect(url_for('login'))
-#     if request.method == 'POST':
-#         data = [
-#             request.form.get('card_number'),
-#             request.form.get('cust_surname'),
-#             request.form.get('cust_name'),
-#             request.form.get('cust_patronymic'),
-#             request.form.get('phone_number'),
-#             request.form.get('city'),
-#             request.form.get('street'),
-#             request.form.get('zip_code'),
-#             request.form.get('percent'),
-#         ]
-#         print(data)  # Виведення даних на консоль (для перевірки)
-#         # Опрацьовка даних та збереження в базу даних
-#         customer_card.insert_customer_card(data)
-#         return redirect(url_for('manager_cabinet'))  # Перенаправлення на сторінку кабінету менеджера
-#     role=0
-#     if session.get("manager"):
-#         role=1
-#     return render_template('manager_options/Customers/add_customer_card.html', role=role)
-
-
-
-
-
-# @app.route('/Product/add_product', methods=['GET', 'POST'])
-# def add_product():
-#     if not session.get("manager"):
-#         return redirect(url_for('home'))
-#     if request.method == 'POST':
-#         data = [
-#             request.form.get('category_number'),
-#             request.form.get('product_name'),
-#             request.form.get('characteristics')
-#         ]
-#         if data[1]=='':
-#             data[1]=None
-#         # Process and save the data to the database
-#         product.insert_product(data)
-#         return redirect(url_for('manager_cabinet'))
-
-#     return render_template('manager_options/Product/add_product.html')
-
-
-# @app.route('/Product_Store/add_product_store', methods=['GET', 'POST'])
-# def add_product_store():
-#     if not session.get("manager"):
-#         return redirect(url_for('home'))
-#     if request.method == 'POST':
-#         data = [
-#             request.form.get('UPC'),
-#             request.form.get('UPC_prom'),
-#             request.form.get('id_product'),
-#             request.form.get('selling_price'),
-#             request.form.get('products_number'),
-#             request.form.get('promotional_product'),
-#         ]
-#         print(data)  # Printing data for verification
-#         # Process the data and save it to the database
-#         store_product.insert_store_product(data)
-#         return redirect(url_for('manager_cabinet'))  # Redirect to the manager's cabinet page
-
-#     return render_template('manager_options/Product_Store/add_product_store.html')
-
-# #--------------------- UPDATE
-# @app.route('/update_employee', methods=['GET', 'POST'])
-# def update_employee():
-#     if not session.get("manager"):
-#         return redirect(url_for('home'))
-#     if not session.get('logged_in'):
-#         return redirect(url_for('login'))
-
-#     if request.method == 'POST':
-#         employee_id = request.form.get('employee_id')
-#         updated_data = [
-#             request.form.get('empl_surname'),
-#             request.form.get('empl_name'),
-#             request.form.get('empl_patronymic'),
-#             request.form.get('empl_role'),
-#             request.form.get('salary'),
-#             request.form.get('date_of_birth'),
-#             request.form.get('date_of_start'),
-#             request.form.get('phone_number'),
-#             request.form.get('city'),
-#             request.form.get('street'),
-#             request.form.get('zip_code')
-#         ]
-#         employee.update_employee(employee_id,updated_data)  # Оновити дані про працівника в базі даних
-#         return redirect(url_for('manager_cabinet'))
-
-#     return render_template('manager_options/update_employee.html')
-
-
-# @app.route('/update_customer_card', methods=['POST', 'GET'])
-# def update_customer_card():
-#     if not session.get('logged_in'):      #спільне для касира і менеджера
-#         return redirect(url_for('login'))
-
-#     if request.method == 'POST':
-#         data = [
-#             request.form.get('card_number'),
-#             request.form.get('cust_surname'),
-#             request.form.get('cust_name'),
-#             request.form.get('cust_patronymic'),
-#             request.form.get('phone_number'),
-#             request.form.get('city'),
-#             request.form.get('street'),
-#             request.form.get('zip_code'),
-#             request.form.get('percent')
-#         ]
-
-#         # Опрацювання даних та оновлення в базі даних
-#         customer_card.update_customer_card(data)
-
-#         return redirect(url_for('manager_cabinet'), role=session.get("manager"))
-#     role = 0
-#     if session.get("manager"):
-#         role = 1
-#     return render_template('manager_options/update_customer_card.html',role=role)
-
-
-
-
-
-# @app.route('/update_product', methods=['GET', 'POST'])
-# def update_product():
-#     if not session.get("manager"):
-#         return redirect(url_for('home'))
-#     if request.method == 'POST':
-#         data = [
-#             request.form.get('product_name'),
-#             request.form.get('characteristics'),
-#             request.form.get('category_number'),
-#         ]
-#         # Process and save the data to the database
-#         product.update_product(data)
-#         return redirect(url_for('manager_cabinet'))
-
-#     return render_template('manager_options/update_product.html')
-
-
-# @app.route('/update_product_store', methods=['GET', 'POST'])
-# def update_product_store():
-#     if not session.get("manager"):
-#         return redirect(url_for('home'))
-#     if request.method == 'POST':
-#         data = [
-#             request.form.get('UPC'),
-#             request.form.get('UPC_prom'),
-#             request.form.get('id_product'),
-#             request.form.get('selling_price'),
-#             request.form.get('products_number'),
-#             request.form.get('promotional_product'),
-#         ]
-#         print(data)  # Printing data for verification
-#         # Process the data and save it to the database
-#         store_product.insert_store_product(data)
-#         return redirect(url_for('manager_cabinet'))  # Redirect to the manager's cabinet page
-
-#     return render_template('manager_options/update_product_store.html')
-
-# #--------------------- DELETE
-
-# @app.route('/delete_employee', methods=['POST', 'GET'])
-# def delete_employee():
-#     if not session.get("manager"):
-#         return redirect(url_for('home'))
-#     if not session.get('logged_in'):
-#         return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
-#     if request.method == 'POST':
-#         employee_id = request.form.get('id_employee')
-#         employee.delete_employee(employee_id)
-#         return redirect(url_for('manager_cabinet'))
-
-#     return render_template('manager_options/delete_employee.html')
-
-
-# @app.route('/delete_customer_card', methods=['POST', 'GET'])
-# def delete_customer_card():
-#     if not session.get("manager"):
-#         return redirect(url_for('home'))
-#     if not session.get('logged_in'):
-#         return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
-
-#     if request.method == 'POST':
-#         card_number = request.form.get('card_number')
-#         customer_card.delete_customer_card(card_number)
-#         return redirect(url_for('manager_cabinet'))
-
-#     return render_template('manager_options/delete_customer_card.html')
-
-
-
-
-
-# @app.route('/delete_product', methods=['POST', 'GET'])
-# def delete_product():
-#     if not session.get("manager"):
-#         return redirect(url_for('home'))
-#     if not session.get('logged_in'):
-#         return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
-
-#     if request.method == 'POST':
-#         product_id = request.form.get('product_id')
-#         product.delete_product(product_id)
-#         return redirect(url_for('manager_cabinet'))
-
-#     return render_template('manager_options/delete_product.html')
-
-
-# @app.route('/delete_product_store', methods=['POST', 'GET'])
-# def delete_product_store():
-#     if not session.get("manager"):
-#         return redirect(url_for('home'))
-#     if not session.get('logged_in'):
-#         return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
-
-#     if request.method == 'POST':
-#         upc = request.form.get('upc')
-#         store_product.delete_store_product(upc)
-#         return redirect(url_for('manager_cabinet'))
-
-#     return render_template('manager_options/delete_product_store.html')
-
-
-# @app.route('/delete_check_store', methods=['POST', 'GET'])
-# def delete_check_store():
-#     if not session.get("manager"):
-#         return redirect(url_for('home'))
-#     if not session.get('logged_in'):
-#         return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
-
-#     if request.method == 'POST':
-#         check_number = request.form.get('check_number')
-#         checkk.delete_checkk(check_number)
-#         return redirect(url_for('manager_cabinet'))
-
-#     return render_template('manager_options/delete_checkk.html')
-
-# #---------------- REPORTS
-# @app.route('/report_employees', methods=['POST', 'GET'])
-# def report_employees():
-#     if not session.get("manager"):
-#         return redirect(url_for('home'))
-#     if not session.get('logged_in'):
-#         return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
 
-#     if request.method == 'GET':
-#         sort_by_surname = request.args.get('sort_by_surname')
-#         if sort_by_surname:
-#             employees = employee.get_all_employees_sorted_by_surname()
-#         else:
-#             employees = employee.get_all_employees()
-#     else:
-#         employees = employee.get_all_employees()
 
-#     return render_template('manager_options/report_employees.html', employees=employees)
-
-
-# @app.route('/report_customer_cards')
-# def report_customer_cards():
-#     if not session.get("manager"):
-#         return redirect(url_for('home'))
-#     if not session.get('logged_in'):
-#         return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
-
-#     try:
-#         cards = customer_card.get_all_customer_cards()
-#         return render_template('manager_options/report_customer_cards.html', cards=cards)
-#     except Exception as e:
-#         print("Error: Failed to generate customer card report -", str(e))
-#         return redirect(url_for('manager_cabinet'))
-
-
-
-
-
-# @app.route('/report_products')
-# def report_products():
-#     if not session.get("manager"):
-#         return redirect(url_for('home'))
-#     if not session.get('logged_in'):
-#         return redirect(url_for('login'))
-
-#     # Отримати всі товари з бази даних
-#     products=product.get_all_products()
-
-#     # Передати дані товарів у шаблон і відобразити звіт
-#     return render_template('manager_options/report_products.html', products=products)
-
-
-# @app.route('/report_products_store')
-# def report_products_store():    #спільне для касира і менеджера
-#     if not session.get('logged_in'):
-#         return redirect(url_for('login'))
-
-#     # Отримати всі товари в магазині з бази даних
-#     products=store_product.get_all_products()
-
-#     # Передати дані товарів у шаблон і відобразити звіт
-#     role = 0
-#     if session.get("manager"):
-#         role = 1
-#     return render_template('manager_options/report_products_store.html', products=products, role=role)
-
-
-# @app.route('/report_checks')
-# def report_checks():
-#     if not session.get("manager"):
-#         return redirect(url_for('home'))
-#     if not session.get('logged_in'):
-#         return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
-
-#     checks=checkk.get_all_checks()
-
-#     return render_template('manager_options/report_checks.html', checks=checks)
-
-
-# @app.route('/search_by_surname', methods=['POST', "GET"])
-# def search_by_surname():
-#     if not session.get("manager"):
-#         return redirect(url_for('home'))
-#     surname = request.form.get('surname')
-#     phone, address=employee.get_by_surname(surname)
-
-
-#     return render_template('manager_options/search_by_surname.html', phone=phone, address=address)
-
-
-# @app.route('/search_discount', methods=['POST'])
-# def search_by_discount():
-#     if not session.get("manager"):
-#         return redirect(url_for('home'))
-#     discount = request.form['discount']
-
-#     # Perform the search query using the discount value
-#     cards = customer_card.get_cards_by_discount(discount)
-
-#     # Sort the cards by surname
-#     cards = sorted(cards, key=lambda x: x[1])
-
-#     return render_template('manager_options/report_customer_cards.html', cards=cards)
-
-
-
-# @app.route('/check_by_id', methods=['GET', 'POST'])
-# def check_by_id():
-#     if not session.get("manager"):
-#         return redirect(url_for('home'))
-#     if request.method == 'POST':
-#         cashier_id = request.form['cashier_id']
-#         start_date = request.form['start_date']
-#         end_date = request.form['end_date']
-#         product_name = request.form.get('product_name', '')
-
-#         results = checkk.get_checks_by_cashier(cashier_id, start_date, end_date)
-#         total_quantity = sum(int(check[7]) for check in results if check[6] == product_name)
-#         total_sum = 0.0
-#         for check in results:
-#             if(check[4]!=""):
-#                 total_sum += float(check[4])  # Індекс 4 - колонка "Загальна сума"
-#         print(results)
-#         return render_template('manager_options/check_by_id.html', checks=results,total_sum=total_sum, total_quantity=total_quantity)
-
-#     return render_template('manager_options/check_by_id.html', checks=[])
+
 
 
 #----------------------------------- ALL FOR CASHIER
@@ -773,125 +870,14 @@ def cashier_cabinet():
 #     return render_template('cashier_options/all_clients.html', clients=clients)
 
 
-# @app.route('/anton_mar_1', methods=['GET', 'POST'])
-# def mar_custom_1():
-#     if request.method == 'POST':
-#         amount = float(request.form.get('amount'))
-#         cursor = conn.cursor()
-#         query = '''
-#          SELECT CC.cust_surname, CC.cust_name, SUM(SP.selling_price) AS total_price
-#          FROM Customer_Card CC
-#          JOIN Checkk CK ON CC.card_number = CK.card_number
-#          JOIN Sale S ON CK.check_number = S.check_number
-#          JOIN Store_Product SP ON S.UPC = SP.UPC
-#          WHERE SP.promotional_product = 1
-#          GROUP BY CC.cust_surname, CC.cust_name
-#          HAVING SUM(S.selling_price) > ?
-#          '''
-#         cursor.execute(query, (amount,))
-#         results = cursor.fetchall()
-#         cursor.close()
-#         return render_template('manager_options/query_mar_1.html', data=results)
-#     else:
-#         return render_template('manager_options/query_mar_1.html')
 
 
 
 
-# @app.route('/gryn_custom_1', methods=['GET', 'POST'])
-# def gryn_custom_1():
-#     cursor = conn.cursor()
-#     query = '''
-#         SELECT P.id_product, P.product_name
-#         FROM Product AS P
-#         WHERE P.id_product IN (
-#             SELECT SP.Id_product
-#             FROM Store_Product SP
-#             WHERE SP.UPC IN (
-#                 SELECT S.UPC
-#                 FROM Sale S
-#                 GROUP BY S.UPC
-#                 HAVING SUM(S.product_number) = (
-#                     SELECT MAX(subquery.total_bought)
-#                     FROM (
-#                         SELECT SUM(S2.product_number) AS total_bought
-#                         FROM Sale S2
-#                         GROUP BY S2.UPC
-#                     ) AS subquery
-#                 )
-#             )
-#         );
-#     '''
-#     cursor.execute(query)
-#     results = cursor.fetchall()
-#     cursor.close()
-
-#     return render_template('manager_options/query_gryn_1.html', data=results)
 
 
 
-#         return render_template('manager_options/query_gryn_2.html', data=results, submitted=True)
-#     else:
-#         return render_template('manager_options/query_gryn_2.html', submitted=False)
 
-
-# @app.route('/hoh_1', methods=['GET', 'POST'])
-# def hoh_custom_1():
-#     if request.method == 'POST':
-#         cursor = conn.cursor()
-#         query = '''
-#             SELECT E.id_employee, E.empl_name, E.empl_surname
-#             FROM Employee E
-#             WHERE E.empl_role = 'Cashier' AND E.id_employee NOT IN (
-#                 SELECT C.id_employee
-#                 FROM Checkk C
-#                 WHERE C.check_number IN (
-#                     SELECT S.check_number
-#                     FROM Sale S
-#                     WHERE S.UPC IN (
-#                         SELECT SP.UPC
-#                         FROM Store_Product SP
-#                         WHERE SP.id_product = (
-#                             SELECT P.id_product
-#                             FROM Product P
-#                             WHERE P.product_name = ?
-#                         )
-#                     )
-#                 )
-#             )
-#             AND E.id_employee NOT IN (
-#                 SELECT C.id_employee
-#                 FROM Checkk C
-#                 WHERE C.print_date = ?
-#             );
-#         '''
-#         product_name = str(request.form.get('product'))
-#         date_string = request.form.get('date')
-#         date = datetime.strptime(date_string, '%Y-%m-%d').date().strftime('%Y-%m-%d')
-#         cursor.execute(query, (product_name, date))
-#         results = cursor.fetchall()
-#         cursor.close()
-
-#         return render_template('manager_options/query_hoh_1.html', data=results, submitted=True)
-#     else:
-#         return render_template('manager_options/query_hoh_1.html', submitted=False)
-
-
-# @app.route('/hoh_2', methods=['GET', 'POST'])
-# def hoh_custom_2():
-#     cursor = conn.cursor()
-#     query = '''
-#             SELECT E.city
-#             FROM Employee E
-#             INNER JOIN Checkk C ON E.id_employee = C.id_employee
-#             INNER JOIN Sale S ON C.check_number = S.check_number
-#             GROUP BY E.city
-#             HAVING COUNT(DISTINCT S.product_number) >= 2;
-#     '''
-#     cursor.execute(query)
-#     results = cursor.fetchall()
-#     cursor.close()
-#     return render_template('manager_options/query_hoh_2.html', data=results, submitted=True)
 
 
 if __name__ == '__main__':

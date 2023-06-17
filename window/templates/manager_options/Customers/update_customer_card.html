@@ -60,7 +60,7 @@
       <input type="submit" value="Оновити">
     </div>
         {%if role==1%}
-        <a href="{{ url_for('manager_cabinet') }}">Назад</a>
+        <a href="{{ url_for('go_customers') }}">Назад</a>
         {%endif%}
         {%if role==0%}
         <a href="{{ url_for('cashier_cabinet') }}">Назад</a>

@@ -5,7 +5,7 @@
 </head>
 <body>
     <h1>Знайти категорії продуктів, у яких всі продукти коштують більше заданої суми</h1>
-    <form action="/gryn_2" method="post">
+    <form action="/Category/gryn_2" method="post">
         <label for="parameter">Enter Price Threshold:</label>
         <input type="number" step="0.01" name="parameter" id="parameter" required>
         <button type="submit">Submit</button>
@@ -31,5 +31,7 @@
     {% elif submitted %}
         <p>No categories found for the given price threshold.</p>
     {% endif %}
+    <a href="{{url_for('go_category')}}">Назад</a>
+    <a href="{{ url_for('home') }}">Додому</a>
 </body>
 </html>

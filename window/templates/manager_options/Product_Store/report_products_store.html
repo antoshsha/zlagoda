@@ -31,6 +31,8 @@
             content: ' ▼';
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
     <script>
         function sortTable(columnIndex) {
             var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
@@ -131,6 +133,51 @@
         function resetFiltersAndSort() {
             window.location.href = "{{ url_for('report_products_store') }}";
         }
+
+        function saveReport() {
+            var docDefinition = {
+                content: [
+                    { text: 'Звіт про товари в магазині', style: 'header' },
+                    { text: '\n' },
+                    {
+                        table: {
+                            headerRows: 1,
+                            widths: ['auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
+                            body: collectTableData()
+                        }
+                    }
+                ],
+                styles: {
+                    header: {
+                        fontSize: 18,
+                        bold: true,
+                        alignment: 'center',
+                        margin: [0, 0, 0, 10]
+                    }
+                }
+            };
+
+            pdfMake.createPdf(docDefinition).download('products_report.pdf');
+        }
+
+        function collectTableData() {
+            var table = document.getElementById("products-table");
+            var data = [];
+            var headers = [];
+            for (var i = 0; i < table.rows[0].cells.length; i++) {
+                headers[i] = table.rows[0].cells[i].textContent;
+            }
+            data.push(headers);
+            for (var j = 1; j < table.rows.length; j++) {
+                var tableRow = table.rows[j];
+                var rowData = [];
+                for (var k = 0; k < tableRow.cells.length; k++) {
+                    rowData[k] = tableRow.cells[k].textContent;
+                }
+                data.push(rowData);
+            }
+            return data;
+        }
     </script>
 </head>
 <body>
@@ -169,11 +216,12 @@
     </table>
     <br>
         {%if role==1%}
-        <a href="{{ url_for('manager_cabinet') }}">Назад</a>
+        <a href="{{ url_for('go_product_store') }}">Назад</a>
         {%endif%}
         {%if role==0%}
         <a href="{{ url_for('cashier_cabinet') }}">Назад</a>
         {%endif%}
     <a href="{{ url_for('home') }}">Додому</a>
+    <button onclick="saveReport()">Зберегти звіт в PDF</button>
 </body>
 </html>
