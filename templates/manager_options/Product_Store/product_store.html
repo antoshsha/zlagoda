@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Наявність</title>
+</head>
+<body>
+    {% block content %}
+    <h1>Наявність</h1>
+    <ul>
+        
+        <li><a href="{{ url_for('add_product_store') }}">Додати товар в магазин</a></li>
+
+        <li><a href="{{ url_for('update_product_store') }}">Оновити товар в магазині</a></li>
+
+        <li><a href="{{ url_for('delete_product_store') }}">Видалити товар з магазину</a></li>
+        
+        <li><a href="{{ url_for('report_products_store') }}">Звіт по товарам в магазині</a></li>
+    
+         <br>
+        <a href="{{ url_for('home') }}">Додому</a>
+        <a href="{{ url_for('manager_cabinet') }}">Назад</a>
+    </ul>
+    {% endblock %}
+</body>
+</html>

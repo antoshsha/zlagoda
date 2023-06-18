@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Клієнти</title>
+</head>
+<body>
+    {% block content %}
+    <h1>Клієнти</h1>
+    <ul>
+        <li><a href="{{ url_for('add_customer_card') }}">Додати нового постійного клієнта</a></li>
+    
+        <li><a href="{{ url_for('update_customer_card') }}">Оновити дані про постійного клієнта</a></li>
+       
+        <li><a href="{{ url_for('delete_customer_card') }}">Видалити нового постійного клієнта</a></li>
+    
+        <li><a href="{{ url_for('report_customer_cards') }}">Звіт по постійним клієнтам</a></li>
+    
+        <li><a href="{{ url_for('mar_custom_1') }}">Отримати інформацію про всіх постійних клієнтів, які придбали акційного товару більше, ніж на певну суму грошей. </a></li>
+         <br>
+        <a href="{{ url_for('home') }}">Додому</a>
+        <a href="{{ url_for('manager_cabinet') }}">Назад</a>
+    </ul>
+    {% endblock %}
+</body>
+</html>

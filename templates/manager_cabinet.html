@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Кабінет менеджера</title>
+</head>
+<body>
+    {% block content %}
+    <nav class="navbar navbar-expand navbar-light bg-primary topbar mb-4 static-top shadow">
+    <ul class="navbar-nav justify-content-between w-100">
+  
+        <li class="nav-item flex-fill">
+            <a class="nav-link"href="#">
+                Кабінет менеджера
+            </a>
+        </li>
+        <li class="nav-item flex-fill">
+            <a class="nav-link" href="{{url_for('go_category')}}">
+                Категорії
+            </a>
+        </li>
+
+        
+        <li class="nav-item flex-fill">
+            <a class="nav-link" href="{{ url_for('go_check') }}">
+                Чеки
+            </a>
+        </li>
+
+        
+        <li class="nav-item flex-fill">
+            <a class="nav-link" href="{{ url_for('go_customers') }}">
+                Клієнти
+            </a>
+        </li>
+
+        
+        <li class="nav-item flex-fill">
+            <a class="nav-link" href="{{ url_for('go_product') }}">
+                Продукти
+            </a>
+        </li>
+
+       
+        <li class="nav-item flex-fill">
+            <a class="nav-link" href="{{ url_for('go_product_store') }}">
+                Наявність
+            </a>
+        </li>
+
+        
+        <li class="nav-item flex-fill">
+            <a class="nav-link" href="{{ url_for('home') }}">
+                Додому
+            </a>
+        </li>
+
+    </ul>
+    </nav>
+
+     {% endblock %}
+</body>
+</html>
