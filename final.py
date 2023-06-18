@@ -96,6 +96,18 @@ def login_user(username, password):
 def start():
     return redirect(url_for('home'))
 
+# @app.route('/home', methods=['GET', 'POST'])
+# def home():
+#     role= request.args.get("role")
+#     if not session.get('logged_in'):
+#         return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
+#     role = ""
+#     if session.get("manager"):
+#         role = "менеджер!"
+#     else:
+#         role = "касир"
+#     return render_template('home.html', role=role)
+
 @app.route('/home', methods=['GET', 'POST'])
 def home():
     role= request.args.get("role")
@@ -104,9 +116,11 @@ def home():
     role = ""
     if session.get("manager"):
         role = "менеджер!"
+        return render_template('manager_cabinet.html', role=role)
     else:
         role = "касир"
-    return render_template('home.html', role=role)
+    return render_template('cashier_cabinet.html', role=role)
+
 
 
 @app.route('/login', methods=['GET', 'POST'])
