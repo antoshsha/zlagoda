@@ -1,3 +1,4 @@
+{% extends 'base.html' %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -113,11 +114,12 @@
     </script>
 </head>
 <body>
+    {% block content %}
     <h1>Звіт про працівників</h1>
     <button onclick="showOnlyCashiers()">Показати лише касирів</button>
     <button onclick="showAllEmployees()">Показати всіх працівників</button>
     <li><a href="{{ url_for('search_by_surname') }}">Пошук телефона та адреси по прізвищу</a></li>
-    <table id="employees-table">
+    <table class="table" id="employees-table">
         <thead>
             <tr>
                 <th onclick="sortTable(0)" class="sort-btn">ID працівника</th>
@@ -157,5 +159,6 @@
     <button onclick="saveReport()">Save Report</button>
     <a href="{{ url_for('go_employee') }}">Назад</a>
     <a href="{{ url_for('home') }}">Додому</a>
+    {% endblock %}
 </body>
 </html>

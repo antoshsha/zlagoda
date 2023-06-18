@@ -1,63 +1,324 @@
 {% extends 'base.html' %}
+{% block content %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Кабінет менеджера</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
+    <script>
+        function sortTable(columnIndex) {
+            var table, rows, switching, i, x, y, shouldSwitch;
+            table = document.getElementById("categories-table");
+            switching = true;
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("TD")[columnIndex];
+                    y = rows[i + 1].getElementsByTagName("TD")[columnIndex];
+                    if (columnIndex === 0) {
+                        // Сортування за номером категорії як числове значення
+                        if (parseInt(x.innerHTML) > parseInt(y.innerHTML)) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else {
+                        // Сортування за назвою категорії як рядкове значення
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                }
+            }
+        }
+
+        function saveReport() {
+            var docDefinition = {
+                content: [
+                    { text: 'Звіт про категорії', style: 'header' },
+                    { text: '\n' },
+                    {
+                        table: {
+                            headerRows: 1,
+                            widths: ['auto', 'auto'],
+                            body: collectTableData()
+                        }
+                    }
+                ],
+                styles: {
+                    header: {
+                        fontSize: 18,
+                        bold: true
+                    }
+                }
+            };
+
+            pdfMake.createPdf(docDefinition).download('report.pdf');
+        }
+
+        function collectTableData() {
+            var table = document.getElementById("categories-table");
+            var data = [];
+            var headers = [];
+
+            for (var i = 0; i < table.rows[0].cells.length; i++) {
+                headers[i] = table.rows[0].cells[i].innerHTML;
+            }
+
+            data.push(headers);
+
+            for (var j = 1; j < table.rows.length; j++) {
+                var tableRow = table.rows[j];
+                var rowData = [];
+
+                for (var k = 0; k < tableRow.cells.length; k++) {
+                    rowData[k] = tableRow.cells[k].innerHTML;
+                }
+
+                data.push(rowData);
+            }
+
+return data;
+        }
+    </script>
 </head>
-<body>
-    {% block content %}
-    <nav class="navbar navbar-expand navbar-light bg-primary topbar mb-4 static-top shadow">
-    <ul class="navbar-nav justify-content-between w-100">
-  
-        <li class="nav-item flex-fill">
-            <a class="nav-link"href="#">
-                Кабінет менеджера
-            </a>
-        </li>
-        <li class="nav-item flex-fill">
-            <a class="nav-link" href="{{url_for('go_category')}}">
-                Категорії
-            </a>
-        </li>
+<body id="page-top">
+<div id="content-wrapper" class="d-flex flex-column">
+    <!-- Main Content -->
+    <div id="content">
+        <nav class="navbar navbar-expand navbar-light bg-primary topbar mb-4 static-top shadow">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        Кабінет менеджера
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/category">
+                        Категорії
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/employee">
+                        Чеки
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/customers">
+                        Клієнти
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/product">
+                        Продукти
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/product_store">
+                        Наявність
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">
+                        Вийти
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
 
-        
-        <li class="nav-item flex-fill">
-            <a class="nav-link" href="{{ url_for('go_check') }}">
-                Чеки
-            </a>
-        </li>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2">
+                <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+                    <!-- Sidebar - Brand -->
+                    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+                        <div class="sidebar-brand-icon rotate-n-15">
+                            <i class="fas fa-laugh-wink"></i>
+                        </div>
+                        <div class="sidebar-brand-text mx-3">Працівники</div>
+                    </a>
 
-        
-        <li class="nav-item flex-fill">
-            <a class="nav-link" href="{{ url_for('go_customers') }}">
-                Клієнти
-            </a>
-        </li>
+                    <!-- Divider -->
+                    <hr class="sidebar-divider my-0">
 
-        
-        <li class="nav-item flex-fill">
-            <a class="nav-link" href="{{ url_for('go_product') }}">
-                Продукти
-            </a>
-        </li>
+                    <!-- Nav Item - Dashboard -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Employee/add_empl">
+                            <i class="fas fa-fw fa-tachometer-alt"></i>
+                            <span>Додати працівника</span>
+                        </a>
+                    </li>
 
-       
-        <li class="nav-item flex-fill">
-            <a class="nav-link" href="{{ url_for('go_product_store') }}">
-                Наявність
-            </a>
-        </li>
+                    <!-- Divider -->
+                    <hr class="sidebar-divider">
 
-        
-        <li class="nav-item flex-fill">
-            <a class="nav-link" href="{{ url_for('logout') }}">
-                Вийти
-            </a>
-        </li>
+                    <!-- Heading -->
+                    <div class="sidebar-heading">
+                        Додаткові запити
+                    </div>
 
-    </ul>
-    </nav>
+                    <!-- Nav Item - Pages Collapse Menu -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Employee/hoh_1">
+                            <i class="fas fa-fw fa-tachometer-alt"></i>
+                            <span>Гог 1</span>
+                        </a>
+                    </li>
 
-     {% endblock %}
+                    <!-- Nav Item - Utilities Collapse Menu -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Employee/hoh_2">
+                            <i class="fas fa-fw fa-tachometer-alt"></i>
+                            <span>Гог 2</span>
+                        </a>
+                    </li>
+
+                    <!-- Divider -->
+                    <hr class="sidebar-divider">
+
+                    <!-- Heading -->
+                    <div class="sidebar-heading">
+                        Оновлення таблиці
+                    </div>
+<!-- Nav Item - Pages Collapse Menu -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Employee/add_empl">
+                            <i class="fas fa-fw fa-tachometer-alt"></i>
+                            <span>Додати</span>
+                        </a>
+                    </li>
+
+                    <!-- Nav Item - Charts -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Employee/update_employee">
+                            <i class="fas fa-fw fa-tachometer-alt"></i>
+                            <span>Оновити</span>
+                        </a>
+                    </li>
+
+                    <!-- Nav Item - Tables -->
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/Employee/delete_employee">
+                            <i class="fas fa-fw fa-tachometer-alt"></i>
+                            <span>Видалити</span>
+                        </a>
+                    </li>
+
+                    <hr class="sidebar-divider d-none d-md-block">
+                </ul>
+            </div>
+
+            
+
+            <!-- Table -->
+            <div class="col-md-10">
+                <div class="container-fluid">
+                    <button onclick="showOnlyCashiers()">Показати лише касирів</button>
+                    <button onclick="showAllEmployees()">Показати всіх працівників</button>
+                    <li><a href="/Employee/search_by_surname">Пошук телефона та адреси по прізвищу</a></li>
+                    <table class="table table-bordered" id="employees-table">
+                        <thead>
+                        <tr>
+                            <th onclick="sortTable(0)" class="sort-btn">ID працівника</th>
+                            <th onclick="sortTable(1)" class="sort-btn">Прізвище</th>
+                            <th>Ім'я</th>
+                            <th>По батькові</th>
+                            <th>Посада</th>
+                            <th>Заробітна плата</th>
+                            <th>Дата народження</th>
+                            <th>Дата прийняття</th>
+                            <th>Номер телефону</th>
+                            <th>Місто</th>
+                            <th>Вулиця</th>
+                            <th>Поштовий індекс</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        
+                        <tr>
+                            <td>EMP001</td>
+                            <td>Doe</td>
+                            <td>John</td>
+                            <td>Smith</td>
+                            <td>Cashier</td>
+                            <td>5000</td>
+                            <td>1980-01-01</td>
+                            <td>2020-01-01</td>
+                            <td>+1234567890</td>
+                            <td>New York</td>
+                            <td>Street 1</td>
+                            <td>12345</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>EMP002</td>
+                            <td>Johnson</td>
+                            <td>Jane</td>
+                            <td>None</td>
+                            <td>Cashier</td>
+                            <td>3000</td>
+                            <td>1990-02-02</td>
+                            <td>2020-02-02</td>
+                            <td>+0987654321</td>
+                            <td>Los Angeles</td>
+                            <td>Street 2</td>
+                            <td>54321</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>EMP003</td>
+                            <td>Williams</td>
+                            <td>Robert</td>
+                            <td>Lee</td>
+                            <td>Manager</td>
+                            <td>4500</td>
+                            <td>1985-03-03</td>
+                            <td>2020-03-03</td>
+                            <td>+9876543210</td>
+                            <td>Chicago</td>
+                            <td>Street 3</td>
+                            <td>67890</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>E008</td>
+                            <td>Doe</td>
+                            <td>John</td>
+                            <td>Smith</td>
+                            <td>Manager</td>
+                            <td>5000</td>
+                            <td>2000-01-01</td>
+                            <td>2023-01-01</td>
+                            <td>+123456789</td>
+                            <td>City</td>
+                            <td>Street</td>
+                            <td>12345</td>
+                        </tr>
+                        
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <button onclick="saveReport()">Save Report</button>
+</div>
 </body>
 </html>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>
+{% endblock %}

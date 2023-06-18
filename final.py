@@ -160,14 +160,32 @@ def logout():
 
 
 #------------------------------- ALL FOR MANAGER
+
 @app.route('/manager_cabinet', methods=['GET', 'POST'])
-def manager_cabinet():
-    if not session.get('logged_in'):
-        return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
+def report_employees():
     if not session.get("manager"):
         return redirect(url_for('home'))
-    return render_template('/manager_cabinet.html')
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
 
+    if request.method == 'GET':
+        sort_by_surname = request.args.get('sort_by_surname')
+        if sort_by_surname:
+            employees = employee.get_all_employees_sorted_by_surname()
+        else:
+            employees = employee.get_all_employees()
+    else:
+        employees = employee.get_all_employees()
+
+    return render_template('manager_cabinet.html', employees=employees)
+
+# @app.route('/manager_cabinet', methods=['GET', 'POST'])
+# def manager_cabinet():
+#     if not session.get('logged_in'):
+#         return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
+#     if not session.get("manager"):
+#         return redirect(url_for('login')) #оце не працює але не страшно
+#     return render_template('/manager_cabinet.html')
 
 #------------------------------- BASIC MENU(CHANGES POSSIBLE)
 @app.route('/category')
@@ -185,7 +203,6 @@ def go_customers():
 @app.route('/employee')
 def go_employee():
     return render_template('/manager_options/Employee/employee.html')
-
 @app.route('/product')
 def go_product():
     return render_template('/manager_options/Product/product.html')
@@ -549,23 +566,43 @@ def delete_employee():
 
     return render_template('manager_options/Employee/delete_employee.html')
 
-@app.route('/Employee/report_employees', methods=['POST', 'GET'])
-def report_employees():
-    if not session.get("manager"):
-        return redirect(url_for('home'))
-    if not session.get('logged_in'):
-        return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
+# @app.route('/Employee/report_employees', methods=['POST', 'GET'])
+# def report_employees():
+#     if not session.get("manager"):
+#         return redirect(url_for('home'))
+#     if not session.get('logged_in'):
+#         return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
 
-    if request.method == 'GET':
-        sort_by_surname = request.args.get('sort_by_surname')
-        if sort_by_surname:
-            employees = employee.get_all_employees_sorted_by_surname()
-        else:
-            employees = employee.get_all_employees()
-    else:
-        employees = employee.get_all_employees()
+#     if request.method == 'GET':
+#         sort_by_surname = request.args.get('sort_by_surname')
+#         if sort_by_surname:
+#             employees = employee.get_all_employees_sorted_by_surname()
+#         else:
+#             employees = employee.get_all_employees()
+#     else:
+#         employees = employee.get_all_employees()
 
-    return render_template('manager_options/Employee/report_employees.html', employees=employees)
+#     return render_template('manager_options/Employee/report_employees.html', employees=employees)
+
+# @app.route('/Employee/report_employees', methods=['POST', 'GET'])
+# def report_employees():
+#     if not session.get("manager"):
+#         return redirect(url_for('home'))
+#     if not session.get('logged_in'):
+#         return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
+
+#     if request.method == 'GET':
+#         sort_by_surname = request.args.get('sort_by_surname')
+#         if sort_by_surname:
+#             employees = employee.get_all_employees_sorted_by_surname()
+#         else:
+#             employees = employee.get_all_employees()
+#     else:
+#         employees = employee.get_all_employees()
+
+#     return render_template('manager_options/Employee/report_employees.html', employees=employees)
+
+
 
 @app.route('/Employee/search_by_surname', methods=['POST', "GET"])
 def search_by_surname():
