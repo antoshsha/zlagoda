@@ -126,7 +126,10 @@ def home():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if session.get('logged_in'):
-        return redirect(url_for('home'))  # Перенаправлення на головну сторінку, якщо користувач уже увійшов в систему
+        if session.get('manager'):
+            return render_template('manager_cabinet.html')
+        elif session.get('cashier'):
+            return render_template('cashier_cabinet.html')  # Перенаправлення на головну сторінку, якщо користувач уже увійшов в систему
 
     form = LoginForm()
     if form.validate_on_submit():
