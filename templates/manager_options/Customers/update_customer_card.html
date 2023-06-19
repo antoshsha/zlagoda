@@ -1,3 +1,5 @@
+{% extends 'base.html' %}
+{% block content %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,62 +12,100 @@
     <p style="color: red;">{{ error }}</p>
   {% endif %}
 
-  <form method="POST" action="{{ url_for('update_customer_card') }}">
+  <form class="my-form" method="POST" action="{{ url_for('update_customer_card') }}">
+    <table>
+        <tr>
+            <td>
+                
+                    <label for="card_number">Номер картки:</label>
+                   
+                
+            </td>
+            <td> <input type="text" id="card_number" name="card_number"></td>
+            <td>
+                
+                    <label for="cust_surname">Прізвище:</label>
+                   
+               
+            </td>
+            <td> <input type="text" id="cust_surname" name="cust_surname"></td>
+            <td>
+               
+                    <label for="cust_name">Ім'я:</label>
+                   
+                
+            </td>
+            <td> <input type="text" id="cust_name" name="cust_name"></td>
+        </tr>
+        <tr>
+            <td>
+               
+                    <label for="cust_patronymic">По-батькові:</label>
+                    
+                
+            </td>
+            <td><input type="text" id="cust_patronymic" name="cust_patronymic"></td>
+            <td>
+               
+                    <label for="phone_number">Номер телефону:</label>
+                    
+                
+            </td>
+            <td><input type="text" id="phone_number" name="phone_number"></td>
+            <td>
+                
+                    <label for="city">Місто:</label>
+                   
+               
+            </td>
+            <td> <input type="text" id="city" name="city"></td>
+        </tr>
+        <tr>
+            <td>
+               
+                    <label for="street">Вулиця:</label>
+                   
+                
+            </td>
+            <td> <input type="text" id="street" name="street"></td>
+            <td>
+               
+                    <label for="zip_code">Поштовий індекс:</label>
+                    
+                
+            </td>
+            <td><input type="text" id="zip_code" name="zip_code"></td>
+            <td>
+               
+                    <label for="percent">Відсоток:</label>
+                    
+               
+            </td>
+            <td><input type="text" id="percent" name="percent"></td>
+        </tr>
+    </table>
     <div>
-      <label for="card_number">Номер картки:</label>
-      <input type="text" id="card_number" name="card_number" required>
+        <button type="submit" value="Оновити">Оновити</button>
     </div>
+</form>
 
-    <div>
-      <label for="cust_surname">Прізвище:</label>
-      <input type="text" id="cust_surname" name="cust_surname" required>
-    </div>
-
-    <div>
-      <label for="cust_name">Ім'я:</label>
-      <input type="text" id="cust_name" name="cust_name" required>
-    </div>
-
-    <div>
-      <label for="cust_patronymic">По батькові:</label>
-      <input type="text" id="cust_patronymic" name="cust_patronymic" required>
-    </div>
-
-    <div>
-      <label for="phone_number">Номер телефону:</label>
-      <input type="text" id="phone_number" name="phone_number" required>
-    </div>
-
-    <div>
-      <label for="city">Місто:</label>
-      <input type="text" id="city" name="city" required>
-    </div>
-
-    <div>
-      <label for="street">Вулиця:</label>
-      <input type="text" id="street" name="street" required>
-    </div>
-
-    <div>
-      <label for="zip_code">Поштовий індекс:</label>
-      <input type="text" id="zip_code" name="zip_code" required>
-    </div>
-
-    <div>
-      <label for="percent">Відсоток знижки:</label>
-      <input type="text" id="percent" name="percent" required>
-    </div>
-
-    <div>
-      <input type="submit" value="Оновити">
-    </div>
-        {%if role==1%}
-        <a href="{{ url_for('go_customers') }}">Назад</a>
-        {%endif%}
-        {%if role==0%}
-        <a href="{{ url_for('cashier_cabinet') }}">Назад</a>
-        {%endif%}
-    <a href="{{ url_for('home') }}">Додому</a>
-  </form>
+    {%if role==1%}
+    <a href="{{ url_for('go_customers') }}" class="btn btn-primary btn-icon-split">
+        <span class="icon text-white-50">
+            <i class="fas fa-flag"></i>
+        </span>
+        <span class="text">Назад</span>
+    </a>
+    {%endif%}
+    {%if role==0%}
+    <a href="{{ url_for('cashier_cabinet') }}" class="btn btn-primary btn-icon-split">
+        <span class="icon text-white-50">
+            <i class="fas fa-flag"></i>
+        </span>
+        <span class="text">Назад</span>
+    </a>
+    {%endif%}
 </body>
 </html>
+{% endblock %}
+

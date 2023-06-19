@@ -1,20 +1,237 @@
 {% extends 'base.html' %}
+{% block content %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Чеки</title>
+    <title>Звіт про чеки</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
+    <script>
+          function saveReport() {
+            var table = document.getElementById('table');
+            var data = [];
+            
+            // Extract table data
+            for (var i = 0; i < table.rows.length; i++) {
+                var tableRow = table.rows[i];
+                var rowData = [];
+
+                for (var j = 0; j < tableRow.cells.length; j++) {
+                    rowData[j] = tableRow.cells[j].innerHTML;
+                }
+
+                data.push(rowData);
+            }
+
+            var docDefinition = {
+                content: [
+                    { text: 'Звіт про чеки', style: 'header' },
+                    { text: '\n' },
+                    {
+                        table: {
+                            headerRows: 1,
+                            widths: ['auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
+                            body: data
+                        }
+                    }
+                ],
+                styles: {
+                    header: {
+                        fontSize: 18,
+                        bold: true
+                    }
+                }
+            };
+
+            pdfMake.createPdf(docDefinition).open();
+        }
+    </script>
 </head>
 <body>
-    {% block content %}
-    <h1>Чеки</h1>
-    <ul>
-        <li><a href="{{ url_for('delete_check_store') }}">Видалити чек</a></li>
-        <li><a href="{{ url_for('report_checks') }}">Звіт по чекам</a></li>
-        <li><a href="{{ url_for('check_by_id') }}">Шукати по айді</a></li>
-         <br>
-        <a href="{{ url_for('home') }}">Додому</a>
-        <a href="{{ url_for('manager_cabinet') }}">Назад</a>
-    </ul>
-    {% endblock %}
+  
+    <body id="page-top">
+        <div id="content-wrapper" class="d-flex flex-column">
+            <!-- Main Content -->
+            <div id="content">
+                <nav class="navbar navbar-expand navbar-light bg-primary topbar mb-4 static-top shadow">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <b> Кабінет менеджера </b>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('go_category') }}">
+                                Категорії
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('go_check') }}">
+                                Чеки
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url_for('go_customers')}}">
+                                Клієнти
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                Продукти
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url_for('go_product_store')}}">
+                                Наявність
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url_for('manager_cabinet')}}">
+                                Головна
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/logout">
+                                Вийти
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- Sidebar -->
+                    <div class="col-md-2">
+                        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+                            <!-- Sidebar - Brand -->
+                            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
+                                <div class="sidebar-brand-icon rotate-n-15">
+                                    <i class="fas fa-laugh-wink"></i>
+                                </div>
+                                <div class="sidebar-brand-text mx-3">Zlagoda</div>
+                            </a>
+
+                            <!-- Divider -->
+                    <hr class="sidebar-divider">
+                    
+                    <!-- Divider -->
+                    <hr class="sidebar-divider">
+    
+        
+                            <!-- Heading -->
+                            <div class="sidebar-heading">
+                                Додаткові функції
+                            </div>
+
+        
+                            <!-- Nav Item - Tables -->
+                            <li class="nav-item active">
+                                <a class="nav-link" href="{{url_for('delete_check_store')}}">
+                                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                                    <span>Видалити чек</span>
+                                </a>
+                            </li>
+                            <li class="nav-item active">
+                                <a class="nav-link" href="#" onclick="saveReport()" >
+                                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                                    <span>Звіт</span>
+                                </a>
+                            </li>
+                            
+                            <hr class="sidebar-divider d-none d-md-block">
+                        </ul>
+                    </div>
+                    
+                    <div class="col-md-10">
+                        <div class="container-fluid">
+                            <form class="my-form" method="POST" action="{{url_for('check_by_id')}}">
+                                <table>
+                                  <tr>
+                                    <td>
+                                        <input type="text" name="cashier_id" id="cashier_id" pattern=".*">
+                                      <label for="cashier_id">ID касира:</label>
+                                      
+                                    </td>
+                                    <td>
+                                      
+                                    </td>
+                        
+                                    <td>
+                                        <input type="text" name="product_name" id="product_name">
+                                      <label for="product_name">Товар, продана кількість якого цікавить:</label>
+                                    </td>
+                                    <td>
+                                     
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>
+                                        <input type="date" name="start_date" id="start_date" required>
+                                      <label for="start_date">Початкова дата:</label>
+                                    </td>
+                                    <td>
+                                    
+                                    </td>
+                                  
+                                    <td>
+                                    <input type="date" name="end_date" id="end_date" required>
+                                      <label for="end_date">Кінцева дата:</label>
+                                    </td>
+                                    <td>
+                                     
+                                    </td>
+                                  </tr>
+                                 <tr>
+                                    <td colspan="2">
+                                      <button type="submit">Отримати інформацію</button>
+                                    </td>
+                                  </tr>
+                                </table>
+                                
+                              </form>
+                              
+                                    
+                                    <table class = "table table-bordered" id = "table">
+                                        <thead>
+                                            <tr>
+                                                <th>Номер чеку</th>
+                                                <th>ID працівника</th>
+                                                <th>Номер картки</th>
+                                                <th>Дата друку</th>
+                                                <th>Загальна сума</th>
+                                                <th>ПДВ</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for check in checks %}
+                                            <tr>
+                                                <td>{{ check[0] }}</td>
+                                                <td>{{ check[1] }}</td>
+                                                <td>{{ check[2] }}</td>
+                                                <td>{{ check[3] }}</td>
+                                                <td>{{ check[4] }}</td>
+                                                <td>{{ check[5] }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                
+    
 </body>
 </html>
+{% endblock %}

@@ -38,7 +38,7 @@
                 }
             };
 
-            pdfMake.createPdf(docDefinition).download('report.pdf');
+            pdfMake.createPdf(docDefinition).open();
         }
 
         function collectTableData() {
@@ -62,7 +62,7 @@
 </head>
 <body>
     <h1>Звіт про чеки</h1>
-    <form method="POST" action="/check_by_id">
+    <form method="POST" action="{{url_for('check_by_id')}}">
         <label for="cashier_id">ID касира:</label>
         <input type="text" name="cashier_id" id="cashier_id" pattern=".*" >
         <br>

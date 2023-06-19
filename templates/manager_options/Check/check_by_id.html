@@ -1,19 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Звіт про чеки</title>
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        th, td {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-    </style>
+    
 </head>
 <body>
     <h1>Звіт про чеки</h1>
@@ -49,10 +39,12 @@
     </table>
     <br>
     <p>Загальна сума за обраний період: {{ total_sum }}</p>
-    {% if total_quantity!=0 %}
+    {% if total_quantity != 0 %}
         <p>Продано обраного товару за цей період обраними(або усіма) касирами: {{ total_quantity }}</p>
     {% endif %}
-    <a href="{{ url_for('home') }}">Додому</a>
-    <a href="{{ url_for('report_checks') }}">Назад</a>
+    <a href="{{ url_for('go_check') }}">Назад</a>
+
+    <button onclick="saveReport()">Зберегти звіт у PDF</button>
 </body>
 </html>
+{% endblock %}

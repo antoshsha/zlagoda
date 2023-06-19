@@ -146,23 +146,28 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('report_products_store') }}">
+                    <a class="nav-link" href="{{ url_for('go_check') }}">
                         Чеки
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/customers">
+                    <a class="nav-link" href="{{url_for('go_customers')}}">
                         Клієнти
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/product">
+                    <a class="nav-link" href="{{url_for('go_product')}}">
                         Продукти
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/product_store">
+                    <a class="nav-link" href="{{url_for('go_product_store')}}">
                         Наявність
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        Головна
                     </a>
                 </li>
                 <li class="nav-item">
@@ -184,19 +189,13 @@
                         <div class="sidebar-brand-icon rotate-n-15">
                             <i class="fas fa-laugh-wink"></i>
                         </div>
-                        <div class="sidebar-brand-text mx-3">Працівники</div>
+                        <div class="sidebar-brand-text mx-3">Zlagoda</div>
                     </a>
 
                     <!-- Divider -->
                     <hr class="sidebar-divider my-0">
 
-                    <!-- Nav Item - Dashboard -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="/Employee/add_empl">
-                            <i class="fas fa-fw fa-tachometer-alt"></i>
-                            <span>Додати працівника</span>
-                        </a>
-                    </li>
+                
 
                     <!-- Divider -->
                     <hr class="sidebar-divider">
@@ -210,7 +209,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/Employee/hoh_1">
                             <i class="fas fa-fw fa-tachometer-alt"></i>
-                            <span>Гог 1</span>
+                            <span>Касири,які не продавали товар за заданою назвою(весь час) і не працювали у дату х</span>
                         </a>
                     </li>
 
@@ -218,7 +217,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/Employee/hoh_2">
                             <i class="fas fa-fw fa-tachometer-alt"></i>
-                            <span>Гог 2</span>
+                            <span>Міста у яких робітники продали >= 2 одиниць товарів</span>
                         </a>
                     </li>
 

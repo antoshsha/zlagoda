@@ -176,33 +176,87 @@ def logout():
 
 #     return render_template('manager_cabinet.html', employees=employees)
 
-@app.route('/Employee/report_employees')
+# @app.route('/Employee/report_employees')
+# @app.route('/manager_cabinet')
+# def manager_cabinet():
+#     if not session.get("manager"):
+#         return redirect(url_for('home'))
+#     if not session.get('logged_in'):
+#         return redirect(url_for('login'))
+   
+#     employees = employee.get_all_employees()
+
+#     return render_template('manager_cabinet.html', employees=employees)
+
+
+# @app.route('/manager_cabinet')
+# def manager_cabinet():
+#     if not session.get("manager"):
+#         return redirect(url_for('login'))
+#     if not session.get('logged_in'):
+#         return redirect(url_for('login'))
+#     return render_template('manager_cabinet.html')   
+
 @app.route('/manager_cabinet')
 def manager_cabinet():
     if not session.get("manager"):
-        return redirect(url_for('home'))
+        return redirect(url_for('login'))
     if not session.get('logged_in'):
         return redirect(url_for('login'))
-   
-    employees = employee.get_all_employees()
+
+    if request.method == 'GET':
+        sort_by_surname = request.args.get('sort_by_surname')
+        if sort_by_surname:
+            employees = employee.get_all_employees_sorted_by_surname()
+        else:
+            employees = employee.get_all_employees()
+    else:
+        employees = employee.get_all_employees()
 
     return render_template('manager_cabinet.html', employees=employees)
-
-
 
 #------------------------------- BASIC MENU(CHANGES POSSIBLE)
 @app.route('/category')
 def go_category():
     return render_template('/manager_options/Category/category.html')
 
+# @app.route('/check')
+# def go_check():
+#     return render_template('/manager_options/Check/check.html')
+
 @app.route('/check')
+@app.route('/Check/report_checks')
 def go_check():
-    return render_template('/manager_options/Check/check.html')
+    if not session.get("manager"):
+        return redirect(url_for('home'))
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+
+    if request.path == '/check':
+        return render_template('/manager_options/Check/check.html')
+    else:
+        checks = checkk.get_all_checks()
+        return render_template('manager_options/Check/check.html', checks=checks)
+
+
+# @app.route('/customers')
+# def go_customers():
+#     return render_template('/manager_options/Customers/customers.html')
 
 @app.route('/customers')
+@app.route('/Customers/report_customer_cards')
 def go_customers():
-    return render_template('/manager_options/Customers/customers.html')
+    if not session.get("manager"):
+        return redirect(url_for('home'))
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
 
+    try:
+        cards = customer_card.get_all_customer_cards()
+        return render_template('/manager_options/Customers/customers.html', cards=cards)
+    except Exception as e:
+        print("Error: Failed to generate customer card report -", str(e))
+        return redirect(url_for('go_customers'))
 
 @app.route('/employee')
 def go_employee():
@@ -393,16 +447,16 @@ def delete_check_store():
 
     return render_template('manager_options/Check/delete_checkk.html')
 
-@app.route('/Check/report_checks')
-def report_checks():
-    if not session.get("manager"):
-        return redirect(url_for('home'))
-    if not session.get('logged_in'):
-        return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
+# @app.route('/Check/report_checks')
+# def report_checks():
+#     if not session.get("manager"):
+#         return redirect(url_for('home'))
+#     if not session.get('logged_in'):
+#         return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
 
-    checks=checkk.get_all_checks()
+#     checks=checkk.get_all_checks()
 
-    return render_template('manager_options/Check/report_checks.html', checks=checks)
+#     return render_template('manager_options/Check/report_checks.html', checks=checks)
 
 @app.route('/Check/check_by_id', methods=['GET', 'POST'])
 def check_by_id():

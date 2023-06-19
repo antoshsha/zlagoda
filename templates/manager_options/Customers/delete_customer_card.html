@@ -1,3 +1,5 @@
+{% extends 'base.html' %}
+{% block content %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,16 +7,23 @@
 </head>
 <body>
     <h1>Видалити постійного клієнта</h1>
-    <form method="POST" action="{{ url_for('delete_customer_card') }}">
+    <form class ="my-form" method="POST" action="{{ url_for('delete_customer_card') }}">
         <div>
             <label for="card_number">Номер карти:</label>
             <input type="text" id="card_number" name="card_number">
         </div>
         <div>
-            <input type="submit" value="Видалити">
+            <button type="submit" value="Видалити">Видалити</button>
         </div>
     </form>
-    <a href="{{ url_for('go_customers') }}">Назад</a>
-    <a href="{{ url_for('home') }}">Додому</a>
+    <br>
+    <a href="{{ url_for('go_customers') }}" class="btn btn-primary btn-icon-split">
+        <span class="icon text-white-50">
+            <i class="fas fa-flag"></i>
+        </span>
+        <span class="text">Назад</span>
+    </a>
 </body>
 </html>
+{% endblock %}
+
