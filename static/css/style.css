@@ -28,6 +28,12 @@
     border-radius: 5px;
     padding: 10px;
   }
+  .my-form textarea {
+    border: 1px solid #c7c4c4;
+    border-radius: 5px;
+    padding: 10px;
+
+  }
   
   .my-form button {
     background-color: #3498db;

@@ -1,3 +1,5 @@
+{% extends 'base.html' %}
+{% block content %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,7 +13,13 @@
     {% else %}
         <p>No products found.</p>
     {% endif %}
-    <a href="{{ url_for('go_product') }}">Назад</a>
-    <a href="{{ url_for('home') }}">Додому</a>
+    <a href="{{ url_for('go_product') }}" class="btn btn-primary btn-icon-split">
+        <span class="icon text-white-50">
+            <i class="fas fa-flag"></i>
+        </span>
+        <span class="text">Назад</span>
+    </a>
+    
 </body>
 </html>
+{%  endblock %}

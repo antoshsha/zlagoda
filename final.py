@@ -207,9 +207,21 @@ def go_customers():
 @app.route('/employee')
 def go_employee():
     return render_template('/manager_options/Employee/employee.html')
+
+
 @app.route('/product')
+@app.route('/Product/report_products')
 def go_product():
-    return render_template('/manager_options/Product/product.html')
+    if not session.get("manager"):
+        return redirect(url_for('home'))
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+
+    # Отримати всі товари з бази даних
+    products = product.get_all_products()
+
+    # Передати дані товарів у шаблон і відобразити звіт
+    return render_template('/manager_options/Product/product.html', products=products)
 
 @app.route('/product_store')
 @app.route('/Product_store/report_products_store')
@@ -860,19 +872,19 @@ def delete_product_store():
     return render_template('manager_options/Product_Store/delete_product_store.html')
 
 
-# @app.route('/Product_store/report_products_store')
-# def report_products_store():    #спільне для касира і менеджера
-#     if not session.get('logged_in'):
-#         return redirect(url_for('login'))
+@app.route('/Product_store/report_products_store')
+def report_products_store():    #спільне для касира і менеджера
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
 
-#     # Отримати всі товари в магазині з бази даних
-#     products=store_product.get_all_products()
+    # Отримати всі товари в магазині з бази даних
+    products=store_product.get_all_products()
 
-#     # Передати дані товарів у шаблон і відобразити звіт
-#     role = 0
-#     if session.get("manager"):
-#         role = 1
-#     return render_template('manager_options/Product_store/report_products_store.html', products=products, role=role)
+    # Передати дані товарів у шаблон і відобразити звіт
+    role = 0
+    if session.get("manager"):
+        role = 1
+    return render_template('manager_options/Product_store/report_products_store.html', products=products, role=role)
 
 
 

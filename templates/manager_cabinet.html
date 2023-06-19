@@ -3,6 +3,35 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    .sort-btn {
+        cursor: pointer;
+        color: blue;
+        text-decoration: underline;
+    }
+
+    .sort-asc:after {
+        content: ' ▲';
+    }
+
+    .sort-desc:after {
+        content: ' ▼';
+    }
+    </style>
     <title>Кабінет менеджера</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
@@ -108,16 +137,16 @@
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="#">
-                        Кабінет менеджера
+                        <b> Кабінет менеджера </b>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="">
+                    <a class="nav-link" href="{{ url_for('go_category') }}">
                         Категорії
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('go_employee') }}">
+                    <a class="nav-link" href="{{ url_for('report_products_store') }}">
                         Чеки
                     </a>
                 </li>
