@@ -162,7 +162,7 @@ def logout():
 #------------------------------- ALL FOR MANAGER
 
 @app.route('/manager_cabinet', methods=['GET', 'POST'])
-def report_employees():
+def manager_cabinet():
     if not session.get("manager"):
         return redirect(url_for('home'))
     if not session.get('logged_in'):
@@ -199,6 +199,7 @@ def go_check():
 @app.route('/customers')
 def go_customers():
     return render_template('/manager_options/Customers/customers.html')
+
 
 @app.route('/employee')
 def go_employee():
