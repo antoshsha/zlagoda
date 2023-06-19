@@ -1,3 +1,5 @@
+{% extends 'base.html' %}
+{% block content %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,8 +18,14 @@
     {% else %}
         <p>No results found.</p>
     {% endif %}
-    <a href="{{ url_for('go_employee') }}">Назад</a>
-     <a href="{{ url_for('home') }}">Додому</a>
+    <br>
+    <a href="{{ url_for('manager_cabinet') }}" class="btn btn-primary btn-icon-split">
+      <span class="icon text-white-50">
+          <i class="fas fa-flag"></i>
+      </span>
+      <span class="text">Назад</span>
+    </a>
 </body>
+{% endblock %}
 </html>
 

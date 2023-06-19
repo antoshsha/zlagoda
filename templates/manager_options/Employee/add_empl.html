@@ -1,65 +1,118 @@
+{% extends 'base.html' %}
+{% block content %}
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Додати нового працівника ауау</title>
+    <title>Додати нового працівника</title>
+    <style>
+        .my-form table {
+            width: 100%;
+        }
+
+        .my-form td {
+            padding: 5px;
+        }
+    </style>
 </head>
 <body>
     <h1>Додати нового працівника</h1>
-    <form method="POST" action="{{ url_for('add_empl') }}">
-        <div>
-            <label for="id_employee">ID працівника:</label>
-            <input type="text" id="id_employee" name="id_employee">
-        </div>
-        <div>
-            <label for="empl_surname">Прізвище:</label>
-            <input type="text" id="empl_surname" name="empl_surname">
-        </div>
-        <div>
-            <label for="empl_name">Ім'я:</label>
-            <input type="text" id="empl_name" name="empl_name">
-        </div>
-        <div>
-            <label for="empl_patronymic">По-батькові:</label>
-            <input type="text" id="empl_patronymic" name="empl_patronymic">
-        </div>
-        <div>
-            <label for="empl_role">Посада:</label>
-            <input type="text" id="empl_role" name="empl_role">
-        </div>
-        <div>
-            <label for="salary">Заробітна плата:</label>
-            <input type="text" id="salary" name="salary">
-        </div>
-        <div>
-            <label for="date_of_birth">Дата народження:</label>
-            <input type="text" id="date_of_birth" name="date_of_birth">
-        </div>
-        <div>
-            <label for="date_of_start">Дата початку:</label>
-            <input type="text" id="date_of_start" name="date_of_start">
-        </div>
-        <div>
-            <label for="phone_number">Номер телефону:</label>
-            <input type="text" id="phone_number" name="phone_number">
-        </div>
-        <div>
-            <label for="city">Місто:</label>
-            <input type="text" id="city" name="city">
-        </div>
-        <div>
-            <label for="street">Вулиця:</label>
-            <input type="text" id="street" name="street">
-        </div>
-        <div>
-            <label for="zip_code">Поштовий індекс:</label>
-            <input type="text" id="zip_code" name="zip_code">
-        </div>
-        <div>
-            <input type="submit" value="Зберегти">
-        </div>
+    <form class="my-form" method="POST" action="{{ url_for('add_empl') }}">
+        <table>
+            <tr>
+                <td>
+                    <label for="id_employee">ID працівника:</label>
+                </td>
+                <td>
+                    <input type="text" id="id_employee" name="id_employee" required>
+                </td>
+                <td>
+                    <label for="empl_surname">Прізвище:</label>
+                </td>
+                <td>
+                    <input type="text" id="empl_surname" name="empl_surname" required>
+                </td>
+                <td>
+                    <label for="empl_name">Ім'я:</label>
+                </td>
+                <td>
+                    <input type="text" id="empl_name" name="empl_name" required>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="empl_patronymic">По-батькові:</label>
+                </td>
+                <td>
+                    <input type="text" id="empl_patronymic" name="empl_patronymic">
+                </td>
+                <td>
+                    <label for="empl_role">Посада:</label>
+                </td>
+                <td>
+                    <input type="text" id="empl_role" name="empl_role" required>
+                </td>
+                <td>
+                    <label for="salary">Заробітна плата:</label>
+                </td>
+                <td>
+                    <input type="text" id="salary" name="salary" required>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="date_of_birth">Дата народження:</label>
+                </td>
+                <td>
+                    <input type="text" id="date_of_birth" name="date_of_birth" pattern="\d{4}-\d{2}-\d{2}"
+                    title = "Введіть дату у форматі YYYY-MM-DD" required>
+                </td>
+                <td>
+                    <label for="date_of_start">Дата початку:</label>
+                </td>
+                <td>
+                    <input type="text" id="date_of_start" name="date_of_start" pattern="\d{4}-\d{2}-\d{2}"
+                    title = "Введіть дату у форматі YYYY-MM-DD" required>
+                </td>
+                <td>
+                    <label for="phone_number">Номер телефону:</label>
+                </td>
+                <td>
+                    <input type="text" id="phone_number" name="phone_number"  pattern="[+\d]{0,13}" title="Максимально 13 знаків" required>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="city">Місто:</label>
+                </td>
+                <td>
+                    <input type="text" id="city" name="city" required>
+                </td>
+                <td>
+                    <label for="street">Вулиця:</label>
+                </td>
+                <td>
+                    <input type="text" id="street" name="street" required>
+                </td>
+                <td>
+                    <label for="zip_code">Поштовий індекс:</label>
+                </td>
+                <td>
+                    <input type="text" id="zip_code" name="zip_code" pattern = "\d{0,9}" title="Максимально 9 знаків" required>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                    <button type="submit" value="Зберегти">Зберегти</button>
+                </td>
+            </tr>
+        </table>
     </form>
-    <a href="{{ url_for('go_employee') }}">Назад</a>
-    <a href="{{ url_for('home') }}">Додому</a>
-
+    <a href="{{ url_for('manager_cabinet') }}" class="btn btn-primary btn-icon-split">
+        <span class="icon text-white-50">
+            <i class="fas fa-flag"></i>
+        </span>
+        <span class="text">Назад</span>
+    </a>
 </body>
 </html>
+{% endblock %}

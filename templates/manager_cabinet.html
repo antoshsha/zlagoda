@@ -9,7 +9,7 @@
     <script>
         function sortTable(columnIndex) {
             var table, rows, switching, i, x, y, shouldSwitch;
-            table = document.getElementById("categories-table");
+            table = document.getElementById("employees-table");
             switching = true;
             while (switching) {
                 switching = false;
@@ -18,18 +18,9 @@
                     shouldSwitch = false;
                     x = rows[i].getElementsByTagName("TD")[columnIndex];
                     y = rows[i + 1].getElementsByTagName("TD")[columnIndex];
-                    if (columnIndex === 0) {
-                        // Сортування за номером категорії як числове значення
-                        if (parseInt(x.innerHTML) > parseInt(y.innerHTML)) {
-                            shouldSwitch = true;
-                            break;
-                        }
-                    } else {
-                        // Сортування за назвою категорії як рядкове значення
-                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-                            shouldSwitch = true;
-                            break;
-                        }
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
                     }
                 }
                 if (shouldSwitch) {
@@ -39,53 +30,73 @@
             }
         }
 
-        function saveReport() {
-            var docDefinition = {
-                content: [
-                    { text: 'Звіт про категорії', style: 'header' },
-                    { text: '\n' },
-                    {
-                        table: {
-                            headerRows: 1,
-                            widths: ['auto', 'auto'],
-                            body: collectTableData()
-                        }
-                    }
-                ],
-                styles: {
-                    header: {
-                        fontSize: 18,
-                        bold: true
-                    }
+        function showOnlyCashiers() {
+            var table, rows, i, role;
+            table = document.getElementById("employees-table");
+            rows = table.rows;
+            for (i = 1; i < rows.length; i++) {
+                role = rows[i].getElementsByTagName("TD")[4].innerHTML;
+                if (role !== "Cashier") {
+                    rows[i].style.display = "none";
+                } else {
+                    rows[i].style.display = "";
                 }
-            };
-
-            pdfMake.createPdf(docDefinition).download('report.pdf');
+            }
         }
 
-        function collectTableData() {
-            var table = document.getElementById("categories-table");
-            var data = [];
-            var headers = [];
-
-            for (var i = 0; i < table.rows[0].cells.length; i++) {
-                headers[i] = table.rows[0].cells[i].innerHTML;
+        function showAllEmployees() {
+            var table, rows, i;
+            table = document.getElementById("employees-table");
+            rows = table.rows;
+            for (i = 1; i < rows.length; i++) {
+                rows[i].style.display = "";
             }
+        }
 
-            data.push(headers);
+     
 
-            for (var j = 1; j < table.rows.length; j++) {
-                var tableRow = table.rows[j];
+        function saveReport() {
+    var docDefinition = {
+        content: [
+            { text: 'Звіт про працівників', style: 'header' },
+            { text: '\n' },
+            {
+                table: {
+                    headerRows: -2,
+                    widths: ['auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
+                    body: collectTableData()
+                }
+            }
+        ],
+        styles: {
+            header: {
+                fontSize: 12,
+                bold: true
+            }
+        }
+    };
+
+    var pdfDocGenerator = pdfMake.createPdf(docDefinition);
+
+    // Open the PDF preview in a new window or tab
+    pdfDocGenerator.open();
+        }
+        function collectTableData() {
+            var table = document.querySelector('table');
+            var data = [];
+
+            for (var i = 0; i < table.rows.length; i++) {
+                var tableRow = table.rows[i];
                 var rowData = [];
 
-                for (var k = 0; k < tableRow.cells.length; k++) {
-                    rowData[k] = tableRow.cells[k].innerHTML;
+                for (var j = 0; j < tableRow.cells.length; j++) {
+                    rowData.push(tableRow.cells[j].innerHTML);
                 }
 
                 data.push(rowData);
             }
 
-return data;
+            return data;
         }
     </script>
 </head>
@@ -140,7 +151,7 @@ return data;
             <div class="col-md-2">
                 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
                     <!-- Sidebar - Brand -->
-                    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+                    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
                         <div class="sidebar-brand-icon rotate-n-15">
                             <i class="fas fa-laugh-wink"></i>
                         </div>
@@ -222,9 +233,31 @@ return data;
             <!-- Table -->
             <div class="col-md-10">
                 <div class="container-fluid">
-                    <button onclick="showOnlyCashiers()">Показати лише касирів</button>
-                    <button onclick="showAllEmployees()">Показати всіх працівників</button>
-                    <li><a href="/Employee/search_by_surname">Пошук телефона та адреси по прізвищу</a></li>
+                    <a href="#" class="btn btn-primary btn-icon-split" onclick="showOnlyCashiers()">
+                        <span class="icon text-white-50">
+                            <i class="fas fa-flag"></i>
+                        </span>
+                        <span class="text">Показати лише касирів</span>
+                    </a>
+                    <a href="#" class="btn btn-primary btn-icon-split" onclick="showAllEmployees()">
+                        <span class="icon text-white-50">
+                            <i class="fas fa-flag"></i>
+                        </span>
+                        <span class="text">Показати всіх працівників</span>
+                    </a>
+                    <a href="/Employee/search_by_surname" class="btn btn-primary btn-icon-split" onclick="showAllEmployees()">
+                        <span class="icon text-white-50">
+                            <i class="fas fa-flag"></i>
+                        </span>
+                        <span class="text">Пошук телефона та адреси по прізвищу</span>
+                    </a>
+                    <a href="#" class="btn btn-warning btn-icon-split" onclick="saveReport()">
+                        <span class="icon text-white-50">
+                            <i class="fas fa-flag"></i>
+                        </span>
+                        <span class="text">Звіт</span>  
+                    </a>
+                   
                     <table class="table table-bordered" id="employees-table">
                         <thead>
                         <tr>
@@ -243,67 +276,22 @@ return data;
                         </tr>
                         </thead>
                         <tbody>
-                        
-                        <tr>
-                            <td>EMP001</td>
-                            <td>Doe</td>
-                            <td>John</td>
-                            <td>Smith</td>
-                            <td>Cashier</td>
-                            <td>5000</td>
-                            <td>1980-01-01</td>
-                            <td>2020-01-01</td>
-                            <td>+1234567890</td>
-                            <td>New York</td>
-                            <td>Street 1</td>
-                            <td>12345</td>
-                        </tr>
-                        
-                        <tr>
-                            <td>EMP002</td>
-                            <td>Johnson</td>
-                            <td>Jane</td>
-                            <td>None</td>
-                            <td>Cashier</td>
-                            <td>3000</td>
-                            <td>1990-02-02</td>
-                            <td>2020-02-02</td>
-                            <td>+0987654321</td>
-                            <td>Los Angeles</td>
-                            <td>Street 2</td>
-                            <td>54321</td>
-                        </tr>
-                        
-                        <tr>
-                            <td>EMP003</td>
-                            <td>Williams</td>
-                            <td>Robert</td>
-                            <td>Lee</td>
-                            <td>Manager</td>
-                            <td>4500</td>
-                            <td>1985-03-03</td>
-                            <td>2020-03-03</td>
-                            <td>+9876543210</td>
-                            <td>Chicago</td>
-                            <td>Street 3</td>
-                            <td>67890</td>
-                        </tr>
-                        
-                        <tr>
-                            <td>E008</td>
-                            <td>Doe</td>
-                            <td>John</td>
-                            <td>Smith</td>
-                            <td>Manager</td>
-                            <td>5000</td>
-                            <td>2000-01-01</td>
-                            <td>2023-01-01</td>
-                            <td>+123456789</td>
-                            <td>City</td>
-                            <td>Street</td>
-                            <td>12345</td>
-                        </tr>
-                        
+                            {% for employee in employees %}
+                            <tr>
+                                <td>{{ employee[0] }}</td>
+                                <td>{{ employee[1] }}</td>
+                                <td>{{ employee[2] }}</td>
+                                <td>{{ employee[3] }}</td>
+                                <td>{{ employee[4] }}</td>
+                                <td>{{ employee[5] }}</td>
+                                <td>{{ employee[6] }}</td>
+                                <td>{{ employee[7] }}</td>
+                                <td>{{ employee[8] }}</td>
+                                <td>{{ employee[9] }}</td>
+                                <td>{{ employee[10] }}</td>
+                                <td>{{ employee[11] }}</td>
+                            </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
@@ -311,14 +299,7 @@ return data;
         </div>
     </div>
     <br>
-    <button onclick="saveReport()">Save Report</button>
 </div>
-</body>
-</html>
-
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-</body>
+</body>  
 </html>
 {% endblock %}

@@ -1,18 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>HOH Custom 1</title>
 </head>
 <body>
-    <h1>Знайти таких касирів, що не продавали товар за заданой назвою і не продавали нічого у задану дату</h1>
-    <form action="/hoh_1" method="POST">
+    <h1>Знайти таких касирів, що не продавали товар за заданой назвою(весь час) і не продавали нічого у задану дату</h1>
+    <form class = "my-form" action="/hoh_1" method="POST">
         <label for="product">Product Name:</label>
         <input type="text" id="product" name="product" required>
         <br>
         <label for="date">Date (YYYY-MM-DD):</label>
         <input type="text" id="date" name="date" pattern="\d{4}-\d{2}-\d{2}" required>
         <br>
-        <input type="submit" value="Submit">
+        <input type="submit" value="Шукати">
     </form>
 
     {% if submitted %}
@@ -36,8 +38,13 @@
             <p>No results found.</p>
         {% endif %}
     {% endif %}
-    <a href="{{ url_for('go_employee') }}">Назад</a>
-     <a href="{{ url_for('home') }}">Додому</a>
+    <br>
+<a href="{{ url_for('manager_cabinet') }}" class="btn btn-primary btn-icon-split">
+  <span class="icon text-white-50">
+      <i class="fas fa-flag"></i>
+  </span>
+  <span class="text">Назад</span>
+</a>
 </body>
-
+{% endblock %}
 </html>

@@ -1,12 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Пошук за прізвищем</title>
 </head>
 <body>
+
+        
     <h1>Пошук за прізвищем</h1>
-    <form action="/search_by_surname" method="POST">
-        <label for="surname">Прізвище:</label>
+    <form class = "my-form1" action="{{ url_for('search_by_surname') }}" method="POST">
+        <label for="surname" >Прізвище:</label>
         <input type="text" id="surname" name="surname">
         <button type="submit">Пошук</button>
     </form>
@@ -25,7 +29,12 @@
             </tr>
         </tbody>
     </table>
-    <a href="{{ url_for('go_employee') }}">Назад</a>
-<a href="{{ url_for('home') }}">Додому</a>
+    <a href="{{ url_for('manager_cabinet') }}" class="btn btn-primary btn-icon-split">
+        <span class="icon text-white-50">
+            <i class="fas fa-flag"></i>
+        </span>
+        <span class="text">Назад</span>
+    </a>
 </body>
 </html>
+{% endblock %}

@@ -8,7 +8,7 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle box shadow */
   }
   
-  .form-title {
+  .my-form title {
     font-weight: bold;
     margin-bottom: 10px;
   }
@@ -30,6 +30,45 @@
   }
   
   .my-form button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+
+  .my-form1 {
+    border: 1px solid #ccc;
+    border-radius: 10;
+    padding: 10px;
+    font-family: Arial, sans-serif;
+    background-color: #f7f7f7;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle box shadow */
+  }
+  
+  .my-form1-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .my-form1 label {
+    display: block;
+    font-weight: italic;
+  }
+  
+  .my-form1 input {
+    border: 1px solid #c7c4c4;
+    border-radius: 5px;
+    padding: 10px;
+}
+  .my-form1 select {
+    border: 1px solid #c7c4c4;
+    border-radius: 5px;
+    padding: 10px;
+  }
+  
+  .my-form1 button {
     background-color: #3498db;
     color: white;
     border: none;

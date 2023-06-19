@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask import Flask, render_template, redirect, url_for, request, session, flash
+from flask import Flask, render_template, redirect, url_for, request, session, flash, jsonify
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired
@@ -161,31 +161,34 @@ def logout():
 
 #------------------------------- ALL FOR MANAGER
 
-@app.route('/manager_cabinet', methods=['GET', 'POST'])
+# @app.route('/manager_cabinet', methods=['GET', 'POST'])
+# def manager_cabinet():
+#     if not session.get("manager"):
+#         return redirect(url_for('home'))
+#     if not session.get('logged_in'):
+#         return redirect(url_for('login'))
+#     if request.method == 'GET':
+#      sort_by_surname = request.args.get('sort_by_surname')
+#     if sort_by_surname:
+#         employees = employee.get_all_employees_sorted_by_surname()
+#     else:
+#         employees = employee.get_all_employees()
+
+#     return render_template('manager_cabinet.html', employees=employees)
+
+@app.route('/Employee/report_employees')
+@app.route('/manager_cabinet')
 def manager_cabinet():
     if not session.get("manager"):
         return redirect(url_for('home'))
     if not session.get('logged_in'):
         return redirect(url_for('login'))
-
-    if request.method == 'GET':
-        sort_by_surname = request.args.get('sort_by_surname')
-        if sort_by_surname:
-            employees = employee.get_all_employees_sorted_by_surname()
-        else:
-            employees = employee.get_all_employees()
-    else:
-        employees = employee.get_all_employees()
+   
+    employees = employee.get_all_employees()
 
     return render_template('manager_cabinet.html', employees=employees)
 
-# @app.route('/manager_cabinet', methods=['GET', 'POST'])
-# def manager_cabinet():
-#     if not session.get('logged_in'):
-#         return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
-#     if not session.get("manager"):
-#         return redirect(url_for('login')) #оце не працює але не страшно
-#     return render_template('/manager_cabinet.html')
+
 
 #------------------------------- BASIC MENU(CHANGES POSSIBLE)
 @app.route('/category')
@@ -209,8 +212,38 @@ def go_product():
     return render_template('/manager_options/Product/product.html')
 
 @app.route('/product_store')
+@app.route('/Product_store/report_products_store')
 def go_product_store():
-    return render_template('/manager_options/Product_store/product_store.html')
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+
+    # Отримати всі товари в магазині з бази даних
+    products = store_product.get_all_products()
+
+    # Передати дані товарів у шаблон і відобразити звіт
+    role = 0
+    if session.get("manager"):
+        role = 1
+    return render_template('/manager_options/Product_store/product_store.html', products = products)
+# @app.route('/product_store')
+# def go_product_store():
+#     return render_template('/manager_options/Product_store/product_store.html')
+# @app.route('/Product_store/report_products_store')
+# def report_products_store():    #спільне для касира і менеджера
+#     if not session.get('logged_in'):
+#         return redirect(url_for('login'))
+
+#     # Отримати всі товари в магазині з бази даних
+#     products=store_product.get_all_products()
+
+#     # Передати дані товарів у шаблон і відобразити звіт
+#     role = 0
+#     if session.get("manager"):
+#         role = 1
+#     return render_template('manager_options/Product_store/report_products_store.html', products=products, role=role)
+
+
+
 
 #------------------------------- CATEGORY
 
@@ -504,7 +537,7 @@ def mar_custom_1():
 @app.route('/Employee/add_empl', methods=['GET', 'POST'])
 def add_empl():
     if not session.get("manager"):
-        return redirect(url_for('home'))
+        return redirect(url_for('login'))
     if request.method == 'POST':
         data = [
             request.form.get('id_employee'),
@@ -827,19 +860,19 @@ def delete_product_store():
     return render_template('manager_options/Product_Store/delete_product_store.html')
 
 
-@app.route('/Product_store/report_products_store')
-def report_products_store():    #спільне для касира і менеджера
-    if not session.get('logged_in'):
-        return redirect(url_for('login'))
+# @app.route('/Product_store/report_products_store')
+# def report_products_store():    #спільне для касира і менеджера
+#     if not session.get('logged_in'):
+#         return redirect(url_for('login'))
 
-    # Отримати всі товари в магазині з бази даних
-    products=store_product.get_all_products()
+#     # Отримати всі товари в магазині з бази даних
+#     products=store_product.get_all_products()
 
-    # Передати дані товарів у шаблон і відобразити звіт
-    role = 0
-    if session.get("manager"):
-        role = 1
-    return render_template('manager_options/Product_store/report_products_store.html', products=products, role=role)
+#     # Передати дані товарів у шаблон і відобразити звіт
+#     role = 0
+#     if session.get("manager"):
+#         role = 1
+#     return render_template('manager_options/Product_store/report_products_store.html', products=products, role=role)
 
 
 

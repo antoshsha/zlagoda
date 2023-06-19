@@ -1,40 +1,81 @@
+{% extends 'base.html' %}
+{% block content %}
 <!DOCTYPE html>
 <html>
 <head>
+    <style>
+        .my-form table {
+          width: 100%;
+      }
+      
+      .my-form td {
+          padding: 5px;
+      }
+      </style>
     <title>Оновити товар у магазині</title>
 </head>
 <body>
     <h1>Оновити товар у магазині</h1>
-    <form method="POST" action="{{ url_for('add_product_store') }}">
-        <div>
-            <label for="UPC">UPC:</label>
-            <input type="text" id="UPC" name="UPC">
-        </div>
-        <div>
-            <label for="UPC_prom">UPC промо-товару:</label>
-            <input type="text" id="UPC_prom" name="UPC_prom">
-        </div>
-        <div>
-            <label for="id_product">ID товару:</label>
-            <input type="text" id="id_product" name="id_product">
-        </div>
-        <div>
-            <label for="selling_price">Ціна продажу:</label>
-            <input type="text" id="selling_price" name="selling_price">
-        </div>
-        <div>
-            <label for="products_number">Кількість товару:</label>
-            <input type="text" id="products_number" name="products_number">
-        </div>
-        <div>
-            <label for="promotional_product">Промо-товар:</label>
-            <input type="text" id="promotional_product" name="promotional_product">
-        </div>
+    <form class="my-form" method="POST" action="{{ url_for('update_product_store') }}">
+        <table>
+            <tr>
+                <td>
+                    <label for="UPC">UPC:</label>
+                </td>
+                <td>
+                    <input type="text" id="UPC" name="UPC">
+                </td>
+           
+                <td>
+                    <label for="UPC_prom">UPC промо-товару:</label>
+                </td>
+                <td>
+                    <input type="text" id="UPC_prom" name="UPC_prom">
+                </td>
+            
+                <td>
+                    <label for="id_product">ID товару:</label>
+                </td>
+                <td>
+                    <input type="text" id="id_product" name="id_product">
+                </td>
+            </tr>
+        
+       
+            <tr>
+                <td>
+                    <label for="selling_price">Ціна продажу:</label>
+                </td>
+                <td>
+                    <input type="text" id="selling_price" name="selling_price">
+                </td>
+            
+                <td>
+                    <label for="products_number">Кількість товару:</label>
+                </td>
+                <td>
+                    <input type="text" id="products_number" name="products_number">
+                </td>
+        
+                <td>
+                    <label for="promotional_product">Промо-товар:</label>
+                </td>
+                <td>
+                    <input type="text" id="promotional_product" name="promotional_product">
+                </td>
+            </tr>
+        </table>
         <div>
             <input type="submit" value="Зберегти">
         </div>
     </form>
-    <a href="{{ url_for('go_product_store') }}">Назад</a>
-    <a href="{{ url_for('home') }}">Додому</a>
+    <a href="{{ url_for('go_product_store') }}" class="btn btn-primary btn-icon-split">
+        <span class="icon text-white-50">
+            <i class="fas fa-flag"></i>
+        </span>
+        <span class="text">Назад</span>
+    </a>
 </body>
 </html>
+
+{% endblock %}
