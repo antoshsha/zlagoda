@@ -8,7 +8,11 @@
     <form method="POST" action="{{ url_for('delete_check_store') }}">
         <div>
             <label for="check_number">Номер чеку:</label>
-            <input type="text" id="check_number" name="check_number">
+            <select name="check_number">
+                {% for option in options %}
+                <option value="{{ option }}">{{ option }}</option>
+                {% endfor %}
+            </select>
         </div>
         <div>
             <input type="submit" value="Видалити">

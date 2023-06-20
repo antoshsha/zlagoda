@@ -10,7 +10,11 @@
     <form class = "my-form" method="POST" action="{{ url_for('delete_product') }}">
         <div>
             <label for="product_id">ID продукту:</label>
-            <input type="text" id="product_id" name="product_id">
+            <select name="product_name">
+                {% for option in options %}
+                <option value="{{ option }}">{{ option }}</option>
+                {% endfor %}
+            </select>
         </div>
         <div>
             <input type="submit" value="Видалити">

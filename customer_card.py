@@ -82,6 +82,18 @@ def get_all_customer_cards():
     except Exception as e:
         print("Error: Failed to retrieve customer card data -", str(e))
         return []
+    
+def get_dropdown_customer_cards():
+    """Get information of all customer cards"""
+    try:
+        cursor = conn.cursor()
+        cursor.execute("SELECT card_number, cust_surname FROM Customer_Card")
+        cards = cursor.fetchall()
+        cursor.close()
+        return cards
+    except Exception as e:
+        print("Error: Failed to retrieve customer card data -", str(e))
+        return []
 
 
 def get_cards_by_discount(discount):

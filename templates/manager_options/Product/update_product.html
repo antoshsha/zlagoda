@@ -13,8 +13,13 @@
             <input type="text" id="category_number" name="category_number">
         </div>
         <div>
+           
             <label for="product_name">Назва товару:</label>
-            <input type="text" id="product_name" name="product_name">
+            <select name="product_name">
+                {% for option in options %}
+                <option value="{{ option }}">{{ option }}</option>
+                {% endfor %}
+            </select>
         </div>
         <div>
             <label for="characteristics">Характеристики:</label>

@@ -13,6 +13,15 @@ ORDER BY p.product_name;""")
     cursor.close()
     return products
 
+def get_dropdown_product_store():
+    cursor = conn.cursor()
+    cursor.execute("""SELECT sp.UPC, p.product_name
+                      FROM Store_Product sp
+                      INNER JOIN Product p ON sp.id_product = p.id_product
+                      ORDER BY sp.UPC;""")
+    products = cursor.fetchall()
+    cursor.close()
+    return products
 def insert_store_product(store_product_data):
     """Insert a new store product or update an existing one"""
     UPC, UPC_prom, id_product, selling_price, products_number, promotional_product = store_product_data

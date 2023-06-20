@@ -57,6 +57,8 @@ def get_all_categories():
     except Exception as e:
         print("Error: Failed to retrieve category data -", str(e))
         return []
+    
+
 """
 TESTING DELETING UPDATING AND INSERTING A CATEGORY
 """

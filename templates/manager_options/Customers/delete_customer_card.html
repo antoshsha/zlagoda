@@ -10,7 +10,11 @@
     <form class ="my-form" method="POST" action="{{ url_for('delete_customer_card') }}">
         <div>
             <label for="card_number">Номер карти:</label>
-            <input type="text" id="card_number" name="card_number">
+            <select name="card_number">
+            {% for option in options %}
+            <option value="{{ option }}">{{ option }}</option>
+            {% endfor %}
+        </select>
         </div>
         <div>
             <button type="submit" value="Видалити">Видалити</button>

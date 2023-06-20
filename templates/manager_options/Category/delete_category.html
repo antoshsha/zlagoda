@@ -8,7 +8,11 @@
     <form method="POST" action="{{ url_for('delete_category') }}">
         <div>
             <label for="category_number">Номер категорії:</label>
-            <input type="text" id="category_number" name="category_number">
+            <select name="category_number">
+                {% for option in options %}
+                <option value="{{ option }}">{{ option }}</option>
+                {% endfor %}
+            </select>
         </div>
         <div>
             <input type="submit" value="Видалити">

@@ -23,7 +23,11 @@
                     <label for="UPC">UPC:</label>
                 </td>
                 <td>
-                    <input type="text" id="UPC" name="UPC">
+                    <select name="UPC">
+                        {% for option in options %}
+                        <option value="{{ option }}">{{ option }}</option>
+                        {% endfor %}
+                    </select>
                 </td>
            
                 <td>

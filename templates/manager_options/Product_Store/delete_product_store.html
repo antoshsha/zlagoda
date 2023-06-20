@@ -10,7 +10,11 @@
     <form class = "my-form" method="POST" action="{{ url_for('delete_product_store') }}">
         <div>
             <label for="upc">UPC товару:</label>
-            <input type="text" id="upc" name="upc">
+            <select name="upc">
+                {% for option in options %}
+                <option value="{{ option }}">{{ option }}</option>
+                {% endfor %}
+            </select>
         </div>
         <div>
             <input type="submit" value="Видалити">

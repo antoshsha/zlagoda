@@ -27,9 +27,15 @@
         <tr>
             <td>
                 <label for="id_employee">ID працівника:</label>
+                
             </td>
             <td>
-                <input type="text" id="id_employee" name="id_employee" required>
+                <select name="id_employee">
+                    {% for option in options %}
+                    <option value="{{ option }}">{{ option }}</option>
+                    {% endfor %}
+                </select>
+                <!-- <input type="text" id="id_employee" name="id_employee" required> -->
             </td>
             <td>
                 <label for="empl_surname">Прізвище:</label>

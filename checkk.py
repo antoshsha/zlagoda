@@ -10,6 +10,13 @@ def get_all_checks():
     cursor.close()
     return checks
 
+def get_dropdown_checks():
+    cursor = conn.cursor()
+    cursor.execute("SELECT check_number FROM Checkk")
+    checks = cursor.fetchall()
+    cursor.close()
+    return checks
+
 
 def get_checks_by_cashier(cashier_id, start_date, end_date):
     cursor = conn.cursor()

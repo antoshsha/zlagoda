@@ -332,6 +332,7 @@ def update_category():
         return redirect(url_for('home'))
     if not session.get('logged_in'):
         return redirect(url_for('login'))
+    options = category.get_all_categories()
 
     if request.method == 'POST':
         category_number = request.form.get('category_number')
@@ -342,7 +343,7 @@ def update_category():
 
         return redirect(url_for('go_category'))
 
-    return render_template('manager_options/Category/update_category.html')
+    return render_template('manager_options/Category/update_category.html', options = options)
 
 @app.route('/Category/delete_category', methods=['POST', 'GET'])
 def delete_category():
@@ -350,13 +351,13 @@ def delete_category():
         return redirect(url_for('home'))
     if not session.get('logged_in'):
         return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
-
+    options = category.get_all_categories()
     if request.method == 'POST':
         category_number = request.form.get('category_number')
         category.delete_category(category_number)
         return redirect(url_for('go_category'))
 
-    return render_template('manager_options/Category/delete_category.html')
+    return render_template('manager_options/Category/delete_category.html', options = options)
 
 @app.route('/Category/report_categories')
 def report_categories():
@@ -440,13 +441,13 @@ def delete_check_store():
         return redirect(url_for('home'))
     if not session.get('logged_in'):
         return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
-
+    options = checkk.get_dropdown_checks()
     if request.method == 'POST':
         check_number = request.form.get('check_number')
         checkk.delete_checkk(check_number)
         return redirect(url_for('go_check'))
 
-    return render_template('manager_options/Check/delete_checkk.html')
+    return render_template('manager_options/Check/delete_checkk.html', options = options)
 
 # @app.route('/Check/report_checks')
 # def report_checks():
@@ -511,6 +512,7 @@ def add_customer_card():
 def update_customer_card():
     if not session.get('logged_in'):      #спільне для касира і менеджера
         return redirect(url_for('login'))
+    options = customer_card.get_dropdown_customer_cards()
 
     if request.method == 'POST':
         data = [
@@ -532,7 +534,7 @@ def update_customer_card():
     role = 0
     if session.get("manager"):
         role = 1
-    return render_template('manager_options/Customers/update_customer_card.html',role=role)
+    return render_template('manager_options/Customers/update_customer_card.html',role=role, options = options)
 
 @app.route('/Customers/delete_customer_card', methods=['POST', 'GET'])
 def delete_customer_card():
@@ -540,13 +542,13 @@ def delete_customer_card():
         return redirect(url_for('home'))
     if not session.get('logged_in'):
         return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
-
+    options = customer_card.get_dropdown_customer_cards()
     if request.method == 'POST':
         card_number = request.form.get('card_number')
         customer_card.delete_customer_card(card_number)
         return redirect(url_for('go_customers'))
 
-    return render_template('manager_options/Customers/delete_customer_card.html')
+    return render_template('manager_options/Customers/delete_customer_card.html', options = options)
 
 @app.route('/Customers/search_discount', methods=['POST'])
 def search_by_discount():
@@ -634,7 +636,7 @@ def update_employee():
         return redirect(url_for('home'))
     if not session.get('logged_in'):
         return redirect(url_for('login'))
-
+    options = employee.get_dropdown_employee()
     if request.method == 'POST':
         employee_id = request.form.get('employee_id')
         updated_data = [
@@ -653,7 +655,7 @@ def update_employee():
         employee.update_employee(employee_id,updated_data)  # Оновити дані про працівника в базі даних
         return redirect(url_for('manager_cabinet'))
 
-    return render_template('manager_options/Employee/update_employee.html')
+    return render_template('manager_options/Employee/update_employee.html', options = options)
 
 @app.route('/Employee/delete_employee', methods=['POST', 'GET'])
 def delete_employee():
@@ -661,12 +663,13 @@ def delete_employee():
         return redirect(url_for('home'))
     if not session.get('logged_in'):
         return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
+    options = employee.get_dropdown_employee()
     if request.method == 'POST':
         employee_id = request.form.get('id_employee')
         employee.delete_employee(employee_id)
         return redirect(url_for('manager_cabinet'))
 
-    return render_template('manager_options/Employee/delete_employee.html')
+    return render_template('manager_options/Employee/delete_employee.html', options = options)
 
 # @app.route('/Employee/report_employees', methods=['POST', 'GET'])
 # def report_employees():
@@ -799,6 +802,7 @@ def add_product():
 def update_product():
     if not session.get("manager"):
         return redirect(url_for('home'))
+    options = product.get_dropdown_products()
     if request.method == 'POST':
         data = [
             request.form.get('product_name'),
@@ -809,7 +813,7 @@ def update_product():
         product.update_product(data)
         return redirect(url_for('go_product'))
 
-    return render_template('manager_options/Product/update_product.html')
+    return render_template('manager_options/Product/update_product.html', options = options)
 
 
 @app.route('/Product/delete_product', methods=['POST', 'GET'])
@@ -818,13 +822,13 @@ def delete_product():
         return redirect(url_for('home'))
     if not session.get('logged_in'):
         return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
-
+    options = product.get_dropdown_products()
     if request.method == 'POST':
         product_id = request.form.get('product_id')
         product.delete_product(product_id)
         return redirect(url_for('go_product'))
 
-    return render_template('manager_options/Product/delete_product.html')
+    return render_template('manager_options/Product/delete_product.html', options = options)
 
 @app.route('/Product/report_products')
 def report_products():
@@ -896,6 +900,7 @@ def add_product_store():
 def update_product_store():
     if not session.get("manager"):
         return redirect(url_for('home'))
+    options = store_product.get_dropdown_product_store()
     if request.method == 'POST':
         data = [
             request.form.get('UPC'),
@@ -910,7 +915,7 @@ def update_product_store():
         store_product.insert_store_product(data)
         return redirect(url_for('go_product_store'))  # Redirect to the manager's cabinet page
 
-    return render_template('manager_options/Product_Store/update_product_store.html')
+    return render_template('manager_options/Product_Store/update_product_store.html', options = options)
 
 
 @app.route('/Product_Store/delete_product_store', methods=['POST', 'GET'])
@@ -919,13 +924,13 @@ def delete_product_store():
         return redirect(url_for('home'))
     if not session.get('logged_in'):
         return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
-
+    options = store_product.get_dropdown_product_store()
     if request.method == 'POST':
         upc = request.form.get('upc')
         store_product.delete_store_product(upc)
         return redirect(url_for('go_product_store'))
 
-    return render_template('manager_options/Product_Store/delete_product_store.html')
+    return render_template('manager_options/Product_Store/delete_product_store.html', options = options)
 
 
 @app.route('/Product_store/report_products_store')

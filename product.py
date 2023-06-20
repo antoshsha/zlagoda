@@ -60,6 +60,14 @@ def get_all_products():
     cursor.close()
     return products
 
+def get_dropdown_products():
+    """Отримати всі товари з бази даних"""
+    cursor = conn.cursor()
+    cursor.execute("SELECT id_product, product_name FROM Product")
+    products = cursor.fetchall()
+    cursor.close()
+    return products
+
 
 def validate_category(category_number):
 

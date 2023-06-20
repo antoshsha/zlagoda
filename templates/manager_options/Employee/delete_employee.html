@@ -10,7 +10,11 @@
     <form class = "my-form" method="POST" action="{{ url_for('delete_employee') }}">
         <div>
             <label for="id_employee">ID працівника:</label>
-            <input type="text" id="id_employee" name="id_employee">
+            <select name="id_employee">
+                {% for option in options %}
+                <option value="{{ option }}">{{ option }}</option>
+                {% endfor %}
+            </select>
         </div>
         <div>
             <input type="submit" value="Видалити">

@@ -21,7 +21,11 @@
                    
                 
             </td>
-            <td> <input type="text" id="card_number" name="card_number"></td>
+            <td>  <select name="card_number">
+                {% for option in options %}
+                <option value="{{ option }}">{{ option }}</option>
+                {% endfor %}
+            </select></td>
             <td>
                 
                     <label for="cust_surname">Прізвище:</label>

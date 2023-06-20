@@ -3,7 +3,7 @@ import datetime
 from sqlite3 import IntegrityError
 from typing import Iterable
 
-db_file_path = r'D:\ais\zlagoda\ais.db'
+db_file_path = r'D:/Мої документи/2YearNaukma/Summer/zlagoda/ais.db'
 
 
 conn = sqlite3.connect(db_file_path, check_same_thread=False)
@@ -110,6 +110,18 @@ def get_all_employees():
     try:
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM Employee")
+        employees = cursor.fetchall()
+        cursor.close()
+        return employees
+    except Exception as e:
+        print("Error: Unable to fetch employees -", str(e))
+        return []
+    
+def get_dropdown_employee():
+    """Get all employees from the database"""
+    try:
+        cursor = conn.cursor()
+        cursor.execute("SELECT id_employee, empl_surname FROM Employee")
         employees = cursor.fetchall()
         cursor.close()
         return employees
