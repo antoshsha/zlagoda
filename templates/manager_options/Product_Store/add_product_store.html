@@ -5,13 +5,13 @@
 <head>
     <style>
         .my-form table {
-          width: 100%;
-      }
-      
-      .my-form td {
-          padding: 5px;
-      }
-      </style>
+            width: 100%;
+        }
+
+        .my-form td {
+            padding: 5px;
+        }
+    </style>
     <title>Додати товар у магазин</title>
 </head>
 <body>
@@ -23,14 +23,14 @@
                     <label for="UPC">UPC:</label>
                 </td>
                 <td>
-                    <input type="text" id="UPC" name="UPC" required>
+                    <input type="text" id="UPC" name="UPC" required maxlength="12">
                 </td>
-        
+
                 <td>
                     <label for="UPC_prom">UPC промо-товару:</label>
                 </td>
                 <td>
-                    <input type="text" id="UPC_prom" name="UPC_prom" required>
+                    <input type="text" id="UPC_prom" name="UPC_prom" maxlength="12">
                 </td>
                 <td>
                     <label for="id_product">ID товару:</label>
@@ -44,18 +44,16 @@
                     <label for="selling_price">Ціна продажу:</label>
                 </td>
                 <td>
-                    <input type="number" min="0" id="selling_price" name="selling_price" required
-                    title = "введіть невід'ємне значення">
+                    <input type="number" min="0" id="selling_price" name="selling_price" required step="0.01" pattern="\d+(\.\d{1,2})?">
                 </td>
-        
+
                 <td>
                     <label for="products_number">Кількість товару:</label>
                 </td>
                 <td>
-                    <input type="number" min = "0" id="products_number" name="products_number" required 
-                    title = "введіть невід'ємне значення">
+                    <input type="number" min="0" id="products_number" name="products_number" required>
                 </td>
-            
+
                 <td>
                     <label for="promotional_product">Промо-товар:</label>
                 </td>
@@ -75,6 +73,44 @@
         </span>
         <span class="text">Назад</span>
     </a>
+
+    <script>
+        window.onload = function() {
+            var form = document.querySelector('.my-form');
+            var upcInput = document.getElementById('UPC');
+            var upcPromInput = document.getElementById('UPC_prom');
+            var idProductInput = document.getElementById('id_product');
+            var sellingPriceInput = document.getElementById('selling_price');
+            var productsNumberInput = document.getElementById('products_number');
+
+            form.addEventListener('submit', function(event) {
+                if (upcInput.value === '' || upcInput.value.length > 12) {
+                    event.preventDefault();
+                    alert('UPC має бути непорожнім рядком до 12 символів.');
+                }
+
+                if (upcPromInput.value.length > 12) {
+                    event.preventDefault();
+                    alert('UPC промо-товару має бути рядком до 12 символів.');
+                }
+
+                if (idProductInput.value === '' || isNaN(parseInt(idProductInput.value))) {
+                    event.preventDefault();
+                    alert('ID товару має бути обов\'язковим цілим числом.');
+                }
+
+                if (sellingPriceInput.value === '' || sellingPriceInput.value.length > 13 || !/^\d+(\.\d{1,2})?$/.test(sellingPriceInput.value)) {
+                    event.preventDefault();
+                    alert('Ціна продажу має бути непорожнім числом до 13 символів (до крапки) та до 2 десяткових знаків.');
+                }
+
+                if (productsNumberInput.value === '' || isNaN(parseInt(productsNumberInput.value))) {
+                    event.preventDefault();
+                    alert('Кількість товару має бути обов\'язковим цілим числом.');
+                }
+            });
+        };
+    </script>
 </body>
 </html>
 {% endblock %}

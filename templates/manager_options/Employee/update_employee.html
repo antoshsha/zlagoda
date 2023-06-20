@@ -13,6 +13,45 @@
     padding: 5px;
 }
 </style>
+<script>
+    window.onload = function() {
+        var form = document.querySelector('.my-form');
+        var idEmployeeInput = document.getElementById('id_employee');
+        var emplSurnameInput = document.getElementById('empl_surname');
+        var emplNameInput = document.getElementById('empl_name');
+        var emplRoleInput = document.getElementById('empl_role');
+        var salaryInput = document.getElementById('salary');
+        var phoneInput = document.getElementById('phone_number');
+        var zipCodeInput = document.getElementById('zip_code');
+
+        form.addEventListener('submit', function(event) {
+            if (idEmployeeInput.value.length > 10 || idEmployeeInput.value.length === 0) {
+                event.preventDefault();
+                alert('ID працівника має бути до 10 символів і не може бути порожнім.');
+            }
+
+            if (emplSurnameInput.value.length > 50 || emplSurnameInput.value.length === 0) {
+                event.preventDefault();
+                alert('Прізвище має бути до 50 символів і не може бути порожнім.');
+            }
+
+            if (emplNameInput.value.length > 50 || emplNameInput.value.length === 0) {
+                event.preventDefault();
+                alert("Ім'я має бути до 50 символів і не може бути порожнім.");
+            }
+
+            if (!['Manager', 'Cashier'].includes(emplRoleInput.value)) {
+                event.preventDefault();
+                alert('Дозволені значення для посади: Manager або Cashier.');
+            }
+
+            if (!/^[\d]{0,9}$/.test(zipCodeInput.value)) {
+                event.preventDefault();
+                alert('Поштовий індекс може містити максимум 9 цифр.');
+            }
+        });
+    };
+</script>
 </head>
 <body>
   <h1>Оновлення даних про співробітника</h1>
@@ -21,21 +60,15 @@
     <p style="color: red;">{{ error }}</p>
   {% endif %}
 
-  
-  <form class="my-form" method="POST" action="{{ url_for('update_employee') }}">
+
+  <form class="my-form" method="POST" action="{{ url_for('update_employee') }}" onsubmit="return validateForm()">
     <table>
         <tr>
             <td>
                 <label for="id_employee">ID працівника:</label>
-                
             </td>
             <td>
-                <select name="id_employee">
-                    {% for option in options %}
-                    <option value="{{ option }}">{{ option }}</option>
-                    {% endfor %}
-                </select>
-                <!-- <input type="text" id="id_employee" name="id_employee" required> -->
+                <input type="text" id="id_employee" name="id_employee" required>
             </td>
             <td>
                 <label for="empl_surname">Прізвище:</label>
@@ -61,13 +94,15 @@
                 <label for="empl_role">Посада:</label>
             </td>
             <td>
-                <input type="text" id="empl_role" name="empl_role" required>
+                <input type="text" id="empl_role" name="empl_role" pattern="Manager|Cashier"
+                       title="Дозволені значення: Manager або Cashier" required>
             </td>
             <td>
                 <label for="salary">Заробітна плата:</label>
             </td>
             <td>
-                <input type="number" min = "0" id="salary" name="salary" required>
+                <input type="text" id="salary" name="salary" pattern="^\d{1,10}(?:\.\d{1,4})?$"
+                       title="Максимум 10 цифр до крапки і 4 цифри після крапки" required>
             </td>
         </tr>
         <tr>
@@ -75,21 +110,20 @@
                 <label for="date_of_birth">Дата народження:</label>
             </td>
             <td>
-                <input type="text" id="date_of_birth" name="date_of_birth" pattern="\d{4}-\d{2}-\d{2}"
-                title = "Введіть дату у форматі YYYY-MM-DD" required>
+                <input type="date" id="date_of_birth" name="date_of_birth" required>
             </td>
             <td>
                 <label for="date_of_start">Дата початку:</label>
             </td>
             <td>
-                <input type="text" id="date_of_start" name="date_of_start" pattern="\d{4}-\d{2}-\d{2}"
-                title = "Введіть дату у форматі YYYY-MM-DD" required>
+                <input type="date" id="date_of_start" name="date_of_start" required>
             </td>
             <td>
                 <label for="phone_number">Номер телефону:</label>
             </td>
             <td>
-                <input type="text" id="phone_number" name="phone_number"  pattern="[+\d]{0,13}" title="Максимально 13 знаків" required>
+                <input type="text" id="phone_number" name="phone_number" pattern="[+\d]{0,13}"
+                       title="Максимально 13 знаків" required>
             </td>
         </tr>
         <tr>
@@ -109,23 +143,17 @@
                 <label for="zip_code">Поштовий індекс:</label>
             </td>
             <td>
-                <input type="text" id="zip_code" name="zip_code" pattern = "\d{0,9}" title="Максимально 9 знаків" required>
+                <input type="text" id="zip_code" name="zip_code" pattern="\d{0,9}"
+                       title="Максимально 9 знаків" required>
             </td>
         </tr>
         <tr>
             <td colspan="6">
-                <button type="submit" value="Оновити">Оновити</button>
+                <button type="submit" value="Зберегти">Зберегти</button>
             </td>
         </tr>
     </table>
-</form>
-<br>
-<a href="{{ url_for('manager_cabinet') }}" class="btn btn-primary btn-icon-split">
-  <span class="icon text-white-50">
-      <i class="fas fa-flag"></i>
-  </span>
-  <span class="text">Назад</span>
-</a>
+  </form>
 </body>
-{% endblock %}
 </html>
+{% endblock %}

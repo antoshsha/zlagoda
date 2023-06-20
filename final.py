@@ -1079,7 +1079,7 @@ def my_checks():
         checks = checkk.get_checks_by_cashier(session.get("id"),start_date, end_date)
        
 
-        return render_template('cashier_options/my_checks.html', checks=checks)
+        return render_template('cashier_options/my_checks.html', checks=checks, data=data)
 
      return render_template('cashier_options/my_checks.html', data=data)
 

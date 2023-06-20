@@ -7,13 +7,12 @@
 </head>
 <body>
     <h1>Оновити товар</h1>
-    <form class = "my-form" method="POST" action="{{ url_for('update_product') }}">
+    <form class="my-form" method="POST" action="{{ url_for('update_product') }}">
         <div>
             <label for="category_number">Номер категорії:</label>
-            <input type="text" id="category_number" name="category_number">
+            <input type="number" id="category_number" name="category_number" required>
         </div>
         <div>
-           
             <label for="product_name">Назва товару:</label>
             <select name="product_name">
                 {% for option in options %}
@@ -23,7 +22,7 @@
         </div>
         <div>
             <label for="characteristics">Характеристики:</label>
-            <textarea id="characteristics" name="characteristics"></textarea>
+            <textarea id="characteristics" name="characteristics" required maxlength="50"></textarea>
         </div>
         <div>
             <button type="submit" value="Оновити">Оновити</button>
@@ -36,6 +35,26 @@
         </span>
         <span class="text">Назад</span>
     </a>
+
+    <script>
+        window.onload = function() {
+            var form = document.querySelector('.my-form');
+            var categoryNumberInput = document.getElementById('category_number');
+            var characteristicsInput = document.getElementById('characteristics');
+
+            form.addEventListener('submit', function(event) {
+                if (categoryNumberInput.value === '' || isNaN(parseInt(categoryNumberInput.value))) {
+                    event.preventDefault();
+                    alert('Номер категорії має бути обов\'язковим цілим числом.');
+                }
+
+                if (characteristicsInput.value === '' || characteristicsInput.value.length > 50) {
+                    event.preventDefault();
+                    alert('Характеристики мають бути обов\'язковими та не більше 50 символів.');
+                }
+            });
+        };
+    </script>
 </body>
 </html>
 {% endblock %}

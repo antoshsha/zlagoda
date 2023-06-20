@@ -8,17 +8,17 @@
     <form method="post" action="{{ url_for('add_checkk') }}">
         <div>
             <label for="checkNumber">Номер чеку:</label>
-            <input type="text" id="checkNumber" name="check_number" required>
+            <input type="text" id="checkNumber" name="check_number" required maxlength="10">
         </div>
 
         <div>
             <label for="employeeID">ID працівника:</label>
-            <input type="text" id="employeeID" name="id_employee" required>
+            <input type="text" id="employeeID" name="id_employee" required maxlength="10">
         </div>
 
         <div>
             <label for="cardNumber">Номер картки:</label>
-            <input type="text" id="cardNumber" name="card_number" required>
+            <input type="text" id="cardNumber" name="card_number" maxlength="13">
         </div>
 
         <div>

@@ -13,6 +13,45 @@
             padding: 5px;
         }
     </style>
+    <script>
+        window.onload = function() {
+            var form = document.querySelector('.my-form');
+            var idEmployeeInput = document.getElementById('id_employee');
+            var emplSurnameInput = document.getElementById('empl_surname');
+            var emplNameInput = document.getElementById('empl_name');
+            var emplRoleInput = document.getElementById('empl_role');
+            var salaryInput = document.getElementById('salary');
+            var phoneInput = document.getElementById('phone_number');
+            var zipCodeInput = document.getElementById('zip_code');
+
+            form.addEventListener('submit', function(event) {
+                if (idEmployeeInput.value.length > 10 || idEmployeeInput.value.length === 0) {
+                    event.preventDefault();
+                    alert('ID працівника має бути до 10 символів і не може бути порожнім.');
+                }
+
+                if (emplSurnameInput.value.length > 50 || emplSurnameInput.value.length === 0) {
+                    event.preventDefault();
+                    alert('Прізвище має бути до 50 символів і не може бути порожнім.');
+                }
+
+                if (emplNameInput.value.length > 50 || emplNameInput.value.length === 0) {
+                    event.preventDefault();
+                    alert("Ім'я має бути до 50 символів і не може бути порожнім.");
+                }
+
+                if (!['Manager', 'Cashier'].includes(emplRoleInput.value)) {
+                    event.preventDefault();
+                    alert('Дозволені значення для посади: Manager або Cashier.');
+                }
+
+                if (!/^[\d]{0,9}$/.test(zipCodeInput.value)) {
+                    event.preventDefault();
+                    alert('Поштовий індекс може містити максимум 9 цифр.');
+                }
+            });
+        };
+    </script>
 </head>
 <body>
     <h1>Додати нового працівника</h1>
@@ -50,13 +89,14 @@
                 </td>
                 <td>
                     <input type="text" id="empl_role" name="empl_role" pattern="Manager|Cashier"
-                    title="Дозволені значення: Manager або Cashier" required>
+                           title="Дозволені значення: Manager або Cashier" required>
                 </td>
                 <td>
                     <label for="salary">Заробітна плата:</label>
                 </td>
                 <td>
-                    <input type="text" id="salary" name="salary" required>
+                    <input type="text" id="salary" name="salary" pattern="^\d{1,10}(?:\.\d{1,4})?$"
+                           title="Максимум 10 цифр до крапки і 4 цифри після крапки" required>
                 </td>
             </tr>
             <tr>
@@ -77,7 +117,7 @@
                 </td>
                 <td>
                     <input type="text" id="phone_number" name="phone_number" pattern="[+\d]{0,13}"
-                    title="Максимально 13 знаків" required>
+                           title="Максимально 13 знаків" required>
                 </td>
             </tr>
             <tr>
@@ -98,7 +138,7 @@
                 </td>
                 <td>
                     <input type="text" id="zip_code" name="zip_code" pattern="\d{0,9}"
-                    title="Максимально 9 знаків" required>
+                           title="Максимально 9 знаків" required>
                 </td>
             </tr>
             <tr>

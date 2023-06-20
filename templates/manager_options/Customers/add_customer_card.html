@@ -4,6 +4,43 @@
 <html>
 <head>
     <title>Додати клієнта</title>
+    <script>
+        window.onload = function() {
+            var form = document.querySelector('.my-form');
+            var cardNumberInput = document.getElementById('card_number');
+            var custSurnameInput = document.getElementById('cust_surname');
+            var custNameInput = document.getElementById('cust_name');
+            var phoneInput = document.getElementById('phone_number');
+            var percentInput = document.getElementById('percent');
+
+            form.addEventListener('submit', function(event) {
+                if (cardNumberInput.value.length > 13 || cardNumberInput.value.length === 0) {
+                    event.preventDefault(); // Перешкоджає відправленню форми
+                    alert('Номер картки має бути до 13 символів і не може бути порожнім.');
+                }
+
+                if (custSurnameInput.value.length > 50 || custSurnameInput.value.length === 0) {
+                    event.preventDefault(); // Перешкоджає відправленню форми
+                    alert("Прізвище має бути до 50 символів і не може бути порожнім.");
+                }
+
+                if (custNameInput.value.length > 50 || custNameInput.value.length === 0) {
+                    event.preventDefault(); // Перешкоджає відправленню форми
+                    alert("Ім'я має бути до 50 символів і не може бути порожнім.");
+                }
+
+                if (phoneInput.value.length > 13 || phoneInput.value.length === 0) {
+                    event.preventDefault(); // Перешкоджає відправленню форми
+                    alert('Номер телефону має бути до 13 символів і не може бути порожнім.');
+                }
+
+                if (percentInput.value === '' || isNaN(parseFloat(percentInput.value))) {
+                    event.preventDefault(); // Перешкоджає відправленню форми
+                    alert('Відсоток має бути числом і не може бути порожнім.');
+                }
+            });
+        };
+    </script>
 </head>
 <body>
     <h1>Додати клієнта</h1>

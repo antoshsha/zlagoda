@@ -5,13 +5,13 @@
 <head>
     <style>
         .my-form table {
-          width: 100%;
-      }
-      
-      .my-form td {
-          padding: 5px;
-      }
-      </style>
+            width: 100%;
+        }
+
+        .my-form td {
+            padding: 5px;
+        }
+    </style>
     <title>Оновити товар у магазині</title>
 </head>
 <body>
@@ -29,43 +29,43 @@
                         {% endfor %}
                     </select>
                 </td>
-           
+
                 <td>
                     <label for="UPC_prom">UPC промо-товару:</label>
                 </td>
                 <td>
-                    <input type="text" id="UPC_prom" name="UPC_prom">
+                    <input type="text" id="UPC_prom" name="UPC_prom" maxlength="12">
                 </td>
-            
+
                 <td>
                     <label for="id_product">ID товару:</label>
                 </td>
                 <td>
-                    <input type="text" id="id_product" name="id_product">
+                    <input type="text" id="id_product" name="id_product" required>
                 </td>
             </tr>
-        
-       
+
+
             <tr>
                 <td>
                     <label for="selling_price">Ціна продажу:</label>
                 </td>
                 <td>
-                    <input type="text" id="selling_price" name="selling_price">
+                    <input type="text" id="selling_price" name="selling_price" maxlength="13" pattern="\d+(\.\d{1,2})?">
                 </td>
-            
+
                 <td>
                     <label for="products_number">Кількість товару:</label>
                 </td>
                 <td>
-                    <input type="text" id="products_number" name="products_number">
+                    <input type="text" id="products_number" name="products_number" required>
                 </td>
-        
+
                 <td>
                     <label for="promotional_product">Промо-товар:</label>
                 </td>
                 <td>
-                    <input type="text" id="promotional_product" name="promotional_product">
+                    <input type="text" id="promotional_product" name="promotional_product" required>
                 </td>
             </tr>
         </table>
@@ -79,7 +79,44 @@
         </span>
         <span class="text">Назад</span>
     </a>
+
+    <script>
+        window.onload = function() {
+            var form = document.querySelector('.my-form');
+            var upcPromInput = document.getElementById('UPC_prom');
+            var idProductInput = document.getElementById('id_product');
+            var sellingPriceInput = document.getElementById('selling_price');
+            var productsNumberInput = document.getElementById('products_number');
+            var promotionalProductInput = document.getElementById('promotional_product');
+
+            form.addEventListener('submit', function(event) {
+                if (upcPromInput.value.length > 12) {
+                    event.preventDefault();
+                    alert('UPC промо-товару має бути рядком до 12 символів.');
+                }
+
+                if (idProductInput.value === '') {
+                    event.preventDefault();
+                    alert('ID товару є обов\'язковим полем.');
+                }
+
+                if (sellingPriceInput.value === '' || sellingPriceInput.value.length > 13 || !/^\d+(\.\d{1,2})?$/.test(sellingPriceInput.value)) {
+                    event.preventDefault();
+                    alert('Ціна продажу має бути числом до 13 символів (до крапки) та до 2 десяткових знаків.');
+                }
+
+                if (productsNumberInput.value === '') {
+                    event.preventDefault();
+                    alert('Кількість товару є обов\'язковим полем.');
+                }
+
+                if (promotionalProductInput.value === '') {
+                    event.preventDefault();
+                    alert('Промо-товар є обов\'язковим полем.');
+                }
+            });
+        };
+    </script>
 </body>
 </html>
-
 {% endblock %}

@@ -4,10 +4,23 @@
 <html>
 <head>
     <title>Додати категорію</title>
+    <script>
+        window.onload = function() {
+            var form = document.getElementById('my-form');
+            var categoryInput = document.getElementById('category_name');
+
+            form.addEventListener('submit', function(event) {
+                if (categoryInput.value.length > 50) {
+                    event.preventDefault(); // Передійти до відправлення форми
+                    alert('Назва категорії має бути до 50 символів.');
+                }
+            });
+        };
+    </script>
 </head>
 <body>
     <h1>Додати категорію</h1>
-    <form  class = "my-form" method="POST" action="{{ url_for('add_category') }}">
+    <form id="my-form" method="POST" action="{{ url_for('add_category') }}">
         <div>
             <label for="category_name">Назва категорії:</label>
             <input type="text" id="category_name" name="category_name">
