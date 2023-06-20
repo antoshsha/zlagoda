@@ -11,71 +11,62 @@
         <table>
             <tr>
                 <td>
-                    
                     <label for="card_number">Номер картки:</label>
-                        
-                    
                 </td>
-                <td><input type="text" id="card_number" name="card_number"></td>
                 <td>
-                    
-                        <label for="cust_surname">Прізвище:</label>
-                       
-                   
+                    <input type="text" id="card_number" name="card_number" required>
                 </td>
-                <td> <input type="text" id="cust_surname" name="cust_surname"></td>
                 <td>
-                   
-                        <label for="cust_name">Ім'я:</label>
-                       
-                    
+                    <label for="cust_surname">Прізвище:</label>
                 </td>
-                <td> <input type="text" id="cust_name" name="cust_name"></td>
+                <td>
+                    <input type="text" id="cust_surname" name="cust_surname" required>
+                </td>
+                <td>
+                    <label for="cust_name">Ім'я:</label>
+                </td>
+                <td>
+                    <input type="text" id="cust_name" name="cust_name" required>
+                </td>
             </tr>
             <tr>
                 <td>
-                   
-                        <label for="cust_patronymic">По-батькові:</label>
-                        
-                    
+                    <label for="cust_patronymic">По-батькові:</label>
                 </td>
-                <td><input type="text" id="cust_patronymic" name="cust_patronymic"></td>
                 <td>
-                   
-                        <label for="phone_number">Номер телефону:</label>
-                        
-                    
+                    <input type="text" id="cust_patronymic" name="cust_patronymic">
                 </td>
-                <td><input type="text" id="phone_number" name="phone_number"></td>
                 <td>
-                    
-                        <label for="city">Місто:</label>
-                        
-                   
+                    <label for="phone_number">Номер телефону:</label>
                 </td>
-                <td><input type="text" id="city" name="city"></td>
+                <td>
+                    <input type="text" id="phone_number" name="phone_number" pattern="[+\d]{0,13}" title="Максимально 13 знаків" required>
+                </td>
+                <td>
+                    <label for="city">Місто:</label>
+                </td>
+                <td>
+                    <input type="text" id="city" name="city" required>
+                </td>
             </tr>
             <tr>
                 <td>
-                   
-                        <label for="street">Вулиця:</label>
-                       
-                    
+                    <label for="street">Вулиця:</label>
                 </td>
-                <td> <input type="text" id="street" name="street"></td>
                 <td>
-                   
-                        <label for="zip_code">Поштовий індекс:</label>
-                       
-                    
+                    <input type="text" id="street" name="street" required>
                 </td>
-                <td> <input type="text" id="zip_code" name="zip_code"></td>
                 <td>
-                   
-                        <label for="percent">Відсоток:</label>
-                       
+                    <label for="zip_code">Поштовий індекс:</label>
                 </td>
-                <td> <input type="text" id="percent" name="percent">
+                <td>
+                    <input type="text" id="zip_code" name="zip_code" required>
+                </td>
+                <td>
+                    <label for="percent">Відсоток:</label>
+                </td>
+                <td>
+                    <input type="number" id="percent" name="percent" step="any" required>
                 </td>
             </tr>
         </table>
@@ -84,23 +75,24 @@
         </div>
     </form>
     <br>
-    
-        {%if role==1%}
-        <a href="{{ url_for('go_customers') }}" class="btn btn-primary btn-icon-split">
+
+    {% if role == 1 %}
+        <a href="{{ url_for('manager_cabinet') }}" class="btn btn-primary btn-icon-split">
             <span class="icon text-white-50">
                 <i class="fas fa-flag"></i>
             </span>
             <span class="text">Назад</span>
         </a>
-        {%endif%}
-        {%if role==0%}
+    {% endif %}
+
+    {% if role == 0 %}
         <a href="{{ url_for('cashier_cabinet') }}" class="btn btn-primary btn-icon-split">
             <span class="icon text-white-50">
                 <i class="fas fa-flag"></i>
             </span>
             <span class="text">Назад</span>
         </a>
-        {%endif%}
+    {% endif %}
 </body>
 </html>
 {% endblock %}

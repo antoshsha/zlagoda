@@ -14,6 +14,7 @@ import  manager
 import product
 import store_product
 import encrypter
+import user
 from employee import conn
 from datetime import datetime
 
@@ -500,7 +501,7 @@ def add_customer_card():
         print(data)  # Виведення даних на консоль (для перевірки)
         # Опрацьовка даних та збереження в базу даних
         customer_card.insert_customer_card(data)
-        return redirect(url_for('go_customer'))  # Перенаправлення на сторінку кабінету менеджера
+        return redirect(url_for('manager_cabinet'))  # Перенаправлення на сторінку кабінету менеджера
     role=0
     if session.get("manager"):
         role=1
@@ -617,12 +618,13 @@ def add_empl():
             request.form.get('phone_number'),
             request.form.get('city'),
             request.form.get('street'),
-            request.form.get('zip_code')
+            request.form.get('zip_code'),
+            request.form.get('username'),
+            request.form.get('password'),
         ]
         print(data)
-        employee.insert_employee(data)
-        print(data)
-        employee.insert_employee(data)
+        employee.insert_employee(data[:12])
+        user.insert_user(data[12],data[13],data[1])
         # Опрацьовка даних та збереження в базу даних
     return render_template("manager_options/Employee/add_empl.html")
 

@@ -3,7 +3,7 @@ import datetime
 from sqlite3 import IntegrityError
 from typing import Iterable
 
-db_file_path = r'D:/Мої документи/2YearNaukma/Summer/zlagoda/ais.db'
+db_file_path = r'D:\ais\zlagoda\ais.db'
 
 
 conn = sqlite3.connect(db_file_path, check_same_thread=False)

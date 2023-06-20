@@ -49,7 +49,8 @@
                     <label for="empl_role">Посада:</label>
                 </td>
                 <td>
-                    <input type="text" id="empl_role" name="empl_role" required>
+                    <input type="text" id="empl_role" name="empl_role" pattern="Manager|Cashier"
+                    title="Дозволені значення: Manager або Cashier" required>
                 </td>
                 <td>
                     <label for="salary">Заробітна плата:</label>
@@ -63,21 +64,20 @@
                     <label for="date_of_birth">Дата народження:</label>
                 </td>
                 <td>
-                    <input type="text" id="date_of_birth" name="date_of_birth" pattern="\d{4}-\d{2}-\d{2}"
-                    title = "Введіть дату у форматі YYYY-MM-DD" required>
+                    <input type="date" id="date_of_birth" name="date_of_birth" required>
                 </td>
                 <td>
                     <label for="date_of_start">Дата початку:</label>
                 </td>
                 <td>
-                    <input type="text" id="date_of_start" name="date_of_start" pattern="\d{4}-\d{2}-\d{2}"
-                    title = "Введіть дату у форматі YYYY-MM-DD" required>
+                    <input type="date" id="date_of_start" name="date_of_start" required>
                 </td>
                 <td>
                     <label for="phone_number">Номер телефону:</label>
                 </td>
                 <td>
-                    <input type="text" id="phone_number" name="phone_number"  pattern="[+\d]{0,13}" title="Максимально 13 знаків" required>
+                    <input type="text" id="phone_number" name="phone_number" pattern="[+\d]{0,13}"
+                    title="Максимально 13 знаків" required>
                 </td>
             </tr>
             <tr>
@@ -97,7 +97,22 @@
                     <label for="zip_code">Поштовий індекс:</label>
                 </td>
                 <td>
-                    <input type="text" id="zip_code" name="zip_code" pattern = "\d{0,9}" title="Максимально 9 знаків" required>
+                    <input type="text" id="zip_code" name="zip_code" pattern="\d{0,9}"
+                    title="Максимально 9 знаків" required>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="username">Логін:</label>
+                </td>
+                <td>
+                    <input type="text" id="username" name="username" required>
+                </td>
+                <td>
+                    <label for="password">Пароль:</label>
+                </td>
+                <td>
+                    <input type="password" id="password" name="password" required>
                 </td>
             </tr>
             <tr>
