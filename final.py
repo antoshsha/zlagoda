@@ -198,7 +198,7 @@ def logout():
 #         return redirect(url_for('login'))
 #     return render_template('manager_cabinet.html')   
 
-@app.route('/manager_cabinet')
+@app.route('/manager_cabinet', methods=['GET', 'POST'])
 def manager_cabinet():
     if not session.get("manager"):
         return redirect(url_for('login'))
