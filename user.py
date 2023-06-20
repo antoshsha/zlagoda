@@ -47,7 +47,7 @@ def delete_user(login):
 
 
 
-# insert_user("marks", "communist", "EMP002")
+# insert_user("maks", "criminal", "EMP003")
 # update_user("johnsmith", "newpassword456", "E008")
 # delete_user("cashier1")
 
