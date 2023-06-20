@@ -18,6 +18,7 @@ def insert_category(category_data):
 
 
 def update_category(category_number, category_name):
+    print(category_number)
     try:
         cursor = conn.cursor()
         result = cursor.execute("UPDATE Category SET category_name = ? WHERE category_number = ?",
@@ -37,7 +38,7 @@ def delete_category(category_number):
         cursor = conn.cursor()
         result = cursor.execute("DELETE FROM Category WHERE category_number = ?", (category_number,))
         conn.commit()
-
+        print(category_number)
         if result.rowcount == 0:
             print("No category found with category number", category_number)
         else:

@@ -99,10 +99,10 @@ def get_all_products_sorted_by_name():
     return results
 """TESTING INSERTING, UPDATING AND DELETING PRODUCTS"""
 
-# product_data = (20, "Product A", "Characteristics A")
+# product_data = (50, "Product GG", "Characteristics A")
 # insert_product(product_data)
 
-# product_data = ("Updated Product", "Updated Characteristics", 1)
+# product_data = ("Updated Product", "Updated Characteristics", 7)
 # update_product(product_data)
 
 # product_id = 4

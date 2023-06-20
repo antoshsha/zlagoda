@@ -178,8 +178,8 @@ def validate_store_product(UPC):
 
 
 
-#store_product_data1 = ("UPC016", None, 5, 20, 100, False)
-#insert_store_product(store_product_data1)
+# store_product_data1 = ("UPC017", None, 7, 20, 100, False)
+# insert_store_product(store_product_data1)
 
 
 # store_product_data = ("UPC013", "UPC012", 5, -20, 45, True)

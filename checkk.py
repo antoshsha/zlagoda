@@ -133,7 +133,6 @@ def delete_checkk(check_number: str) -> None:
 
     # Delete the check from the Checkk table
     cursor.execute("DELETE FROM Checkk WHERE check_number = ?", (check_number,))
-
     conn.commit()
     cursor.close()
 
@@ -155,19 +154,19 @@ TESTING CHECK INSERT, DELETE
 
 
 # check_data = (
-#     "CHK0016",  # check_number
+#     "CHK00109",  # check_number
 #     "EMP001",  # id_employee
 #     None,  # card_number
 #     "2023-06-08",  # print_date
 #     [
 #         "UPC001",  # upc
-#         "UPC002",
-#         "UPC003"
+#         "UPC002"
+#
 #     ],
 #     [
 #         2,  # quantity
-#         1,
-#         3
+#         1
+#
 #     ]
 # )
 #

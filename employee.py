@@ -3,8 +3,8 @@ import datetime
 from sqlite3 import IntegrityError
 from typing import Iterable
 
-db_file_path = r'D:/Мої документи/2YearNaukma/Summer/zlagoda/ais.db'
-
+# db_file_path = r'D:/Мої документи/2YearNaukma/Summer/zlagoda/ais.db'
+db_file_path = "/Users/antonmarynych/PycharmProjects/zlagoda8/ais.db"
 
 conn = sqlite3.connect(db_file_path, check_same_thread=False)
 
@@ -171,12 +171,16 @@ def get_by_id(id):
 """ 
 TESTING UPDATING 
 """
-#
-# employee_id = 'E001'
-# updated_employee_data = ('Doe', 'Jane', 'Smith', 'Manager', 2100.00, '1990-01-01', '2015-01-01', '+987654321',
+
+# employee_id = 'E008'
+# updated_employee_data = ('Man', 'Jane', 'Smith', 'Manager', 2100.00, '1990-01-01', '2015-01-01', '+987654321',
 #                          'New City', 'New Street', '54321')
 # update_employee(employee_id, updated_employee_data)
 
+
+# employee_id = 'ID685493TEST'
+# updated_employee_data = ['ni43ninf', 'ni43ninf', 'ni43ninf', 'Manager', '2982', '1999-03-20', '1999-03-20', '23242', 'fnwnfiewn', 'fwinfwf', '3242432']
+# update_employee(employee_id, updated_employee_data)
 
 """
 TESTING DELETION 

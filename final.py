@@ -358,6 +358,9 @@ def update_category():
 
     if request.method == 'POST':
         category_number = request.form.get('category_number')
+        comma_index = category_number.index(',')
+        category_number = category_number[1:comma_index].strip()
+        category_number = int(category_number)
         category_name = request.form.get('category_name')
 
         # Опрацювання даних та оновлення в базі даних
@@ -376,6 +379,9 @@ def delete_category():
     options = category.get_all_categories()
     if request.method == 'POST':
         category_number = request.form.get('category_number')
+        comma_index = category_number.index(',')
+        category_number = category_number[1:comma_index].strip()
+        category_number = int(category_number)
         category.delete_category(category_number)
         return redirect(url_for('go_category'))
 
@@ -452,6 +458,9 @@ def delete_check_store():
     options = checkk.get_dropdown_checks()
     if request.method == 'POST':
         check_number = request.form.get('check_number')
+        check_number = check_number.strip('()')
+        check_number = check_number.split(', ')
+        check_number = check_number[0][1:-2]
         checkk.delete_checkk(check_number)
         return redirect(url_for('go_check'))
 
@@ -520,10 +529,13 @@ def update_customer_card():
     if not session.get('logged_in'):      #спільне для касира і менеджера
         return redirect(url_for('login'))
     options = customer_card.get_dropdown_customer_cards()
-
     if request.method == 'POST':
+        card_number = request.form.get('card_number')
+        card_number = card_number.strip('()')
+        card_number = card_number.split(', ')
+        card_number = card_number[0][1:-1]
         data = [
-            request.form.get('card_number'),
+            card_number,
             request.form.get('cust_surname'),
             request.form.get('cust_name'),
             request.form.get('cust_patronymic'),
@@ -537,7 +549,7 @@ def update_customer_card():
         # Опрацювання даних та оновлення в базі даних
         customer_card.update_customer_card(data)
 
-        return redirect(url_for('go_category'), role=session.get("manager"))
+        return redirect(url_for('go_category'))
     role = 0
     if session.get("manager"):
         role = 1
@@ -552,6 +564,9 @@ def delete_customer_card():
     options = customer_card.get_dropdown_customer_cards()
     if request.method == 'POST':
         card_number = request.form.get('card_number')
+        card_number = card_number.strip('()')
+        card_number = card_number.split(', ')
+        card_number = card_number[0][1:-1]
         customer_card.delete_customer_card(card_number)
         return redirect(url_for('go_customers'))
 
@@ -645,7 +660,10 @@ def update_employee():
         return redirect(url_for('login'))
     options = employee.get_dropdown_employee()
     if request.method == 'POST':
-        employee_id = request.form.get('employee_id')
+        employee_id = request.form.get('id_employee')
+        employee_id = employee_id.strip('()')
+        employee_id = employee_id.split(', ')
+        employee_id = employee_id[0][1:-1]
         updated_data = [
             request.form.get('empl_surname'),
             request.form.get('empl_name'),
@@ -659,7 +677,7 @@ def update_employee():
             request.form.get('street'),
             request.form.get('zip_code')
         ]
-        employee.update_employee(employee_id,updated_data)  # Оновити дані про працівника в базі даних
+        employee.update_employee(employee_id, updated_data)  # Оновити дані про працівника в базі даних
         return redirect(url_for('manager_cabinet'))
 
     return render_template('manager_options/Employee/update_employee.html', options = options)
@@ -673,6 +691,9 @@ def delete_employee():
     options = employee.get_dropdown_employee()
     if request.method == 'POST':
         employee_id = request.form.get('id_employee')
+        employee_id = employee_id.strip('()')
+        employee_id = employee_id.split(', ')
+        employee_id = employee_id[0][1:-1]
         employee.delete_employee(employee_id)
         return redirect(url_for('manager_cabinet'))
 
@@ -811,11 +832,15 @@ def update_product():
         return redirect(url_for('home'))
     options = product.get_dropdown_products()
     if request.method == 'POST':
+        product_name = request.form.get('product_name')
+        product_name = product_name.split(",")[1].strip()
+        product_name = product_name[1:-1]
         data = [
-            request.form.get('product_name'),
+            product_name,
             request.form.get('characteristics'),
             request.form.get('category_number'),
         ]
+        print(product_name)
         # Process and save the data to the database
         product.update_product(data)
         return redirect(url_for('go_product'))
@@ -831,7 +856,11 @@ def delete_product():
         return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
     options = product.get_dropdown_products()
     if request.method == 'POST':
-        product_id = request.form.get('product_id')
+        product_id = request.form.get('product_name')
+        print(product_id)
+        comma_index = product_id.index(',')
+        product_id = product_id[1:comma_index].strip()
+        product_id = int(product_id)
         product.delete_product(product_id)
         return redirect(url_for('go_product'))
 
@@ -909,8 +938,12 @@ def update_product_store():
         return redirect(url_for('home'))
     options = store_product.get_dropdown_product_store()
     if request.method == 'POST':
+        Upc = request.form.get('UPC')
+        Upc = Upc.strip('()')
+        Upc = Upc.split(', ')
+        Upc = Upc[0][1:-1]
         data = [
-            request.form.get('UPC'),
+            Upc,
             request.form.get('UPC_prom'),
             request.form.get('id_product'),
             request.form.get('selling_price'),
@@ -919,7 +952,7 @@ def update_product_store():
         ]
         print(data)  # Printing data for verification
         # Process the data and save it to the database
-        store_product.insert_store_product(data)
+        store_product.update_store_product(data)
         return redirect(url_for('go_product_store'))  # Redirect to the manager's cabinet page
 
     return render_template('manager_options/Product_Store/update_product_store.html', options = options)
@@ -933,8 +966,11 @@ def delete_product_store():
         return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
     options = store_product.get_dropdown_product_store()
     if request.method == 'POST':
-        upc = request.form.get('upc')
-        store_product.delete_store_product(upc)
+        Upc = request.form.get('upc')
+        Upc = Upc.strip('()')
+        Upc = Upc.split(', ')
+        Upc = Upc[0][1:-1]
+        store_product.delete_store_product(Upc)
         return redirect(url_for('go_product_store'))
 
     return render_template('manager_options/Product_Store/delete_product_store.html', options = options)
