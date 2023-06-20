@@ -21,14 +21,30 @@
             color: blue;
             text-decoration: underline;
         }
+        .sort-asc:after {
+            content: ' ▲';
+        }
+
+        .sort-desc:after {
+            content: ' ▼';
+        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
     <script>
-        function sortTable(columnIndex) {
-            var table, rows, switching, i, x, y, shouldSwitch;
+         function sortTable(columnIndex) {
+            var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
             table = document.getElementById("categories-table");
             switching = true;
+            // Set the sorting direction to ascending:
+            dir = "asc";
+            // Add or remove the sort indicator class from the header cells:
+            ths = table.getElementsByTagName("th");
+            for (i = 0; i < ths.length; i++) {
+                ths[i].classList.remove("sort-asc", "sort-desc");
+            }
+            ths[columnIndex].classList.add("sort-" + dir);
+
             while (switching) {
                 switching = false;
                 rows = table.rows;
@@ -36,15 +52,13 @@
                     shouldSwitch = false;
                     x = rows[i].getElementsByTagName("TD")[columnIndex];
                     y = rows[i + 1].getElementsByTagName("TD")[columnIndex];
-                    if (columnIndex === 0) {
-                        // Сортування за номером категорії як числове значення
-                        if (parseInt(x.innerHTML) > parseInt(y.innerHTML)) {
+                    if (dir === "asc") {
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
                             shouldSwitch = true;
                             break;
                         }
-                    } else {
-                        // Сортування за назвою категорії як рядкове значення
-                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                    } else if (dir === "desc") {
+                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
                             shouldSwitch = true;
                             break;
                         }
@@ -53,9 +67,16 @@
                 if (shouldSwitch) {
                     rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
                     switching = true;
+                    switchcount++;
+                } else {
+                    if (switchcount === 0 && dir === "asc") {
+                        dir = "desc";
+                        switching = true;
+                    }
                 }
             }
         }
+
 
         function saveReport() {
             var docDefinition = {

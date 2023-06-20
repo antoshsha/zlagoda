@@ -1,18 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Table Data</title>
 </head>
 <body>
-    <h1>Отримати інформацію про всіх постійних клієнтів, які придбали акційного товару більше, ніж на певну суму грошей. </h1>
+    <h1 class="h3 mb-4 text-gray-800">Отримати інформацію про всіх постійних клієнтів, які придбали акційного товару більше, ніж на певну суму грошей. </h1>
 
-    <form method="POST">
-        <label for="amount">Minimum Amount:</label>
-        <input type="number" id="amount" name="amount" required>
-        <input type="submit" value="Filter">
+   
+    
+    <form class = "my-form" method="POST">
+        <div style="display: flex; align-items: normal; width :30%;">
+            <label for="amount">Сума:</label>
+            <input type = "number" id="amount" class="form-control bg-light small", name = "amount" required>
+            <button type="submit" value="Filter">Зберегти</button>
+        </div>
     </form>
 
-    <table>
+    <table class = "table table-bordered">
         <thead>
             <tr>
                 <th>Customer Name</th>
@@ -30,7 +36,13 @@
             {% endfor %}
         </tbody>
     </table>
-    <a href="{{ url_for('go_customers') }}">Назад</a>
-    <a href="{{ url_for('home') }}">Додому</a>
+    <br>
+    <a href="{{ url_for('go_customers') }}" class="btn btn-primary btn-icon-split">
+        <span class="icon text-white-50">
+            <i class="fas fa-flag"></i>
+        </span>
+        <span class="text">Назад</span>
+    </a>
 </body>
 </html>
+{% endblock  %}

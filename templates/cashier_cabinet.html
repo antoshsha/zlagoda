@@ -1,28 +1,260 @@
 {% extends 'base.html' %}
+{% block content %}
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Кабінет касира</title>
-</head>
-<body>
-    {% block content %}
-    <h1>Кабінет касира</h1>
-    <ul>
 
-        <!-- Окремо товари, окремо наявність, постійні клієнти і мій профіль. Додати чек - на початку з + -->
-        <li><a href="{{ url_for('all_products') }}">Всі товари</a></li>
-        <li><a href="{{ url_for('all_products_store') }}">Всі товари в магазині</a></li>
-        <li><a href="{{ url_for('all_clients') }}">Всі постійні клієнти</a></li>
-        <li><a href="{{ url_for('search_product_by_name') }}">Пошук товару по назві</a></li>
-        <li><a href="{{ url_for('add_checkk') }}">Додати новий чек</a></li>
-        <li><a href="{{ url_for('add_customer_card') }}">Додати нового постійного клієнта</a></li>
-        <li><a href="{{ url_for('update_customer_card') }}">Оновити дані про постійного клієнта</a></li>
-        <li><a href="{{ url_for('my_checks') }}">Мої чеки</a></li>
-        <li><a href="{{ url_for('report_products_store') }}">Звіт по товарам в магазині</a></li>
-        <li><a href="{{ url_for('me') }}">Дані про мене</a></li>
-        <br>
-        <a href="{{ url_for('logout') }}">Вийти</a>
-    </ul>
-    {% endblock %}
+<head>
+    <style>
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .sort-btn {
+            cursor: pointer;
+            color: blue;
+            text-decoration: underline;
+        }
+
+        .sort-asc:after {
+            content: ' ▲';
+        }
+
+        .sort-desc:after {
+            content: ' ▼';
+        }
+    </style>
+    <title>Кабінет менеджера</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
+</head>
+
+<body id="page-top">
+    <div id=" content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <nav class="navbar navbar-expand navbar-light bg-primary topbar mb-4 static-top shadow">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <b> Кабінет касира </b>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('my_checks') }}">
+                            Мої чеки
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{url_for('all_clients')}}">
+                            Клієнти
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{url_for('all_products')}}">
+                            Продукти
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{url_for('search_product_by_name')}}">
+                            Пошук за назвою
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{url_for('all_products_store')}}">
+                            Наявність
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            Головна
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">
+                            Вийти
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-md-2">
+                    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+                        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
+                            <div class="sidebar-brand-icon rotate-n-15">
+                                <i class="fas fa-laugh-wink"></i>
+                            </div>
+                            <div class="sidebar-brand-text mx-3">Zlagoda</div>
+                        </a>
+
+                        <!-- Divider -->
+                        <hr class="sidebar-divider my-0">
+
+
+
+                        <!-- Divider  -->
+                        <hr class="sidebar-divider">
+
+                        <!-- Heading -->
+                        <div class="sidebar-heading">
+                            Мій профіль
+                        </div>
+                        <div>
+                            <li class="nav-item">
+                                <a class="nav-link" style="font-size: 12px;" href="#">
+                                    ID працівника: {{ data[0] }}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" style="font-size: 12px;" href="#">
+                                    Прізвище: {{ data[1] }}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" style="font-size: 12px;" href="#">
+                                    Ім'я: {{ data[2] }}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" style="font-size: 12px;" href="#">
+                                    По батькові: {{ data[3] }}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" style="font-size: 12px;" href="#">
+                                    Посада: {{ data[4] }}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" style="font-size: 12px;" href="#">
+                                    Заробітна плата: {{ data[5] }}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" style="font-size: 12px;" href="#">
+                                    Дата народження: {{ data[6] }}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" style="font-size: 12px;" href="#">
+                                    Початок роботи: {{ data[7] }}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" style="font-size: 12px;" href="#">
+                                    Тел.номер: {{ data[8] }}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" style="font-size: 12px;" href="#">
+                                    Місто: {{ data[9] }}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" style="font-size: 12px;" href="#">
+                                    Вулиця: {{ data[10] }}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" style="font-size: 12px;" href="#">
+                                    Поштовий індекс: {{ data[11] }}
+                                </a>
+                            </li>
+
+                        </div>
+
+
+                        <hr class="sidebar-divider d-none d-md-block">
+                    </ul>
+                </div>
+                <div class="col-md-10">
+                    <div class="container-fluid">
+                        <h1 class="h3 mb-4 text-gray-800">Створити чек</h1>
+
+                        <form class="my-form" method="post" action="{{ url_for('add_checkk') }}">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <label for="checkNumber">Номер чеку:</label>
+                                    </td>
+                                    <td>
+                                        <input type="text" id="checkNumber" name="check_number" required>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="employeeID">ID працівника:</label>
+                                    </td>
+                                    <td>
+                                        <input type="text" id="employeeID" name="id_employee" value="{{data[0]}}"
+                                            required>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="cardNumber">Номер картки:</label>
+                                    </td>
+                                    <td>
+                                        <input type="text" id="cardNumber" name="card_number" required>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="printDate">Дата друку:</label>
+                                    </td>
+                                    <td>
+                                        <input type="text" id="printDate" name="print_date" required>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="upcs">UPC-коди:</label>
+                                    </td>
+                                    <td>
+                                        <input type="text" id="upcs" name="upcs" required>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="quantities">Кількості:</label>
+                                    </td>
+                                    <td>
+                                        <input type="text" id="quantities" name="quantities" required>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <button type="submit">Створити</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
 </body>
+
 </html>
+{% endblock %}

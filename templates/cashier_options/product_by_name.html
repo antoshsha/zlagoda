@@ -1,20 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Товари за назвою</title>
     <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
 
-        th, td {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-    </style>
+    th, td {
+        text-align: left;
+        padding: 8px;
+    }
+
+    th {
+        background-color: #f2f2f2;
+        cursor: pointer;
+    }
+
+    .sort-header {
+        color: blue;
+        text-decoration: underline;
+    }
+</style>
     <script>
+          function resetFiltersAndSort() {
+            window.location.href = "{{ url_for('search_product_by_name') }}";
+        }
         function sortTable() {
             var table, rows, switching, i, x, y, shouldSwitch;
             table = document.getElementById("productTable");
@@ -59,19 +73,184 @@
     </script>
 </head>
 <body>
-    <h1>Товари за назвою</h1>
-    <form method="post" action="{{ url_for('search_product_by_name') }}">
+    <body id="page-top">
+        <div id="content-wrapper" class="d-flex flex-column">
+             Main Content
+            <div id="content">
+                <nav class="navbar navbar-expand navbar-light bg-primary topbar mb-4 static-top shadow">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <b> Кабінет касира </b>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('my_checks') }}">
+                                Мої чеки
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url_for('all_clients')}}">
+                                Клієнти
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url_for('all_products')}}">
+                                Продукти
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                Пошук за назвою
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url_for('all_products_store')}}">
+                                Наявність
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url_for('cashier_cabinet')}}">
+                                Головна
+                            </a>
+                        </li>
+                
+                        <li class="nav-item">
+                            <a class="nav-link" href="/logout">
+                                Вийти
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- Sidebar -->
+                    <div class="col-md-2">
+                        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar"> 
+                           
+                            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
+                                <div class="sidebar-brand-icon rotate-n-15">
+                                    <i class="fas fa-laugh-wink"></i>
+                                </div>
+                                <div class="sidebar-brand-text mx-3">Zlagoda</div>
+                            </a> 
+        
+                            <!-- Divider -->
+                            <hr class="sidebar-divider my-0">
+        
+                        
+        
+                            <!-- Divider  -->
+                             <hr class="sidebar-divider">
+        
+                            <!-- Heading -->
+                            <div class="sidebar-heading">
+                                Мій профіль
+                            </div>
+                            <div>
+                                <li class="nav-item">
+                                    <a class="nav-link"  style="font-size: 12px;"href="#">
+                                        ID працівника: {{ data[0] }}
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" style="font-size: 12px;" href="#">
+                                        Прізвище: {{ data[1] }}
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" style="font-size: 12px;" href="#">
+                                        Ім'я: {{ data[2] }}
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" style="font-size: 12px;" href="#">
+                                        По батькові: {{ data[3] }}
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link"  style="font-size: 12px;"href="#">
+                                        Посада: {{ data[4] }}
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" style="font-size: 12px;" href="#">
+                                        Заробітна плата: {{ data[5] }}
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link"  style="font-size: 12px;"href="#">
+                                       Дата народження: {{ data[6] }}
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link"  style="font-size: 12px;"href="#">
+                                        Початок роботи: {{ data[7] }}
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link"style="font-size: 12px;" href="#">
+                                       Тел.номер: {{ data[8] }}
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" style="font-size: 12px;" href="#">
+                                        Місто: {{ data[9] }}
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" style="font-size: 12px;" href="#">
+                                       Вулиця: {{ data[10] }}
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" style="font-size: 12px;" href="#">
+                                        Поштовий індекс: {{ data[11] }}
+                                    </a>
+                                </li>
+                    
+        </div>
+                           
+        
+                            <hr class="sidebar-divider d-none d-md-block">
+                        </ul>
+                    </div>
+                    <div class="col-md-10">
+                <div class="container-fluid">
+    <form class = "my-form" method="post" action="{{ url_for('search_product_by_name') }}">
         <label for="categoryInput">Пошук за назвою:</label>
         <input type="text" name="product_name" placeholder="Введіть назву товару">
         <button type="submit">Пошук</button>
     </form>
-    <label for="categoryInput">Пошук за категорією:</label>
-    <input type="text" id="categoryInput" placeholder="Введіть категорію">
-    <button onclick="filterByCategory()">Пошук</button>
+    <div style="display: flex; align-items: center; width: 50%;">
+        <label for="categoryInput">Пошук за категорією:</label>
+        <input type = "text" id="categoryInput" class="form-control bg-light small" placeholder="Введіть категорію">
+        <button href="#" class="btn btn-success btn-icon-split small" value = "Шукати" onclick="filterByCategory()">
+            <span class="icon text-white-50">
+                <i class="fas fa-flag"></i>
+            </span>
+             <span class="text">Шукати</span> 
+        </button>
+    </div>
     <br>
-    <button onclick="sortTable()">Сортувати за назвою</button>
+    <button href="#" class="btn btn-success btn-icon-split small" value = "Шукати" onclick="sortTable()">
+        <span class="icon text-white-50">
+            <i class="fas fa-flag"></i>
+        </span>
+         <span class="text">Сортувати за назвою</span> 
+    </button>
 
-    <table id="productTable">
+    <a href="#" class="btn btn-primary btn-icon-split" onclick="resetFiltersAndSort()">
+        <span class="icon text-white-50">
+            <i class="fas fa-flag"></i>
+        </span>
+        <span class="text">Скинути фільтри</span>
+    </a>
+   
+
+    <table id="productTable" class = "table table-bordered">
         <thead>
             <tr>
                 <th>UPC</th>
@@ -81,7 +260,7 @@
                 <th>Кількість товарів</th>
                 <th>Акційний товар</th>
                 <th>Номер категорії</th>
-                <th>Назва товару</th>
+                <th onclick="sortTable()" class="sort-btn"> Назва товару</th>
                 <th>Характеристики</th>
             </tr>
         </thead>
@@ -101,7 +280,7 @@
             {% endfor %}
         </tbody>
     </table>
-    <a href="{{ url_for('home') }}">Додому</a>
-    <a href="{{ url_for('cashier_cabinet') }}">Назад</a>
+    <br>
 </body>
 </html>
+{% endblock %}

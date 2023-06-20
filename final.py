@@ -121,7 +121,10 @@ def home():
      return render_template('manager_cabinet.html', role=role, employees=employees)
     else:
         role = "касир"
-    return render_template('cashier_cabinet.html', role=role)
+        id = session.get("id")
+    data = employee.get_by_id(id)
+    return render_template('cashier_cabinet.html', role=role, data=data)
+ 
 
 
 
@@ -963,32 +966,50 @@ def cashier_cabinet():
         return redirect(url_for('login'))
     if not session.get("cashier"):
         return redirect(url_for('home'))
-    return render_template('cashier_cabinet.html')
+
+    id = session.get("id")
+    data = employee.get_by_id(id)
+    return render_template('cashier_cabinet.html', data=data)
+
+
+# def cashier_cabinet():
+#     if not session.get('logged_in'):
+#         return redirect(url_for('login'))
+#     if not session.get("cashier"):
+#         return redirect(url_for('home'))
+#     return render_template('cashier_cabinet.html')
 
 
 @app.route('/all_products')
 def all_products():
+    id = session.get("id")
+    data = employee.get_by_id(id)
     # Retrieve the list of products from your database
     products = product.get_all_products_sorted_by_name()  # Replace with your own function to fetch products
 
-    return render_template('cashier_options/all_products.html', products=products)
+
+    return render_template('cashier_options/all_products.html', products=products, data = data)
 
 
 @app.route('/all_products_store')
 def all_products_store():
+    id = session.get("id")
+    data = employee.get_by_id(id)
     products=store_product.get_all_products_ordered_by_name()
-    return render_template('cashier_options/all_products_store.html', products=products)
+    return render_template('cashier_options/all_products_store.html', products=products, data = data)
 
 
 @app.route('/search_product_by_name', methods=['POST', 'GET'])
 def search_product_by_name():
+    id = session.get("id")
+    data = employee.get_by_id(id)
     if request.method == 'POST':
         product_name = request.form['product_name']
         product=store_product.get_all_products_by_name(product_name)
         return render_template('cashier_options/product_by_name.html', product=product)
     product_name=""
     product = store_product.get_all_products_by_name(product_name)
-    return render_template('cashier_options/product_by_name.html', product=product)
+    return render_template('cashier_options/product_by_name.html', product=product,data = data)
 
 
 @app.route('/add_checkk', methods=['POST', 'GET'])
@@ -1011,16 +1032,20 @@ def add_checkk():
 
 @app.route('/my_checks', methods=['POST', 'GET'])
 def my_checks():
-    if request.method == 'POST':
+     id = session.get("id")
+     data = employee.get_by_id(id)
+
+     if request.method == 'POST':
         start_date = datetime.strptime(request.form.get('start_date'), '%Y-%m-%d').date()
         end_date = datetime.strptime(request.form.get('end_date'), '%Y-%m-%d').date()
 
         # Виклик функції, яка повертає список чеків за вказаний проміжок часу
         checks = checkk.get_checks_by_cashier(session.get("id"),start_date, end_date)
+       
 
         return render_template('cashier_options/my_checks.html', checks=checks)
 
-    return render_template('cashier_options/my_checks.html')
+     return render_template('cashier_options/my_checks.html', data=data)
 
 @app.route('/me')
 def me():
@@ -1031,8 +1056,10 @@ def me():
 
 @app.route('/all_clients')
 def all_clients():
+    id = session.get("id")
+    data = employee.get_by_id(id)
     clients = customer_card.get_all_clients_sorted_by_last_name()
-    return render_template('cashier_options/all_clients.html', clients=clients)
+    return render_template('cashier_options/all_clients.html', data=data, clients=clients)
 
 
 

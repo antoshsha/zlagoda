@@ -1,12 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Table Data</title>
 </head>
 <body>
-    <h1>Знайти такі категоріх продуктів, в яких усі товари знаходяться на складі.</h1>
+    <br>
+    <br>
+    <h1 class="h3 mb-4 text-gray-800">Категорії, в яких усі товари знаходяться на складі</h1>
 
-    <table>
+    {% if data %}
+    <table class = "table table-bordered">
         <thead>
             <tr>
                 <th>Category Number</th>
@@ -22,7 +27,16 @@
             {% endfor %}
         </tbody>
     </table>
-    <a href="{{url_for('go_category')}}">Назад</a>
-    <a href="{{ url_for('home') }}">Додому</a>
+    {% elif submitted %}
+    <p>Таких категорій немає.</p>
+{% endif %}
+    <br>
+    <a href="{{ url_for('go_category') }}" class="btn btn-primary btn-icon-split">
+        <span class="icon text-white-50">
+            <i class="fas fa-flag"></i>
+        </span>
+        <span class="text">Назад</span>
+    </a>
 </body>
 </html>
+{% endblock %}

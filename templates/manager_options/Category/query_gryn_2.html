@@ -1,18 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Query Result</title>
 </head>
 <body>
-    <h1>Знайти категорії продуктів, у яких всі продукти коштують більше заданої суми</h1>
-    <form action="/Category/gryn_2" method="post">
-        <label for="parameter">Enter Price Threshold:</label>
-        <input type="number" step="0.01" name="parameter" id="parameter" required>
-        <button type="submit">Submit</button>
+    <br>
+    <br>
+    <h1 class="h3 mb-4 text-gray-800">Категорії, в яких усі товари коштують більше заданої суми</h1>
+    <form class = "my-form" action="/Category/gryn_2" method="POST">
+        <div style="display: flex; align-items: normal; width :30%;">
+            <label for="parameter">Сума:</label>
+            <input type = "number" id="parameter" step="0.01" class="form-control bg-light small", name = "parameter" required>
+            <button type="submit" >Зберегти</button>
+        </div>
     </form>
 
     {% if data %}
-        <table>
+        <table class = "table table-bordered">
             <thead>
                 <tr>
                     <th>Category Number</th>
@@ -29,9 +35,15 @@
             </tbody>
         </table>
     {% elif submitted %}
-        <p>No categories found for the given price threshold.</p>
+        <p>Таких категорій немає.</p>
     {% endif %}
-    <a href="{{url_for('go_category')}}">Назад</a>
-    <a href="{{ url_for('home') }}">Додому</a>
+    <br>
+    <a href="{{ url_for('go_category') }}" class="btn btn-primary btn-icon-split">
+        <span class="icon text-white-50">
+            <i class="fas fa-flag"></i>
+        </span>
+        <span class="text">Назад</span>
+    </a>
 </body>
 </html>
+{% endblock %}
