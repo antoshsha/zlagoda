@@ -26,7 +26,7 @@ def get_checks_by_cashier(cashier_id, start_date, end_date):
             SELECT c.check_number, c.id_employee, c.card_number, c.print_date, c.sum_total, c.vat, p.product_name, s.product_number, s.selling_price
             FROM Checkk AS c
             INNER JOIN Sale AS s ON c.check_number = s.check_number
-            INNER JOIN Store_Product AS sp ON s.UPC = sp.UPС
+            INNER JOIN Store_Product AS sp ON s.UPC = sp.UPC
             INNER JOIN Product AS p ON sp.id_product=p.id_product
             WHERE c.id_employee = ? AND c.print_date BETWEEN ? AND ?
         """
