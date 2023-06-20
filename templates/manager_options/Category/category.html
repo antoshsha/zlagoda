@@ -1,27 +1,267 @@
 {% extends 'base.html' %}
+{% block content %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Категорії</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .sort-btn {
+            cursor: pointer;
+            color: blue;
+            text-decoration: underline;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
+    <script>
+        function sortTable(columnIndex) {
+            var table, rows, switching, i, x, y, shouldSwitch;
+            table = document.getElementById("categories-table");
+            switching = true;
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("TD")[columnIndex];
+                    y = rows[i + 1].getElementsByTagName("TD")[columnIndex];
+                    if (columnIndex === 0) {
+                        // Сортування за номером категорії як числове значення
+                        if (parseInt(x.innerHTML) > parseInt(y.innerHTML)) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else {
+                        // Сортування за назвою категорії як рядкове значення
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                }
+            }
+        }
+
+        function saveReport() {
+            var docDefinition = {
+                content: [
+                    { text: 'Звіт про категорії', style: 'header' },
+                    { text: '\n' },
+                    {
+                        table: {
+                            headerRows: 1,
+                            widths: ['auto', 'auto'],
+                            body: collectTableData()
+                        }
+                    }
+                ],
+                styles: {
+                    header: {
+                        fontSize: 18,
+                        bold: true
+                    }
+                }
+            };
+
+            pdfMake.createPdf(docDefinition).open();
+        }
+
+        function collectTableData() {
+            var table = document.getElementById("categories-table");
+            var data = [];
+            var headers = [];
+
+            for (var i = 0; i < table.rows[0].cells.length; i++) {
+                headers[i] = table.rows[0].cells[i].innerHTML;
+            }
+
+            data.push(headers);
+
+            for (var j = 1; j < table.rows.length; j++) {
+                var tableRow = table.rows[j];
+                var rowData = [];
+
+                for (var k = 0; k < tableRow.cells.length; k++) {
+                    rowData[k] = tableRow.cells[k].innerHTML;
+                }
+
+                data.push(rowData);
+            }
+
+            return data;
+        }
+    </script>
 </head>
 <body>
-    {% block content %}
-    <h1>Категорії</h1>
-    <ul>
-        <li><a href="{{ url_for('add_category') }}">Додати категорію товару</a></li>
+   
+    <body id="page-top">
+        <div id="content-wrapper" class="d-flex flex-column">
+            <!-- Main Content -->
+            <div id="content">
+                <nav class="navbar navbar-expand navbar-light bg-primary topbar mb-4 static-top shadow">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <b> Кабінет менеджера </b>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                Категорії
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('go_check') }}">
+                                Чеки
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url_for('go_customers')}}">
+                                Клієнти
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url_for('go_product')}}">
+                                Продукти
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url_for('go_product_store')}}">
+                                Наявність
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url_for('manager_cabinet')}}">
+                                Головна
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/logout">
+                                Вийти
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- Sidebar -->
+                    <div class="col-md-2">
+                        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+                            <!-- Sidebar - Brand -->
+                            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
+                                <div class="sidebar-brand-icon rotate-n-15">
+                                    <i class="fas fa-laugh-wink"></i>
+                                </div>
+                                <div class="sidebar-brand-text mx-3">Zlagoda</div>
+                            </a>
 
-        <li><a href="{{ url_for('update_category') }}">Оновити категорію товару</a></li>
+                            <!-- Divider -->
+                    <hr class="sidebar-divider">
 
-        <li><a href="{{ url_for('delete_category') }}">Видалити категорію товару</a></li>
-      
-        <li><a href="{{ url_for('report_categories') }}">Звіт по категоріям</a></li>
-       
-        <li><a href="{{ url_for('mar_custom_2') }}">Знайти такі категоріх продуктів, в яких усі товари знаходяться на складі.</a></li>
-        <li><a href="{{ url_for('gryn_custom_2') }}">Знайти категорії продуктів, у яких всі продукти коштують більше заданої суми</a></li>
-         <br>
-         <a href="{{ url_for('manager_cabinet') }}">Назад</a>
-        <a href="{{ url_for('home') }}">Додому</a>
-    </ul>
+                    <!-- Heading -->
+                    <div class="sidebar-heading">
+                        Додаткові запити
+                    </div>
+
+                    <!-- Nav Item - Pages Collapse Menu -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{url_for('mar_custom_2')}}">
+                            <i class="fas fa-fw fa-tachometer-alt"></i>
+                            <span>Категорії, в яких усі товари знаходяться на складі</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{url_for('gryn_custom_2')}}">
+                            <i class="fas fa-fw fa-tachometer-alt"></i>
+                            <span>Категорії, в яких усі товари коштують більше заданої суми</span>
+                        </a>
+                    </li>
+                    <!-- Divider -->
+                    <hr class="sidebar-divider">
+    
+        
+                            <!-- Heading -->
+                            <div class="sidebar-heading">
+                                Оновлення таблиці
+                            </div>
+        <!-- Nav Item - Pages Collapse Menu -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{url_for('add_category')}}">
+                                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                                    <span>Додати</span>
+                                </a>
+                            </li>
+        
+                            <!-- Nav Item - Charts -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{url_for('update_category')}}">
+                                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                                    <span>Оновити</span>
+                                </a>
+                            </li>
+        
+                            <!-- Nav Item - Tables -->
+                            <li class="nav-item active">
+                                <a class="nav-link" href="{{url_for('delete_category')}}">
+                                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                                    <span>Видалити</span>
+                                </a>
+                            </li>
+        
+                            <hr class="sidebar-divider d-none d-md-block">
+                        </ul>
+                    </div>
+                    
+                    <div class="col-md-10">
+                        <div class="container-fluid">
+
+                            <div class="col-md-10">
+                                <div class="container-fluid">
+                                    <a href="#" class="btn btn-warning btn-icon-split" onclick="saveReport()">
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-flag"></i>
+                                        </span>
+                                        <span class="text">Звіт</span>  
+                                    </a>
+                                    <table class = "table table-bordered" id="categories-table">
+                                        <thead>
+                                            <tr>
+                                                <th onclick="sortTable(0)" class="sort-btn">Номер категорії</th>
+                                                <th onclick="sortTable(1)" class="sort-btn">Назва категорії</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for category in categories %}
+                                            <tr>
+                                                <td>{{ category[0] }}</td>
+                                                <td>{{ category[1] }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    <br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
     {% endblock %}
 </body>
 </html>

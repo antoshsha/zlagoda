@@ -116,8 +116,9 @@ def home():
         return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
     role = ""
     if session.get("manager"):
-        role = "менеджер!"
-        return render_template('manager_cabinet.html', role=role)
+     employees = employee.get_all_employees()
+     role = "менеджер!"
+     return render_template('manager_cabinet.html', role=role, employees=employees)
     else:
         role = "касир"
     return render_template('cashier_cabinet.html', role=role)
@@ -216,10 +217,28 @@ def manager_cabinet():
 
     return render_template('manager_cabinet.html', employees=employees)
 
-#------------------------------- BASIC MENU(CHANGES POSSIBLE)
 @app.route('/category')
+@app.route('/Category/report_categories')
 def go_category():
-    return render_template('/manager_options/Category/category.html')
+    if not session.get("manager"):
+        return redirect(url_for('home'))
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+
+    if request.path == '/category':
+        return render_template('/manager_options/Category/category.html')
+    else:
+        try:
+            categories = category.get_all_categories()
+            return render_template('/manager_options/Category/category.html', categories=categories)
+        except Exception as e:
+            print("Error: Failed to generate category report -", str(e))
+            return redirect(url_for('category'))
+
+#------------------------------- BASIC MENU(CHANGES POSSIBLE)
+# @app.route('/category')
+# def go_category():
+#     return render_template('/manager_options/Category/category.html')
 
 # @app.route('/check')
 # def go_check():
@@ -359,20 +378,6 @@ def delete_category():
 
     return render_template('manager_options/Category/delete_category.html', options = options)
 
-@app.route('/Category/report_categories')
-def report_categories():
-    if not session.get("manager"):
-        return redirect(url_for('home'))
-    if not session.get('logged_in'):
-        return redirect(url_for('login'))  # Перенаправлення на сторінку входу, якщо користувач не увійшов в систему
-
-    try:
-        categories = category.get_all_categories()
-        print(categories)
-        return render_template('manager_options/Category/report_categories.html', categories=categories)
-    except Exception as e:
-        print("Error: Failed to generate category report -", str(e))
-        return redirect(url_for('category'))
     
 @app.route('/Category/anton_mar_2', methods=['GET', 'POST'])
 def mar_custom_2():
