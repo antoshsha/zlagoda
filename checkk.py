@@ -66,11 +66,12 @@ def insert_checkk(check_data):
     """Insert a new check into the Checkk table and corresponding sales into the Sale table"""
 
     check_number, id_employee, card_number, print_date, upcs, quantities = check_data
-
+    upcs=upcs.split(" ")
+    quantities=quantities.split(" ")
     # Retrieve selling prices from Store_Product table
     # Check if the quantities are more than zero
     for quantity in quantities:
-        if quantity <= 0:
+        if float(quantity) <= 0:
             raise ValueError("Quantity must be more than zero")
     cursor = conn.cursor()
     selling_prices = []
@@ -100,7 +101,7 @@ def insert_checkk(check_data):
 
     # Calculate total sum
     total_sum = sum(
-        selling_price * quantity if selling_price is not None else 0
+        float(selling_price) * float(quantity) if selling_price is not None else 0
         for selling_price, quantity in zip(selling_prices, quantities)
     )
 
@@ -143,7 +144,11 @@ def get_card_percent(card_number: str) -> float:
     """Retrieve the percent value associated with a customer card"""
     cursor = conn.cursor()
     cursor.execute("SELECT percent FROM Customer_Card WHERE card_number = ?", (card_number,))
-    percent = cursor.fetchone()[0]
+    percent = 0
+    if cursor is not None:
+        percent = cursor.fetchone()
+    if percent is None:
+        percent=0
     cursor.close()
     return float(percent)
 

@@ -5,7 +5,7 @@
 </head>
 <body>
     <h1>Створити новий чек</h1>
-    <form method="post" action="{{ url_for('add_checkk') }}">
+    <form method="post" action="{{ url_for('add_checkk') }}" novalidate>
         <div>
             <label for="checkNumber">Номер чеку:</label>
             <input type="text" id="checkNumber" name="check_number" required maxlength="10">
