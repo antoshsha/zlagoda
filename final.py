@@ -476,7 +476,6 @@ def check_by_id():
         for check in results:
             if(check[4]!=""):
                 total_sum += float(check[4])  # Індекс 4 - колонка "Загальна сума"
-        print(results)
         return render_template('manager_options/Check/check_by_id.html', checks=results,total_sum=total_sum, total_quantity=total_quantity)
 
     return render_template('manager_options/Check/check_by_id.html', checks=[])
