@@ -13,37 +13,44 @@ def get_all_checks():
 
 def get_checks_by_cashier(cashier_id, start_date, end_date):
     cursor = conn.cursor()
-
+    print("id"+str(cashier_id))
     if cashier_id:
         query = """
             SELECT c.check_number, c.id_employee, c.card_number, c.print_date, c.sum_total, c.vat, p.product_name, s.product_number, s.selling_price
             FROM Checkk AS c
             INNER JOIN Sale AS s ON c.check_number = s.check_number
-            INNER JOIN Product AS p ON s.product_number = p.id_product
+            INNER JOIN Store_Product AS sp ON s.UPC = sp.UPС
+            INNER JOIN Product AS p ON sp.id_product=p.id_product
             WHERE c.id_employee = ? AND c.print_date BETWEEN ? AND ?
         """
         params = (cashier_id, start_date, end_date)
     else:
+        print("no_id")
         query = """
             SELECT c.check_number, c.id_employee, c.card_number, c.print_date, c.sum_total, c.vat, p.product_name, s.product_number, s.selling_price
             FROM Checkk AS c
             INNER JOIN Sale AS s ON c.check_number = s.check_number
-            INNER JOIN Product AS p ON s.product_number = p.id_product
-            WHERE c.id_employee IN (SELECT DISTINCT id_employee FROM Checkk) AND c.print_date BETWEEN ? AND ?
+            INNER JOIN Store_Product AS sp ON s.UPC = sp.UPC
+            INNER JOIN Product AS p ON sp.id_product=p.id_product
+            WHERE c.print_date BETWEEN ? AND ?
         """
         params = (start_date, end_date)
 
     cursor.execute(query, params)
     # Отримання результатів запиту
     results = cursor.fetchall()
+    print("res:"+str(results))
     results=np.asarray(results)
-    prev=""
+    prev=["","","","",""]
     for check in results:
-        if check[0]==prev:
+        if [check[0],check[1],check[2],check[3]]==prev:
+            print(str([check[0],check[1],check[2],check[3]])+"=="+str(prev))
             for i in range(6):
                 check[i]=""
         else:
-            prev=check[0]
+            prev=[check[0],check[1],check[2],check[3]]
+    print("----------------")
+    print(results)
     cursor.close()
     return results
 
