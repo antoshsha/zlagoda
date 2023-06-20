@@ -151,9 +151,8 @@ def get_all_products_by_name(product_name):
 
 def get_all_products():
     cursor = conn.cursor()
-    cursor.execute("""SELECT sp.UPC, sp.UPC_prom, p.id_product, p.category_number, p.product_name, p.characteristics, sp.selling_price, sp.products_number, sp.promotional_product
-    FROM Store_Product sp
-    INNER JOIN Product p ON sp.id_product = p.id_product""")
+    cursor.execute("""SELECT *
+    FROM Store_Product""")
     products = cursor.fetchall()
     cursor.close()
     return products
