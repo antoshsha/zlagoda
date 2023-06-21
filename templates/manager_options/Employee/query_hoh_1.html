@@ -12,7 +12,7 @@
     <br>
     <h1 class="h3 mb-4 text-gray-800">Знайти таких касирів, що не продавали товар за заданой назвою(весь час) і не
         продавали нічого у задану дату</h1>
-    <form class="my-form" action="/hoh_1" method="POST">
+    <form class="my-form" action="{{url_for('hoh_custom_1')}}" method="POST">
         <label for="product">Product Name:</label>
         <input type="text" id="product" name="product" required>
         <br>
