@@ -1,28 +1,33 @@
 {% extends 'base.html' %}
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Працівники</title>
 </head>
+
 <body>
     {% block content %}
     <h1>Працівники</h1>
     <ul>
-    
-         <li><a href="{{ url_for('add_empl') }}">Додати нового працівника</a></li>
+
+        <li><a href="{{ url_for('add_empl') }}">Додати нового працівника</a></li>
 
         <li><a href="{{ url_for('update_employee') }}">Оновити дані про працівника</a></li>
-    
-        <li><a href="{{ url_for('delete_employee') }}">Видалити дані про працівника</a></li>
-      
 
-        <li><a href="{{ url_for('hoh_custom_1') }}">Знайти таких касирів, що не продавали товар за заданой назвою і не продавали нічого у задану дату</a></li>
-        <li><a href="{{ url_for('hoh_custom_2') }}">Знайти всі міста за робітниками, такі, що ці робітники продали >= 2 одиниць товарів</a></li>
+        <li><a href="{{ url_for('delete_employee') }}">Видалити дані про працівника</a></li>
+
+
+        <li><a href="{{ url_for('hoh_custom_1') }}">Знайти таких касирів, що не продавали товар за заданой назвою і не
+                продавали нічого у задану дату</a></li>
+        <li><a href="{{ url_for('hoh_custom_2') }}">Знайти всі міста за робітниками, такі, що ці робітники продали >= 2
+                одиниць товарів</a></li>
         <li><a href="{{ url_for('report_employees') }}">htgjhn</a></li>
-         <br>
+        <br>
         <a href="{{ url_for('home') }}">Додому</a>
         <a href="{{ url_for('manager_cabinet') }}">Назад</a>
     </ul>
     {% endblock %}
 </body>
+
 </html>

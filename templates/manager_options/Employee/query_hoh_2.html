@@ -2,32 +2,34 @@
 {% block content %}
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>HOH Custom 2</title>
 </head>
+
 <body>
     <br>
     <br>
     <h1 class="h3 mb-4 text-gray-800">Міста у яких робітники продали >= 2 одиниць товарів</h1>
 
     {% if data %}
-        <h2>Результат:</h2>
-        <ul>
-            {% for city in data %}
-                <li>{{ city[0] }}</li>
-            {% endfor %}
-        </ul>
+    <h2>Результат:</h2>
+    <ul>
+        {% for city in data %}
+        <li>{{ city[0] }}</li>
+        {% endfor %}
+    </ul>
     {% else %}
-        <p>No results found.</p>
+    <p>No results found.</p>
     {% endif %}
     <br>
     <a href="{{ url_for('manager_cabinet') }}" class="btn btn-primary btn-icon-split">
-      <span class="icon text-white-50">
-          <i class="fas fa-flag"></i>
-      </span>
-      <span class="text">Назад</span>
+        <span class="icon text-white-50">
+            <i class="fas fa-flag"></i>
+        </span>
+        <span class="text">Назад</span>
     </a>
 </body>
 {% endblock %}
-</html>
 
+</html>

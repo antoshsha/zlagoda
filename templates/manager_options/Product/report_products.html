@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Звіт про товари</title>
     <style>
@@ -7,14 +8,18 @@
             border-collapse: collapse;
             width: 100%;
         }
-        th, td {
+
+        th,
+        td {
             border: 1px solid black;
             padding: 8px;
             text-align: left;
         }
+
         th {
             background-color: #f2f2f2;
         }
+
         .sort-btn {
             cursor: pointer;
             color: blue;
@@ -65,9 +70,10 @@
         function resetFiltersAndSort() {
             window.location.href = "{{ url_for('report_products') }}";
         }
-        
+
     </script>
 </head>
+
 <body>
     <h1>Звіт про товари</h1>
     <div>
@@ -95,4 +101,5 @@
     <a href="{{ url_for('go_product') }}">Назад</a>
     <a href="{{ url_for('home') }}">Додому</a>
 </body>
+
 </html>

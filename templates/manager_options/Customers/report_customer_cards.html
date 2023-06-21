@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Звіт: Картки клієнтів</title>
     <style>
@@ -8,7 +9,8 @@
             width: 100%;
         }
 
-        th, td {
+        th,
+        td {
             text-align: left;
             padding: 8px;
         }
@@ -96,6 +98,7 @@
         }
     </script>
 </head>
+
 <body>
     <h1>Звіт: Картки клієнтів</h1>
     <form action="/search_discount" method="POST">
@@ -133,4 +136,5 @@
     <a href="{{ url_for('go_customers') }}">Назад</a>
     <a href="{{ url_for('home') }}">Додому</a>
 </body>
+
 </html>

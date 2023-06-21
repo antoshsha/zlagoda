@@ -2,23 +2,26 @@
 {% block content %}
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Table Data</title>
 </head>
-<body>
-    <h1 class="h3 mb-4 text-gray-800">Отримати інформацію про всіх постійних клієнтів, які придбали акційного товару більше, ніж на певну суму грошей. </h1>
 
-   
-    
-    <form class = "my-form" method="POST">
+<body>
+    <h1 class="h3 mb-4 text-gray-800">Отримати інформацію про всіх постійних клієнтів, які придбали акційного товару
+        більше, ніж на певну суму грошей. </h1>
+
+
+
+    <form class="my-form" method="POST">
         <div style="display: flex; align-items: normal; width :30%;">
             <label for="amount">Сума:</label>
-            <input type = "number" id="amount" class="form-control bg-light small", name = "amount" required>
+            <input type="number" id="amount" class="form-control bg-light small" , name="amount" required>
             <button type="submit" value="Filter">Зберегти</button>
         </div>
     </form>
 
-    <table class = "table table-bordered">
+    <table class="table table-bordered">
         <thead>
             <tr>
                 <th>Customer Name</th>
@@ -44,5 +47,6 @@
         <span class="text">Назад</span>
     </a>
 </body>
+
 </html>
-{% endblock  %}
+{% endblock %}

@@ -122,8 +122,28 @@ def home():
     else:
         role = "касир"
         id = session.get("id")
+        data = employee.get_by_id(id)
+        options = customer_card.get_dropdown_customer_cards()
+    if request.method == 'POST':
+        card_number = request.form.get('card_number')
+        card_number = card_number.strip('()')
+        card_number = card_number.split(', ')
+        card_number = card_number[0][1:-1]
+        data = [
+            request.form.get('check_number'),
+            request.form.get('id_employee'),
+           card_number,
+            request.form.get('print_date'),
+            request.form.get('upcs'),
+            request.form.get('quantities')
+        ]
+
+        # Call insert_checkk() function to store data in the database
+        checkk.insert_checkk(data)
+
+    id = session.get("id")
     data = employee.get_by_id(id)
-    return render_template('cashier_cabinet.html', role=role, data=data)
+    return render_template('cashier_cabinet.html',role = role, data=data, options = options)
  
 
 
@@ -164,43 +184,6 @@ def logout():
 
 
 
-#------------------------------- ALL FOR MANAGER
-
-# @app.route('/manager_cabinet', methods=['GET', 'POST'])
-# def manager_cabinet():
-#     if not session.get("manager"):
-#         return redirect(url_for('home'))
-#     if not session.get('logged_in'):
-#         return redirect(url_for('login'))
-#     if request.method == 'GET':
-#      sort_by_surname = request.args.get('sort_by_surname')
-#     if sort_by_surname:
-#         employees = employee.get_all_employees_sorted_by_surname()
-#     else:
-#         employees = employee.get_all_employees()
-
-#     return render_template('manager_cabinet.html', employees=employees)
-
-# @app.route('/Employee/report_employees')
-# @app.route('/manager_cabinet')
-# def manager_cabinet():
-#     if not session.get("manager"):
-#         return redirect(url_for('home'))
-#     if not session.get('logged_in'):
-#         return redirect(url_for('login'))
-   
-#     employees = employee.get_all_employees()
-
-#     return render_template('manager_cabinet.html', employees=employees)
-
-
-# @app.route('/manager_cabinet')
-# def manager_cabinet():
-#     if not session.get("manager"):
-#         return redirect(url_for('login'))
-#     if not session.get('logged_in'):
-#         return redirect(url_for('login'))
-#     return render_template('manager_cabinet.html')   
 
 @app.route('/manager_cabinet', methods=['GET', 'POST'])
 def manager_cabinet():
@@ -530,6 +513,7 @@ def update_customer_card():
         return redirect(url_for('login'))
     options = customer_card.get_dropdown_customer_cards()
     if request.method == 'POST':
+       
         card_number = request.form.get('card_number')
         card_number = card_number.strip('()')
         card_number = card_number.split(', ')
@@ -544,8 +528,9 @@ def update_customer_card():
             request.form.get('street'),
             request.form.get('zip_code'),
             request.form.get('percent')
-        ]
+        ] 
 
+       
         # Опрацювання даних та оновлення в базі даних
         customer_card.update_customer_card(data)
 
@@ -648,7 +633,7 @@ def add_empl():
         ]
         print(data)
         employee.insert_employee(data[:12])
-        user.insert_user(data[12],data[13],data[1])
+        user.insert_user(data[12],data[13],data[0])
         # Опрацьовка даних та збереження в базу даних
     return render_template("manager_options/Employee/add_empl.html")
 
@@ -916,13 +901,16 @@ def add_product_store():
     if not session.get("manager"):
         return redirect(url_for('home'))
     if request.method == 'POST':
+        prom = request.form.get('promotional_product')
+        if prom is None:
+            prom = 0
         data = [
             request.form.get('UPC'),
             request.form.get('UPC_prom'),
             request.form.get('id_product'),
             request.form.get('selling_price'),
             request.form.get('products_number'),
-            request.form.get('promotional_product'),
+            prom,
         ]
         print(data)  # Printing data for verification
         # Process the data and save it to the database
@@ -996,24 +984,50 @@ def report_products_store():    #спільне для касира і мене�
 
 
 #----------------------------------- ALL FOR CASHIER
-@app.route('/cashier_cabinet')
+@app.route('/cashier_cabinet', methods=['GET', 'POST'])
 def cashier_cabinet():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
     if not session.get("cashier"):
         return redirect(url_for('home'))
+    options = customer_card.get_dropdown_customer_cards()
+
+
+    if request.method == 'POST':
+        card_number = request.form.get('card_number')
+        card_number = card_number.strip('()')
+        card_number = card_number.split(', ')
+        card_number = card_number[0][1:-1]
+        data = [
+            request.form.get('check_number'),
+            request.form.get('id_employee'),
+           card_number,
+            request.form.get('print_date'),
+            request.form.get('upcs'),
+            request.form.get('quantities')
+        ]
+
+       
+
+        # Call insert_checkk() function to store data in the database
+        checkk.insert_checkk(data)
+
+    if request.method == 'POST':
+        data = [
+            request.form.get('check_number'),
+            request.form.get('id_employee'),
+            request.form.get('card_number'),
+            request.form.get('print_date'),
+            request.form.get('upcs'),
+            request.form.get('quantities')
+        ]
+
+        # Call insert_checkk() function to store data in the database
+        checkk.insert_checkk(data)
 
     id = session.get("id")
     data = employee.get_by_id(id)
-    return render_template('cashier_cabinet.html', data=data)
-
-
-# def cashier_cabinet():
-#     if not session.get('logged_in'):
-#         return redirect(url_for('login'))
-#     if not session.get("cashier"):
-#         return redirect(url_for('home'))
-#     return render_template('cashier_cabinet.html')
+    return render_template('cashier_cabinet.html', data=data, options = options)
 
 
 @app.route('/all_products')
@@ -1048,22 +1062,6 @@ def search_product_by_name():
     return render_template('cashier_options/product_by_name.html', product=product,data = data)
 
 
-@app.route('/add_checkk', methods=['POST', 'GET'])
-def add_checkk():
-    if request.method == 'POST':
-        data = [
-            request.form.get('check_number'),
-            request.form.get('id_employee'),
-            request.form.get('card_number'),
-            request.form.get('print_date'),
-            request.form.get('upcs'),
-            request.form.get('quantities')
-        ]
-
-        # Виклик функції insert_checkk() для занесення даних в базу даних
-        checkk.insert_checkk(data)
-
-    return render_template('cashier_options/add_checkk.html')
 
 
 @app.route('/my_checks', methods=['POST', 'GET'])

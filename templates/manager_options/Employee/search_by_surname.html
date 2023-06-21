@@ -2,15 +2,17 @@
 {% block content %}
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Пошук за прізвищем</title>
 </head>
+
 <body>
 
-        
+
     <h1>Пошук за прізвищем</h1>
-    <form class = "my-form1" action="{{ url_for('search_by_surname') }}" method="POST">
-        <label for="surname" >Прізвище:</label>
+    <form class="my-form1" action="{{ url_for('search_by_surname') }}" method="POST">
+        <label for="surname">Прізвище:</label>
         <input type="text" id="surname" name="surname">
         <button type="submit">Пошук</button>
     </form>
@@ -36,5 +38,6 @@
         <span class="text">Назад</span>
     </a>
 </body>
+
 </html>
 {% endblock %}

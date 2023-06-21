@@ -187,7 +187,7 @@
                     <div class="container-fluid">
                         <h1 class="h3 mb-4 text-gray-800">Створити чек</h1>
 
-                        <form class="my-form" method="post" action="{{ url_for('add_checkk') }}">
+                        <form class="my-form" method="post" action="{{ url_for('cashier_cabinet') }}">
                             <table>
                                 <tr>
                                     <td>
@@ -211,7 +211,11 @@
                                         <label for="cardNumber">Номер картки:</label>
                                     </td>
                                     <td>
-                                        <input type="text" id="cardNumber" name="card_number" required>
+                                        <select name="card_number">
+                                            {% for option in options %}
+                                            <option value="{{ option }}">{{ option }}</option>
+                                            {% endfor %}
+                                        </select>
                                     </td>
                                 </tr>
                                 <tr>

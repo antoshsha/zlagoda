@@ -2,18 +2,20 @@
 {% block content %}
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Query Result</title>
 </head>
+
 <body>
     <br>
     <br>
     <h1 class="h3 mb-4 text-gray-800">Продукт, який було продано найбільше разів</h1>
     {% if data %}
-        <p>Product ID: {{ data[0][0] }}</p>
-        <p>Product Name: {{ data[0][1] }}</p>
+    <p>Product ID: {{ data[0][0] }}</p>
+    <p>Product Name: {{ data[0][1] }}</p>
     {% else %}
-        <p>No products found.</p>
+    <p>No products found.</p>
     {% endif %}
     <a href="{{ url_for('go_product') }}" class="btn btn-primary btn-icon-split">
         <span class="icon text-white-50">
@@ -21,7 +23,8 @@
         </span>
         <span class="text">Назад</span>
     </a>
-    
+
 </body>
+
 </html>
-{%  endblock %}
+{% endblock %}

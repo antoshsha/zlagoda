@@ -2,6 +2,7 @@
 {% block content %}
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Чеки</title>
     <title>Звіт про чеки</title>
@@ -11,20 +12,21 @@
             width: 100%;
         }
 
-        th, td {
+        th,
+        td {
             padding: 8px;
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
     </style>
-    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
     <script>
-          function saveReport() {
+        function saveReport() {
             var table = document.getElementById('table');
             var data = [];
-            
+
             // Extract table data
             for (var i = 0; i < table.rows.length; i++) {
                 var tableRow = table.rows[i];
@@ -61,8 +63,9 @@
         }
     </script>
 </head>
+
 <body>
-  
+
     <body id="page-top">
         <div id="content-wrapper" class="d-flex flex-column">
             <!-- Main Content -->
@@ -90,7 +93,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="{{url_for('go_product')}}">
                                 Продукти
                             </a>
                         </li>
@@ -112,7 +115,7 @@
                     </ul>
                 </nav>
             </div>
-        
+
             <div class="container-fluid">
                 <div class="row">
                     <!-- Sidebar -->
@@ -127,18 +130,18 @@
                             </a>
 
                             <!-- Divider -->
-                    <hr class="sidebar-divider">
-                    
-                    <!-- Divider -->
-                    <hr class="sidebar-divider">
-    
-        
+                            <hr class="sidebar-divider">
+
+                            <!-- Divider -->
+                            <hr class="sidebar-divider">
+
+
                             <!-- Heading -->
                             <div class="sidebar-heading">
                                 Додаткові функції
                             </div>
 
-        
+
                             <!-- Nav Item - Tables -->
                             <li class="nav-item active">
                                 <a class="nav-link" href="{{url_for('delete_check_store')}}">
@@ -147,91 +150,92 @@
                                 </a>
                             </li>
                             <li class="nav-item active">
-                                <a class="nav-link" href="#" onclick="saveReport()" >
+                                <a class="nav-link" href="#" onclick="saveReport()">
                                     <i class="fas fa-fw fa-tachometer-alt"></i>
                                     <span>Звіт</span>
                                 </a>
                             </li>
-                            
+
                             <hr class="sidebar-divider d-none d-md-block">
                         </ul>
                     </div>
-                    
+
                     <div class="col-md-10">
                         <div class="container-fluid">
                             <form class="my-form" method="POST" action="{{url_for('check_by_id')}}">
                                 <table>
-                                  <tr>
-                                    <td>
-                                        <input type="text" name="cashier_id" id="cashier_id" pattern=".*">
-                                      <label for="cashier_id">ID касира:</label>
-                                      
-                                    </td>
-                                    <td>
-                                      
-                                    </td>
-                        
-                                    <td>
-                                        <input type="text" name="product_name" id="product_name">
-                                      <label for="product_name">Товар, продана кількість якого цікавить:</label>
-                                    </td>
-                                    <td>
-                                     
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <td>
-                                        <input type="date" name="start_date" id="start_date" required>
-                                      <label for="start_date">Початкова дата:</label>
-                                    </td>
-                                    <td>
-                                    
-                                    </td>
-                                  
-                                    <td>
-                                    <input type="date" name="end_date" id="end_date" required>
-                                      <label for="end_date">Кінцева дата:</label>
-                                    </td>
-                                    <td>
-                                     
-                                    </td>
-                                  </tr>
-                                 <tr>
-                                    <td colspan="2">
-                                      <button type="submit">Отримати інформацію</button>
-                                    </td>
-                                  </tr>
+                                    <tr>
+                                        <td>
+                                            <input type="text" name="cashier_id" id="cashier_id" pattern=".*">
+                                            <label for="cashier_id">ID касира:</label>
+
+                                        </td>
+                                        <td>
+
+                                        </td>
+
+                                        <td>
+                                            <input type="text" name="product_name" id="product_name">
+                                            <label for="product_name">Товар, продана кількість якого цікавить:</label>
+                                        </td>
+                                        <td>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <input type="date" name="start_date" id="start_date" required>
+                                            <label for="start_date">Початкова дата:</label>
+                                        </td>
+                                        <td>
+
+                                        </td>
+
+                                        <td>
+                                            <input type="date" name="end_date" id="end_date" required>
+                                            <label for="end_date">Кінцева дата:</label>
+                                        </td>
+                                        <td>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <button type="submit">Отримати інформацію</button>
+                                        </td>
+                                    </tr>
                                 </table>
-                                
-                              </form>
-                              
-                                    
-                                    <table class = "table table-bordered" id = "table">
-                                        <thead>
-                                            <tr>
-                                                <th>Номер чеку</th>
-                                                <th>ID працівника</th>
-                                                <th>Номер картки</th>
-                                                <th>Дата друку</th>
-                                                <th>Загальна сума</th>
-                                                <th>ПДВ</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% for check in checks %}
-                                            <tr>
-                                                <td>{{ check[0] }}</td>
-                                                <td>{{ check[1] }}</td>
-                                                <td>{{ check[2] }}</td>
-                                                <td>{{ check[3] }}</td>
-                                                <td>{{ check[4] }}</td>
-                                                <td>{{ check[5] }}</td>
-                                            </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                
-    
-</body>
+
+                            </form>
+
+
+                            <table class="table table-bordered" id="table">
+                                <thead>
+                                    <tr>
+                                        <th>Номер чеку</th>
+                                        <th>ID працівника</th>
+                                        <th>Номер картки</th>
+                                        <th>Дата друку</th>
+                                        <th>Загальна сума</th>
+                                        <th>ПДВ</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for check in checks %}
+                                    <tr>
+                                        <td>{{ check[0] }}</td>
+                                        <td>{{ check[1] }}</td>
+                                        <td>{{ check[2] }}</td>
+                                        <td>{{ check[3] }}</td>
+                                        <td>{{ check[4] }}</td>
+                                        <td>{{ check[5] }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+
+
+    </body>
+
 </html>
 {% endblock %}

@@ -2,12 +2,14 @@
 {% block content %}
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Видалити категорію</title>
 </head>
+
 <body>
     <h1>Видалити категорію</h1>
-    <form   class = "my-form" method="POST" action="{{ url_for('delete_category') }}">
+    <form class="my-form" method="POST" action="{{ url_for('delete_category') }}">
         <div>
             <label for="category_number">Номер категорії:</label>
             <select name="category_number">
@@ -17,7 +19,7 @@
             </select>
         </div>
         <div>
-            <input type="submit" value="Видалити">
+            <button type="submit" value="Видалити">Видалити</button>
         </div>
     </form>
     <br>
@@ -28,6 +30,6 @@
         <span class="text">Назад</span>
     </a>
 </body>
+
 </html>
 {% endblock %}
-

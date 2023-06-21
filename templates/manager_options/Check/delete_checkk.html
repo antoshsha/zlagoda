@@ -1,11 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Видалити чек</title>
 </head>
+
 <body>
     <h1>Видалити чек</h1>
-    <form method="POST" action="{{ url_for('delete_check_store') }}">
+    <form class="my-form" method="POST" action="{{ url_for('delete_check_store') }}">
         <div>
             <label for="check_number">Номер чеку:</label>
             <select name="check_number">
@@ -15,10 +19,11 @@
             </select>
         </div>
         <div>
-            <input type="submit" value="Видалити">
+            <button type="submit" value="Зберегти">Видалити</button>
         </div>
     </form>
-    <a href="{{ url_for('go_check') }}">Назад</a>
-    <a href="{{ url_for('home') }}">Додому</a>
+
 </body>
+
 </html>
+{% endblock %}

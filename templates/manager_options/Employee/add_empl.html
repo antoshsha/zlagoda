@@ -2,6 +2,7 @@
 {% block content %}
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Додати нового працівника</title>
     <style>
@@ -14,7 +15,7 @@
         }
     </style>
     <script>
-        window.onload = function() {
+        window.onload = function () {
             var form = document.querySelector('.my-form');
             var idEmployeeInput = document.getElementById('id_employee');
             var emplSurnameInput = document.getElementById('empl_surname');
@@ -24,7 +25,7 @@
             var phoneInput = document.getElementById('phone_number');
             var zipCodeInput = document.getElementById('zip_code');
 
-            form.addEventListener('submit', function(event) {
+            form.addEventListener('submit', function (event) {
                 if (idEmployeeInput.value.length > 10 || idEmployeeInput.value.length === 0) {
                     event.preventDefault();
                     alert('ID працівника має бути до 10 символів і не може бути порожнім.');
@@ -53,6 +54,7 @@
         };
     </script>
 </head>
+
 <body>
     <h1>Додати нового працівника</h1>
     <form class="my-form" method="POST" action="{{ url_for('add_empl') }}">
@@ -89,14 +91,14 @@
                 </td>
                 <td>
                     <input type="text" id="empl_role" name="empl_role" pattern="Manager|Cashier"
-                           title="Дозволені значення: Manager або Cashier" required>
+                        title="Дозволені значення: Manager або Cashier" required>
                 </td>
                 <td>
                     <label for="salary">Заробітна плата:</label>
                 </td>
                 <td>
                     <input type="text" id="salary" name="salary" pattern="^\d{1,10}(?:\.\d{1,4})?$"
-                           title="Максимум 10 цифр до крапки і 4 цифри після крапки" required>
+                        title="Максимум 10 цифр до крапки і 4 цифри після крапки" required>
                 </td>
             </tr>
             <tr>
@@ -117,7 +119,7 @@
                 </td>
                 <td>
                     <input type="text" id="phone_number" name="phone_number" pattern="[+\d]{0,13}"
-                           title="Максимально 13 знаків" required>
+                        title="Максимально 13 знаків" required>
                 </td>
             </tr>
             <tr>
@@ -137,8 +139,8 @@
                     <label for="zip_code">Поштовий індекс:</label>
                 </td>
                 <td>
-                    <input type="text" id="zip_code" name="zip_code" pattern="\d{0,9}"
-                           title="Максимально 9 знаків" required>
+                    <input type="text" id="zip_code" name="zip_code" pattern="\d{0,9}" title="Максимально 9 знаків"
+                        required>
                 </td>
             </tr>
             <tr>
@@ -169,5 +171,6 @@
         <span class="text">Назад</span>
     </a>
 </body>
+
 </html>
 {% endblock %}

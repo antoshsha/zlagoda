@@ -2,63 +2,65 @@
 {% block content %}
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title>Оновлення даних про співробітника</title>
-  <style>
-  .my-form table {
-    width: 100%;
-}
+    <title>Оновлення даних про співробітника</title>
+    <style>
+        .my-form table {
+            width: 100%;
+        }
 
-.my-form td {
-    padding: 5px;
-}
-</style>
-<script>
-    window.onload = function() {
-        var form = document.querySelector('.my-form');
-        var idEmployeeInput = document.getElementById('id_employee');
-        var emplSurnameInput = document.getElementById('empl_surname');
-        var emplNameInput = document.getElementById('empl_name');
-        var emplRoleInput = document.getElementById('empl_role');
-        var salaryInput = document.getElementById('salary');
-        var phoneInput = document.getElementById('phone_number');
-        var zipCodeInput = document.getElementById('zip_code');
+        .my-form td {
+            padding: 5px;
+        }
+    </style>
+    <script>
+        window.onload = function () {
+            var form = document.querySelector('.my-form');
+            var idEmployeeInput = document.getElementById('id_employee');
+            var emplSurnameInput = document.getElementById('empl_surname');
+            var emplNameInput = document.getElementById('empl_name');
+            var emplRoleInput = document.getElementById('empl_role');
+            var salaryInput = document.getElementById('salary');
+            var phoneInput = document.getElementById('phone_number');
+            var zipCodeInput = document.getElementById('zip_code');
 
-        form.addEventListener('submit', function(event) {
-            if (idEmployeeInput.value.length > 10 || idEmployeeInput.value.length === 0) {
-                event.preventDefault();
-                alert('ID працівника має бути до 10 символів і не може бути порожнім.');
-            }
+            form.addEventListener('submit', function (event) {
+                if (idEmployeeInput.value.length > 10 || idEmployeeInput.value.length === 0) {
+                    event.preventDefault();
+                    alert('ID працівника має бути до 10 символів і не може бути порожнім.');
+                }
 
-            if (emplSurnameInput.value.length > 50 || emplSurnameInput.value.length === 0) {
-                event.preventDefault();
-                alert('Прізвище має бути до 50 символів і не може бути порожнім.');
-            }
+                if (emplSurnameInput.value.length > 50 || emplSurnameInput.value.length === 0) {
+                    event.preventDefault();
+                    alert('Прізвище має бути до 50 символів і не може бути порожнім.');
+                }
 
-            if (emplNameInput.value.length > 50 || emplNameInput.value.length === 0) {
-                event.preventDefault();
-                alert("Ім'я має бути до 50 символів і не може бути порожнім.");
-            }
+                if (emplNameInput.value.length > 50 || emplNameInput.value.length === 0) {
+                    event.preventDefault();
+                    alert("Ім'я має бути до 50 символів і не може бути порожнім.");
+                }
 
-            if (!['Manager', 'Cashier'].includes(emplRoleInput.value)) {
-                event.preventDefault();
-                alert('Дозволені значення для посади: Manager або Cashier.');
-            }
+                if (!['Manager', 'Cashier'].includes(emplRoleInput.value)) {
+                    event.preventDefault();
+                    alert('Дозволені значення для посади: Manager або Cashier.');
+                }
 
-            if (!/^[\d]{0,9}$/.test(zipCodeInput.value)) {
-                event.preventDefault();
-                alert('Поштовий індекс може містити максимум 9 цифр.');
-            }
-        });
-    };
-</script>
+                if (!/^[\d]{0,9}$/.test(zipCodeInput.value)) {
+                    event.preventDefault();
+                    alert('Поштовий індекс може містити максимум 9 цифр.');
+                }
+            });
+        };
+    </script>
 </head>
-<body>
-  <h1>Оновлення даних про співробітника</h1>
 
-  {% if error %}
+<body>
+    <h1>Оновлення даних про співробітника</h1>
+
+    {% if error %}
     <p style="color: red;">{{ error }}</p>
-  {% endif %}
+    {% endif %}
 
 
   <form class="my-form" method="POST" action="{{ url_for('update_employee') }}" onsubmit="return validateForm()">
@@ -155,5 +157,6 @@
     </table>
   </form>
 </body>
+
 </html>
 {% endblock %}

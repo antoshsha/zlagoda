@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Звіт про чеки</title>
     <style>
@@ -8,7 +9,8 @@
             width: 100%;
         }
 
-        th, td {
+        th,
+        td {
             padding: 8px;
             text-align: left;
             border-bottom: 1px solid #ddd;
@@ -60,11 +62,12 @@
         }
     </script>
 </head>
+
 <body>
     <h1>Звіт про чеки</h1>
     <form method="POST" action="{{url_for('check_by_id')}}">
         <label for="cashier_id">ID касира:</label>
-        <input type="text" name="cashier_id" id="cashier_id" pattern=".*" >
+        <input type="text" name="cashier_id" id="cashier_id" pattern=".*">
         <br>
         <label for="product_name">Товар, продана кількість якого цікавить:</label>
         <input type="text" name="product_name" id="product_name">
@@ -107,4 +110,5 @@
     <a href="{{ url_for('home') }}">Додому</a>
     <a href="{{ url_for('go_check') }}">Назад</a>
 </body>
+
 </html>

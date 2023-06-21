@@ -2,10 +2,11 @@
 {% block content %}
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Додати клієнта</title>
     <script>
-        window.onload = function() {
+        window.onload = function () {
             var form = document.querySelector('.my-form');
             var cardNumberInput = document.getElementById('card_number');
             var custSurnameInput = document.getElementById('cust_surname');
@@ -13,7 +14,7 @@
             var phoneInput = document.getElementById('phone_number');
             var percentInput = document.getElementById('percent');
 
-            form.addEventListener('submit', function(event) {
+            form.addEventListener('submit', function (event) {
                 if (cardNumberInput.value.length > 13 || cardNumberInput.value.length === 0) {
                     event.preventDefault(); // Перешкоджає відправленню форми
                     alert('Номер картки має бути до 13 символів і не може бути порожнім.');
@@ -42,6 +43,7 @@
         };
     </script>
 </head>
+
 <body>
     <h1>Додати клієнта</h1>
     <form class="my-form" method="POST" action="{{ url_for('add_customer_card') }}">
@@ -77,7 +79,8 @@
                     <label for="phone_number">Номер телефону:</label>
                 </td>
                 <td>
-                    <input type="text" id="phone_number" name="phone_number" pattern="[+\d]{0,13}" title="Максимально 13 знаків" required>
+                    <input type="text" id="phone_number" name="phone_number" pattern="[+\d]{0,13}"
+                        title="Максимально 13 знаків" required>
                 </td>
                 <td>
                     <label for="city">Місто:</label>
@@ -114,22 +117,23 @@
     <br>
 
     {% if role == 1 %}
-        <a href="{{ url_for('go_customers') }}" class="btn btn-primary btn-icon-split">
-            <span class="icon text-white-50">
-                <i class="fas fa-flag"></i>
-            </span>
-            <span class="text">Назад</span>
-        </a>
+    <a href="{{ url_for('go_customers') }}" class="btn btn-primary btn-icon-split">
+        <span class="icon text-white-50">
+            <i class="fas fa-flag"></i>
+        </span>
+        <span class="text">Назад</span>
+    </a>
     {% endif %}
 
     {% if role == 0 %}
-        <a href="{{ url_for('cashier_cabinet') }}" class="btn btn-primary btn-icon-split">
-            <span class="icon text-white-50">
-                <i class="fas fa-flag"></i>
-            </span>
-            <span class="text">Назад</span>
-        </a>
+    <a href="{{ url_for('all_clients') }}" class="btn btn-primary btn-icon-split">
+        <span class="icon text-white-50">
+            <i class="fas fa-flag"></i>
+        </span>
+        <span class="text">Назад</span>
+    </a>
     {% endif %}
 </body>
+
 </html>
 {% endblock %}

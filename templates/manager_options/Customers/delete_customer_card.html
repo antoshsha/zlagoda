@@ -2,19 +2,21 @@
 {% block content %}
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Видалити постійного клієнта</title>
 </head>
+
 <body>
     <h1>Видалити постійного клієнта</h1>
-    <form class ="my-form" method="POST" action="{{ url_for('delete_customer_card') }}">
+    <form class="my-form" method="POST" action="{{ url_for('delete_customer_card') }}">
         <div>
             <label for="card_number">Номер карти:</label>
             <select name="card_number">
-            {% for option in options %}
-            <option value="{{ option }}">{{ option }}</option>
-            {% endfor %}
-        </select>
+                {% for option in options %}
+                <option value="{{ option }}">{{ option }}</option>
+                {% endfor %}
+            </select>
         </div>
         <div>
             <button type="submit" value="Видалити">Видалити</button>
@@ -28,6 +30,6 @@
         <span class="text">Назад</span>
     </a>
 </body>
+
 </html>
 {% endblock %}
-

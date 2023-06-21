@@ -2,6 +2,7 @@
 {% block content %}
 <!DOCTYPE html>
 <html>
+
 <head>
     <style>
         .my-form table {
@@ -14,6 +15,7 @@
     </style>
     <title>Оновити товар у магазині</title>
 </head>
+
 <body>
     <h1>Оновити товар у магазині</h1>
     <form class="my-form" method="POST" action="{{ url_for('update_product_store') }}">
@@ -70,7 +72,7 @@
             </tr>
         </table>
         <div>
-            <input type="submit" value="Зберегти">
+            <button type="submit" value="Зберегти">Оновити</button>
         </div>
     </form>
     <a href="{{ url_for('go_product_store') }}" class="btn btn-primary btn-icon-split">
@@ -81,7 +83,7 @@
     </a>
 
     <script>
-        window.onload = function() {
+        window.onload = function () {
             var form = document.querySelector('.my-form');
             var upcPromInput = document.getElementById('UPC_prom');
             var idProductInput = document.getElementById('id_product');
@@ -89,7 +91,7 @@
             var productsNumberInput = document.getElementById('products_number');
             var promotionalProductInput = document.getElementById('promotional_product');
 
-            form.addEventListener('submit', function(event) {
+            form.addEventListener('submit', function (event) {
                 if (upcPromInput.value.length > 12) {
                     event.preventDefault();
                     alert('UPC промо-товару має бути рядком до 12 символів.');
@@ -118,5 +120,6 @@
         };
     </script>
 </body>
+
 </html>
 {% endblock %}

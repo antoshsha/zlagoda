@@ -2,6 +2,7 @@
 {% block content %}
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Наявність</title>
     <title>Звіт про товари в магазині</title>
@@ -11,7 +12,8 @@
             width: 100%;
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid #ddd;
             padding: 8px;
         }
@@ -162,9 +164,9 @@
 
             pdfMake.createPdf(docDefinition).open();
         }
-        
 
-        
+
+
 
         function collectTableData() {
             var table = document.getElementById("products-table");
@@ -186,7 +188,9 @@
         }
     </script>
 </head>
+
 <body>
+
     <body id="page-top">
         <div id="content-wrapper" class="d-flex flex-column">
             <!-- Main Content -->
@@ -236,7 +240,7 @@
                     </ul>
                 </nav>
             </div>
-        
+
             <div class="container-fluid">
                 <div class="row">
                     <!-- Sidebar -->
@@ -249,25 +253,25 @@
                                 </div>
                                 <div class="sidebar-brand-text mx-3">Zlagoda</div>
                             </a>
-        
+
                             <!-- Divider -->
                             <hr class="sidebar-divider">
-    
+
                             <!-- Divider -->
                             <hr class="sidebar-divider">
-        
+
                             <!-- Heading -->
                             <div class="sidebar-heading">
                                 Оновлення таблиці
                             </div>
-        <!-- Nav Item - Pages Collapse Menu -->
+                            <!-- Nav Item - Pages Collapse Menu -->
                             <li class="nav-item">
                                 <a class="nav-link" href="{{url_for('add_product_store')}}">
                                     <i class="fas fa-fw fa-tachometer-alt"></i>
                                     <span>Додати</span>
                                 </a>
                             </li>
-        
+
                             <!-- Nav Item - Charts -->
                             <li class="nav-item">
                                 <a class="nav-link" href="{{url_for('update_product_store')}}">
@@ -275,7 +279,7 @@
                                     <span>Оновити</span>
                                 </a>
                             </li>
-        
+
                             <!-- Nav Item - Tables -->
                             <li class="nav-item active">
                                 <a class="nav-link" href="{{url_for('delete_product_store')}}">
@@ -283,12 +287,12 @@
                                     <span>Видалити</span>
                                 </a>
                             </li>
-        
+
                             <hr class="sidebar-divider d-none d-md-block">
                         </ul>
                     </div>
-                    
-                    
+
+
                     <div class="col-md-10">
                         <div class="container-fluid">
                             <div style="display: flex; align-items: center;">
@@ -323,10 +327,10 @@
                                 <span class="icon text-white-50">
                                     <i class="fas fa-flag"></i>
                                 </span>
-                                <span class="text">Звіт</span>  
+                                <span class="text">Звіт</span>
                             </a>
-                        
-                            <table class = "table table-bordered" id="products-table">
+
+                            <table class="table table-bordered" id="products-table">
                                 <thead>
                                     <tr>
                                         <th onclick="sortTable(0)" class="sort-btn">ID товару</th>
@@ -351,9 +355,10 @@
                                 </tbody>
                             </table>
                         </div>
-                </div>
+                    </div>
                 </div>
             </div>
-</body>
+    </body>
+
 </html>
 {% endblock %}

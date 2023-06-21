@@ -2,12 +2,14 @@
 {% block content %}
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Видалити працівника</title>
 </head>
+
 <body>
     <h1>Видалити працівника</h1>
-    <form class = "my-form" method="POST" action="{{ url_for('delete_employee') }}">
+    <form class="my-form" method="POST" action="{{ url_for('delete_employee') }}">
         <div>
             <label for="id_employee">ID працівника:</label>
             <select name="id_employee">
@@ -27,5 +29,6 @@
         <span class="text">Назад</span>
     </a>
 </body>
+
 </html>
 {% endblock %}

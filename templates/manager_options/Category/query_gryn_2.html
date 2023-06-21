@@ -2,40 +2,43 @@
 {% block content %}
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Query Result</title>
 </head>
+
 <body>
     <br>
     <br>
     <h1 class="h3 mb-4 text-gray-800">Категорії, в яких усі товари коштують більше заданої суми</h1>
-    <form class = "my-form" action="/Category/gryn_2" method="POST">
+    <form class="my-form" action="/Category/gryn_2" method="POST">
         <div style="display: flex; align-items: normal; width :30%;">
             <label for="parameter">Сума:</label>
-            <input type = "number" id="parameter" step="0.01" class="form-control bg-light small", name = "parameter" required>
-            <button type="submit" >Зберегти</button>
+            <input type="number" id="parameter" step="0.01" class="form-control bg-light small" , name="parameter"
+                required>
+            <button type="submit">Зберегти</button>
         </div>
     </form>
 
     {% if data %}
-        <table class = "table table-bordered">
-            <thead>
-                <tr>
-                    <th>Category Number</th>
-                    <th>Category Name</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for row in data %}
-                <tr>
-                    <td>{{ row[0] }}</td>
-                    <td>{{ row[1] }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Category Number</th>
+                <th>Category Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data %}
+            <tr>
+                <td>{{ row[0] }}</td>
+                <td>{{ row[1] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
     {% elif submitted %}
-        <p>Таких категорій немає.</p>
+    <p>Таких категорій немає.</p>
     {% endif %}
     <br>
     <a href="{{ url_for('go_category') }}" class="btn btn-primary btn-icon-split">
@@ -45,5 +48,6 @@
         <span class="text">Назад</span>
     </a>
 </body>
+
 </html>
 {% endblock %}

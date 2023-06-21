@@ -2,6 +2,7 @@
 {% block content %}
 <!DOCTYPE html>
 <html>
+
 <head>
     <style>
         .my-form table {
@@ -14,6 +15,7 @@
     </style>
     <title>Додати товар у магазин</title>
 </head>
+
 <body>
     <h1>Додати товар у магазин</h1>
     <form class="my-form" method="POST" action="{{ url_for('add_product_store') }}">
@@ -44,7 +46,8 @@
                     <label for="selling_price">Ціна продажу:</label>
                 </td>
                 <td>
-                    <input type="number" min="0" id="selling_price" name="selling_price" required step="0.01" pattern="\d+(\.\d{1,2})?">
+                    <input type="number" min="0" id="selling_price" name="selling_price" required step="0.01"
+                        pattern="\d+(\.\d{1,2})?">
                 </td>
 
                 <td>
@@ -58,12 +61,12 @@
                     <label for="promotional_product">Промо-товар:</label>
                 </td>
                 <td>
-                    <input type="checkbox" id="promotional_product" name="promotional_product" required>
+                    <input type="checkbox" id="promotional_product" name="promotional_product">
                 </td>
             </tr>
         </table>
         <div>
-            <input type="submit" value="Зберегти">
+            <button type="submit" value="Зберегти">Додати</button>
         </div>
     </form>
     <br>
@@ -75,7 +78,7 @@
     </a>
 
     <script>
-        window.onload = function() {
+        window.onload = function () {
             var form = document.querySelector('.my-form');
             var upcInput = document.getElementById('UPC');
             var upcPromInput = document.getElementById('UPC_prom');
@@ -83,7 +86,7 @@
             var sellingPriceInput = document.getElementById('selling_price');
             var productsNumberInput = document.getElementById('products_number');
 
-            form.addEventListener('submit', function(event) {
+            form.addEventListener('submit', function (event) {
                 if (upcInput.value === '' || upcInput.value.length > 12) {
                     event.preventDefault();
                     alert('UPC має бути непорожнім рядком до 12 символів.');
@@ -112,5 +115,6 @@
         };
     </script>
 </body>
+
 </html>
 {% endblock %}

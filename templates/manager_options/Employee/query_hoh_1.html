@@ -2,14 +2,17 @@
 {% block content %}
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>HOH Custom 1</title>
 </head>
+
 <body>
     <br>
     <br>
-    <h1 class="h3 mb-4 text-gray-800">Знайти таких касирів, що не продавали товар за заданой назвою(весь час) і не продавали нічого у задану дату</h1>
-    <form class = "my-form" action="/hoh_1" method="POST">
+    <h1 class="h3 mb-4 text-gray-800">Знайти таких касирів, що не продавали товар за заданой назвою(весь час) і не
+        продавали нічого у задану дату</h1>
+    <form class="my-form" action="/hoh_1" method="POST">
         <label for="product">Product Name:</label>
         <input type="text" id="product" name="product" required>
         <br>
@@ -20,33 +23,34 @@
     </form>
 
     {% if submitted %}
-        {% if data %}
-            <h2>Results:</h2>
-            <table>
-                <tr>
-                    <th>ID Employee</th>
-                    <th>Employee Name</th>
-                    <th>Employee Surname</th>
-                </tr>
-                {% for row in data %}
-                <tr>
-                    <td>{{ row[0] }}</td>
-                    <td>{{ row[1] }}</td>
-                    <td>{{ row[2] }}</td>
-                </tr>
-                {% endfor %}
-            </table>
-        {% else %}
-            <p>No results found.</p>
-        {% endif %}
+    {% if data %}
+    <h2>Results:</h2>
+    <table>
+        <tr>
+            <th>ID Employee</th>
+            <th>Employee Name</th>
+            <th>Employee Surname</th>
+        </tr>
+        {% for row in data %}
+        <tr>
+            <td>{{ row[0] }}</td>
+            <td>{{ row[1] }}</td>
+            <td>{{ row[2] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p>No results found.</p>
+    {% endif %}
     {% endif %}
     <br>
-<a href="{{ url_for('manager_cabinet') }}" class="btn btn-primary btn-icon-split">
-  <span class="icon text-white-50">
-      <i class="fas fa-flag"></i>
-  </span>
-  <span class="text">Назад</span>
-</a>
+    <a href="{{ url_for('manager_cabinet') }}" class="btn btn-primary btn-icon-split">
+        <span class="icon text-white-50">
+            <i class="fas fa-flag"></i>
+        </span>
+        <span class="text">Назад</span>
+    </a>
 </body>
 {% endblock %}
+
 </html>

@@ -2,6 +2,7 @@
 {% block content %}
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Категорії</title>
     <style>
@@ -10,7 +11,8 @@
             width: 100%;
         }
 
-        th, td {
+        th,
+        td {
             padding: 8px;
             text-align: left;
             border-bottom: 1px solid #ddd;
@@ -21,6 +23,7 @@
             color: blue;
             text-decoration: underline;
         }
+
         .sort-asc:after {
             content: ' ▲';
         }
@@ -32,7 +35,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
     <script>
-         function sortTable(columnIndex) {
+        function sortTable(columnIndex) {
             var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
             table = document.getElementById("categories-table");
             switching = true;
@@ -128,8 +131,9 @@
         }
     </script>
 </head>
+
 <body>
-   
+
     <body id="page-top">
         <div id="content-wrapper" class="d-flex flex-column">
             <!-- Main Content -->
@@ -179,7 +183,7 @@
                     </ul>
                 </nav>
             </div>
-        
+
             <div class="container-fluid">
                 <div class="row">
                     <!-- Sidebar -->
@@ -194,43 +198,43 @@
                             </a>
 
                             <!-- Divider -->
-                    <hr class="sidebar-divider">
+                            <hr class="sidebar-divider">
 
-                    <!-- Heading -->
-                    <div class="sidebar-heading">
-                        Додаткові запити
-                    </div>
+                            <!-- Heading -->
+                            <div class="sidebar-heading">
+                                Додаткові запити
+                            </div>
 
-                    <!-- Nav Item - Pages Collapse Menu -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('mar_custom_2')}}">
-                            <i class="fas fa-fw fa-tachometer-alt"></i>
-                            <span>Категорії, в яких усі товари знаходяться на складі</span>
-                        </a>
-                    </li>
+                            <!-- Nav Item - Pages Collapse Menu -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{url_for('mar_custom_2')}}">
+                                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                                    <span>Категорії, в яких усі товари знаходяться на складі</span>
+                                </a>
+                            </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('gryn_custom_2')}}">
-                            <i class="fas fa-fw fa-tachometer-alt"></i>
-                            <span>Категорії, в яких усі товари коштують більше заданої суми</span>
-                        </a>
-                    </li>
-                    <!-- Divider -->
-                    <hr class="sidebar-divider">
-    
-        
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{url_for('gryn_custom_2')}}">
+                                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                                    <span>Категорії, в яких усі товари коштують більше заданої суми</span>
+                                </a>
+                            </li>
+                            <!-- Divider -->
+                            <hr class="sidebar-divider">
+
+
                             <!-- Heading -->
                             <div class="sidebar-heading">
                                 Оновлення таблиці
                             </div>
-        <!-- Nav Item - Pages Collapse Menu -->
+                            <!-- Nav Item - Pages Collapse Menu -->
                             <li class="nav-item">
                                 <a class="nav-link" href="{{url_for('add_category')}}">
                                     <i class="fas fa-fw fa-tachometer-alt"></i>
                                     <span>Додати</span>
                                 </a>
                             </li>
-        
+
                             <!-- Nav Item - Charts -->
                             <li class="nav-item">
                                 <a class="nav-link" href="{{url_for('update_category')}}">
@@ -238,7 +242,7 @@
                                     <span>Оновити</span>
                                 </a>
                             </li>
-        
+
                             <!-- Nav Item - Tables -->
                             <li class="nav-item active">
                                 <a class="nav-link" href="{{url_for('delete_category')}}">
@@ -246,11 +250,11 @@
                                     <span>Видалити</span>
                                 </a>
                             </li>
-        
+
                             <hr class="sidebar-divider d-none d-md-block">
                         </ul>
                     </div>
-                    
+
                     <div class="col-md-10">
                         <div class="container-fluid">
 
@@ -260,9 +264,9 @@
                                         <span class="icon text-white-50">
                                             <i class="fas fa-flag"></i>
                                         </span>
-                                        <span class="text">Звіт</span>  
+                                        <span class="text">Звіт</span>
                                     </a>
-                                    <table class = "table table-bordered" id="categories-table">
+                                    <table class="table table-bordered" id="categories-table">
                                         <thead>
                                             <tr>
                                                 <th onclick="sortTable(0)" class="sort-btn">Номер категорії</th>
@@ -279,10 +283,11 @@
                                         </tbody>
                                     </table>
                                     <br>
-                                    </div>
                                 </div>
                             </div>
                         </div>
-    {% endblock %}
-</body>
+                    </div>
+                    {% endblock %}
+    </body>
+
 </html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Звіт про товари в магазині</title>
     <style>
@@ -8,7 +9,8 @@
             width: 100%;
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid #ddd;
             padding: 8px;
         }
@@ -180,6 +182,7 @@
         }
     </script>
 </head>
+
 <body>
     <h1>Звіт про товари в магазині</h1>
     <div>
@@ -215,13 +218,14 @@
         </tbody>
     </table>
     <br>
-        {%if role==1%}
-        <a href="{{ url_for('go_product_store') }}">Назад</a>
-        {%endif%}
-        {%if role==0%}
-        <a href="{{ url_for('cashier_cabinet') }}">Назад</a>
-        {%endif%}
+    {%if role==1%}
+    <a href="{{ url_for('go_product_store') }}">Назад</a>
+    {%endif%}
+    {%if role==0%}
+    <a href="{{ url_for('cashier_cabinet') }}">Назад</a>
+    {%endif%}
     <a href="{{ url_for('home') }}">Додому</a>
     <button onclick="saveReport()">Зберегти звіт в PDF</button>
 </body>
+
 </html>

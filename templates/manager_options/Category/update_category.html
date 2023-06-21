@@ -2,14 +2,15 @@
 {% block content %}
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Оновити категорію</title>
     <script>
-        window.onload = function() {
+        window.onload = function () {
             var form = document.getElementById('my-form');
             var categoryInput = document.getElementById('category_name');
 
-            form.addEventListener('submit', function(event) {
+            form.addEventListener('submit', function (event) {
                 if (categoryInput.value.length > 50) {
                     event.preventDefault(); // Передійти до відправлення форми
                     alert('Назва категорії має бути до 50 символів.');
@@ -18,9 +19,10 @@
         };
     </script>
 </head>
+
 <body>
     <h1>Оновити категорію</h1>
-    <form id="my-form" method="POST" action="{{ url_for('update_category') }}">
+    <form class="my-form" method="POST" action="{{ url_for('update_category') }}">
         <div>
             <label for="category_number">Номер категорії:</label>
             <select name="category_number">
@@ -34,7 +36,7 @@
             <input type="text" id="category_name" name="category_name">
         </div>
         <div>
-            <input type="submit" value="Зберегти">
+            <button type="submit" value="Зберегти">Оновити</button>
         </div>
     </form>
     <br>
@@ -45,5 +47,6 @@
         <span class="text">Назад</span>
     </a>
 </body>
+
 </html>
 {% endblock %}

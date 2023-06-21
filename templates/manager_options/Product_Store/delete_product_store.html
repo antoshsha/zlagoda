@@ -2,12 +2,14 @@
 {% block content %}
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Видалити товар з магазину</title>
 </head>
+
 <body>
     <h1>Видалити товар з магазину</h1>
-    <form class = "my-form" method="POST" action="{{ url_for('delete_product_store') }}">
+    <form class="my-form" method="POST" action="{{ url_for('delete_product_store') }}">
         <div>
             <label for="upc">UPC товару:</label>
             <select name="upc">
@@ -17,7 +19,7 @@
             </select>
         </div>
         <div>
-            <input type="submit" value="Видалити">
+            <button type="submit" value="Зберегти">Видалити</button>
         </div>
     </form>
     <br>
@@ -28,5 +30,6 @@
         <span class="text">Назад</span>
     </a>
 </body>
+
 </html>
 {% endblock %}

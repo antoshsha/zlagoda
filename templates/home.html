@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Головна сторінка</title>
 </head>
+
 <body>
     {% block content %}
     <h1>Ласкаво просимо на головну сторінку</h1>
@@ -15,4 +17,5 @@
     <a href="{{ url_for('logout') }}">Вийти</a>
     {% endblock %}
 </body>
+
 </html>

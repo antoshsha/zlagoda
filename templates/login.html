@@ -1,33 +1,36 @@
 {% extends 'base.html' %}
 <!DOCTYPE html>
 <html>
+
 <head>
-    
+
     <title>Сторінка входу</title>
     <link rel="stylesheet" href="\style.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
-    {% block content %}
-    <body class="bg-gradient-primary">
+{% block content %}
 
-        <div class="container">
-    
-            <!-- Outer Row -->
-            <div class="row justify-content-center">
-    
-                <div class="col-xl-10 col-lg-12 col-md-9">
-    
-                    <div class="card o-hidden border-0 shadow-lg my-5">
-                        <div class="card-body p-0">
-                            <!-- Nested Row within Card Body -->
-                            <div class="row">
-                                <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
-                                <div class="col-lg-6">
-                                    <div class="p-5">
-                                        <div class="text-center">
-                                            <h1 class="h4 text-gray-900 mb-4">Вітаємо!</h1>
-                                        </div>
-                                        <div>
+<body class="bg-gradient-primary">
+
+    <div class="container">
+
+        <!-- Outer Row -->
+        <div class="row justify-content-center">
+
+            <div class="col-xl-10 col-lg-12 col-md-9">
+
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-0">
+                        <!-- Nested Row within Card Body -->
+                        <div class="row">
+                            <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+                            <div class="col-lg-6">
+                                <div class="p-5">
+                                    <div class="text-center">
+                                        <h1 class="h4 text-gray-900 mb-4">Вітаємо!</h1>
+                                    </div>
+                                    <div>
                                         <form class="my-form" method="POST" action="{{ url_for('login') }}">
                                             {{ form.csrf_token }}
 
@@ -38,22 +41,23 @@
                                                 {{ form.password(class="my-form", id="password") }}
                                                 {{ form.submit(class="my-form") }}
                                             </div>
-                                            
+
                                             {% if error %}
                                             <p>{{ error }}</p>
                                             {% endif %}
-                                          </form>
-                                        </div>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-    
+
                 </div>
-    
+
             </div>
-    
+
         </div>
-{% endblock %}
+        {% endblock %}
 </body>
+
 </html>

@@ -2,9 +2,11 @@
 {% block content %}
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Оновити товар</title>
 </head>
+
 <body>
     <h1>Оновити товар</h1>
     <form class="my-form" method="POST" action="{{ url_for('update_product') }}">
@@ -37,12 +39,12 @@
     </a>
 
     <script>
-        window.onload = function() {
+        window.onload = function () {
             var form = document.querySelector('.my-form');
             var categoryNumberInput = document.getElementById('category_number');
             var characteristicsInput = document.getElementById('characteristics');
 
-            form.addEventListener('submit', function(event) {
+            form.addEventListener('submit', function (event) {
                 if (categoryNumberInput.value === '' || isNaN(parseInt(categoryNumberInput.value))) {
                     event.preventDefault();
                     alert('Номер категорії має бути обов\'язковим цілим числом.');
@@ -56,5 +58,6 @@
         };
     </script>
 </body>
+
 </html>
 {% endblock %}

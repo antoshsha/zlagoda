@@ -2,6 +2,7 @@
 {% block content %}
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Клієнти</title>
     <title>Звіт: Картки клієнтів</title>
@@ -11,7 +12,8 @@
             width: 100%;
         }
 
-        th, td {
+        th,
+        td {
             text-align: left;
             padding: 8px;
         }
@@ -25,6 +27,7 @@
             color: blue;
             text-decoration: underline;
         }
+
         .sort-asc:after {
             content: ' ▲';
         }
@@ -36,7 +39,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
     <script>
-      function sortTable(columnIndex) {
+        function sortTable(columnIndex) {
             var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
             table = document.getElementById("customers-table");
             switching = true;
@@ -81,6 +84,26 @@
             }
         }
 
+        function filterByDiscount() {
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("upc-input");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("customers-table");
+            tr = table.getElementsByTagName("tr");
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[8]; // Column index 1 for UPC
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+
         function resetFiltersAndSort() {
             window.location.href = "{{ url_for('report_customer_cards') }}";
         }
@@ -93,7 +116,7 @@
                     {
                         table: {
                             headerRows: 1,
-                            widths: ['auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto','auto'],
+                            widths: ['auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
                             body: collectTableData()
                         }
                     }
@@ -128,7 +151,9 @@
         }
     </script>
 </head>
+
 <body>
+
     <body id="page-top">
         <div id="content-wrapper" class="d-flex flex-column">
             <!-- Main Content -->
@@ -178,7 +203,7 @@
                     </ul>
                 </nav>
             </div>
-        
+
             <div class="container-fluid">
                 <div class="row">
                     <!-- Sidebar -->
@@ -193,37 +218,37 @@
                             </a>
 
                             <!-- Divider -->
-                    <hr class="sidebar-divider">
+                            <hr class="sidebar-divider">
 
-                    <!-- Heading -->
-                    <div class="sidebar-heading">
-                        Додаткові запити
-                    </div>
+                            <!-- Heading -->
+                            <div class="sidebar-heading">
+                                Додаткові запити
+                            </div>
 
-                    <!-- Nav Item - Pages Collapse Menu -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('mar_custom_1')}}">
-                            <i class="fas fa-fw fa-tachometer-alt"></i>
-                            <span> Клієнти, які придбали акційного товару більше, ніж на певну суму</span>
-                        </a>
-                    </li>
+                            <!-- Nav Item - Pages Collapse Menu -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{url_for('mar_custom_1')}}">
+                                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                                    <span> Клієнти, які придбали акційного товару більше, ніж на певну суму</span>
+                                </a>
+                            </li>
 
-                    <!-- Divider -->
-                    <hr class="sidebar-divider">
-    
-        
+                            <!-- Divider -->
+                            <hr class="sidebar-divider">
+
+
                             <!-- Heading -->
                             <div class="sidebar-heading">
                                 Оновлення таблиці
                             </div>
-        <!-- Nav Item - Pages Collapse Menu -->
+                            <!-- Nav Item - Pages Collapse Menu -->
                             <li class="nav-item">
                                 <a class="nav-link" href="{{url_for('add_customer_card')}}">
                                     <i class="fas fa-fw fa-tachometer-alt"></i>
                                     <span>Додати</span>
                                 </a>
                             </li>
-        
+
                             <!-- Nav Item - Charts -->
                             <li class="nav-item">
                                 <a class="nav-link" href="{{url_for('update_customer_card')}}">
@@ -231,7 +256,7 @@
                                     <span>Оновити</span>
                                 </a>
                             </li>
-        
+
                             <!-- Nav Item - Tables -->
                             <li class="nav-item active">
                                 <a class="nav-link" href="{{url_for('delete_customer_card')}}">
@@ -239,17 +264,28 @@
                                     <span>Видалити</span>
                                 </a>
                             </li>
-        
+
                             <hr class="sidebar-divider d-none d-md-block">
                         </ul>
                     </div>
-                    
+
                     <div class="col-md-10">
                         <div class="container-fluid">
 
                             <div class="col-md-10">
                                 <div class="container-fluid">
-                                    
+                                    <div style="display: flex; align-items: center; width: 50%;">
+                                        <label for="upc-input">Пошук за знижкою:</label>
+                                        <input id="upc-input" class="form-control bg-light small">
+                                        <button href="#" class="btn btn-success btn-icon-split small" value="Шукати"
+                                            onclick="filterByDiscount()">
+                                            <span class="icon text-white-50">
+                                                <i class="fas fa-flag"></i>
+                                            </span>
+                                            <span class="text">Шукати</span>
+                                        </button>
+                                    </div>
+
                                     <a href="#" class="btn btn-primary btn-icon-split" onclick="resetFiltersAndSort()">
                                         <span class="icon text-white-50">
                                             <i class="fas fa-flag"></i>
@@ -260,10 +296,10 @@
                                         <span class="icon text-white-50">
                                             <i class="fas fa-flag"></i>
                                         </span>
-                                        <span class="text">Звіт</span>  
+                                        <span class="text">Звіт</span>
                                     </a>
-                                
-                                    <table class = "table table-bordered" id="customers-table">
+
+                                    <table class="table table-bordered" id="customers-table">
                                         <tr>
                                             <th>Номер картки</th>
                                             <th onclick="sortTable(1)" class="sort-header">Прізвище</th>
@@ -290,9 +326,10 @@
                                         {% endfor %}
                                     </table>
                                 </div>
-                        </div>
+                            </div>
                         </div>
                     </div>
-    {% endblock %}
-</body>
+                    {% endblock %}
+    </body>
+
 </html>
