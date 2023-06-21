@@ -147,11 +147,11 @@ def get_all_products_by_name(product_name):
     if product_name == "":
         # Запит до бази даних для отримання всіх товарів
         cursor.execute(
-            "SELECT * FROM Store_Product AS sp JOIN Product AS p ON sp.id_product = p.id_product")
+            "SELECT * FROM Store_Product AS sp INNER JOIN Product AS p ON sp.id_product = p.id_product")
     else:
         # Запит до бази даних для пошуку товару за назвою
         cursor.execute(
-            "SELECT * FROM Store_Product AS sp JOIN Product AS p ON sp.id_product = p.id_product WHERE p.product_name LIKE ?",
+            "SELECT * FROM Store_Product AS sp INNER JOIN Product AS p ON sp.id_product = p.id_product WHERE p.product_name LIKE ?",
             ('%' + product_name + '%',))
 
     products = cursor.fetchall()

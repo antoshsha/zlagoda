@@ -1056,7 +1056,7 @@ def search_product_by_name():
     if request.method == 'POST':
         product_name = request.form['product_name']
         product=store_product.get_all_products_by_name(product_name)
-        return render_template('cashier_options/product_by_name.html', product=product)
+        return render_template('cashier_options/product_by_name.html', product=product, data=data)
     product_name=""
     product = store_product.get_all_products_by_name(product_name)
     return render_template('cashier_options/product_by_name.html', product=product,data = data)
