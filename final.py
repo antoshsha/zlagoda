@@ -4,6 +4,7 @@ from flask import Flask, render_template, redirect, url_for, request, session, f
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired
+from datetime import date
 # import sys
 # sys.path.append(r'D:/Мої документи/2YearNaukma/Summer/zlagoda')
 import employee
@@ -1066,20 +1067,22 @@ def search_product_by_name():
 
 @app.route('/my_checks', methods=['POST', 'GET'])
 def my_checks():
-     id = session.get("id")
-     data = employee.get_by_id(id)
-
-     if request.method == 'POST':
+    id = session.get("id")
+    data = employee.get_by_id(id)
+    start_date=""
+    end_date=""
+    if request.form.get('start_date'):
         start_date = datetime.strptime(request.form.get('start_date'), '%Y-%m-%d').date()
+    if request.form.get('end_date'):
         end_date = datetime.strptime(request.form.get('end_date'), '%Y-%m-%d').date()
+    if not start_date:
+       start_date="1900-01-01"
+    if not end_date:
+        end_date=date.today()
 
         # Виклик функції, яка повертає список чеків за вказаний проміжок часу
-        checks = checkk.get_checks_by_cashier(session.get("id"),start_date, end_date)
-       
-
-        return render_template('cashier_options/my_checks.html', checks=checks, data=data)
-
-     return render_template('cashier_options/my_checks.html', data=data)
+    checks = checkk.get_checks_by_cashier(session.get("id"),start_date, end_date)
+    return render_template('cashier_options/my_checks.html', checks=checks, data=data)
 
 @app.route('/me')
 def me():
