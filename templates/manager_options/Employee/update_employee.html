@@ -72,6 +72,14 @@
             <td>
                 <input type="text" id="id_employee" name="id_employee" required>
             </td>
+            <div>
+                    <label for="id_employee">ID працівника:</label>
+                    <select name="id_employee">
+                        {% for option in options %}
+                        <option value="{{ option }}">{{ option }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
             <td>
                 <label for="empl_surname">Прізвище:</label>
             </td>

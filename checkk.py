@@ -148,7 +148,7 @@ def get_card_percent(card_number: str) -> float:
     if cursor is not None:
         percent = cursor.fetchone()
     if percent is None:
-        percent=0
+        return 0
     cursor.close()
     print(percent)
     return float(percent[0])

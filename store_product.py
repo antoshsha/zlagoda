@@ -178,7 +178,7 @@ def validate_store_product(UPC):
 
 
 
-# store_product_data1 = ("UPC007", None, 7, 80, 50, False)
+store_product_data1 = ("UPC006", "UPC005", 16, 10, 60, True)
 # insert_store_product(store_product_data1)
 
 
@@ -187,4 +187,4 @@ def validate_store_product(UPC):
 
 # delete_store_product("UPC012")
 #
-# insert_store_product(store_product_data1)
+update_store_product(store_product_data1)
